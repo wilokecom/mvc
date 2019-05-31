@@ -13,6 +13,6 @@ class UserModel extends DBFactory {
 	 * @return array
 	 */
 	public static function getUserById($userID){
-		return self::connect()->select("SELECT * FROM users WHERE ID=".$userID);
+		return self::connect()->queryPrepared("SELECT * FROM users WHERE ID=?", array($userID));
 	}
 }

@@ -10,12 +10,61 @@ class MysqlGrammar implements DBInterface {
 	private $aDBConfiguration;
 
 	/*
-	 * @param Closure
+	 * @param instanceof \mysqli
 	 */
 	private $oConnect = null;
+	private $oSTMT = null;
 
 	public function __construct($aDBConfiguration) {
 		$this->aDBConfiguration = $aDBConfiguration;
+	}
+
+	/*
+	 * Prepare before querying
+	 *
+	 * @return array
+	 */
+	public function queryPrepared($query, array $aArgs){
+		$aParams = array();
+		$this->oSTMT = $this->oConnect->prepare($query);
+
+		$types = array_reduce($aArgs, function($carry, $args) use (&$aParams){
+			$aParams[] = $args;
+
+			switch ($args){
+				case is_float($args):
+					$carry .= 'd';
+					break;
+				case is_integer($args):
+					$carry .= 'i';
+					break;
+				case is_string($args):
+					$carry .= 's';
+					break;
+				default:
+					$carry .= 'b';
+					break;
+			}
+
+			return $carry;
+		}, '');
+
+		$this->oSTMT->bind_param($types, ...$aParams);
+		$oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
+		$this->oSTMT->close();
+
+		if ( !$oResult ){
+			return false;
+		}
+
+		$aRows = [];
+		if (isset($oResult) && $oResult instanceof \mysqli_result) {
+			while (null !== ($aRow = $oResult->fetch_assoc())) {
+				$aRows[] = $aRow;
+			}
+		}
+
+		return $aRows;
 	}
 
 	/*
