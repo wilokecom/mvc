@@ -47,9 +47,9 @@ class Controller{
 	public function loadView($viewFile, $aData = []){
 		try{
 			extract($aData);
-			$this->initPlace();
-			//require_once MVC_VIEWS . $viewFile . '.php';
-			$this->oBlade->make($viewFile, $aData);
+			//$this->initPlace();
+			require_once MVC_VIEWS . $viewFile . '.php';
+			//$this->oBlade->make($viewFile, $aData);
 		}catch (\Exception $oException){
 			throw $oException;
 		}

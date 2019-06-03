@@ -3,8 +3,6 @@ namespace MVC\Controllers;
 
 class HomeController extends Controller {
 	public function index(){
-		$this->loadView('home/index', array(
-			'name' => 'value'
-		));
+		$this->loadView('home/index');
 	}
 }
