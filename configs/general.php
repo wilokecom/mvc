@@ -1,5 +1,5 @@
 <?php
-define('MVC_HOME_URL', 'http://127.0.0.1:8888/dev.php.com/mvc/');
+define('MVC_HOME_URL', 'http://127.0.0.1:80/mvc/');
 define('MVC_DIR', dirname(dirname(__FILE__)) . '/');
 define('MVC_CORE', MVC_DIR . 'app/Core/');
 define('MVC_CONTROLLERS', MVC_DIR . 'app/Controllers/');

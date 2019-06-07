@@ -8,7 +8,6 @@ class MysqlGrammar implements DBInterface {
 	 * @param Array
 	 */
 	private $aDBConfiguration;
-
 	/*
 	 * @param instanceof \mysqli
 	 */
@@ -18,7 +17,6 @@ class MysqlGrammar implements DBInterface {
 	public function __construct($aDBConfiguration) {
 		$this->aDBConfiguration = $aDBConfiguration;
 	}
-
 	/*
 	 * Prepare before querying
 	 *
@@ -27,10 +25,8 @@ class MysqlGrammar implements DBInterface {
 	public function queryPrepared($query, array $aArgs){
 		$aParams = array();
 		$this->oSTMT = $this->oConnect->prepare($query);
-
 		$types = array_reduce($aArgs, function($carry, $args) use (&$aParams){
 			$aParams[] = $args;
-
 			switch ($args){
 				case is_float($args):
 					$carry .= 'd';
@@ -45,7 +41,6 @@ class MysqlGrammar implements DBInterface {
 					$carry .= 'b';
 					break;
 			}
-
 			return $carry;
 		}, '');
 
@@ -63,7 +58,6 @@ class MysqlGrammar implements DBInterface {
 				$aRows[] = $aRow;
 			}
 		}
-
 		return $aRows;
 	}
 
@@ -72,17 +66,14 @@ class MysqlGrammar implements DBInterface {
 	 */
 	public function connect() {
 		if ( $this->oConnect === null ){
-			$this->oConnect = new \mysqli($this->aDBConfiguration['host'], $this->aDBConfiguration['username'], $this->aDBConfiguration['password'], $this->aDBConfiguration['db']);
-
+			$this->oConnect = new\mysqli($this->aDBConfiguration['host'], $this->aDBConfiguration['username'], $this->aDBConfiguration['password'], $this->aDBConfiguration['db']);
 			/* check connection */
 			if ($this->oConnect->connect_errno) {
 				throw new \RuntimeException("Connect failed: %s\n", $this->oConnect ->connect_error);
 			}
 		}
-
 		return $this;
 	}
-
 	/**
 	 * Get Result
 	 *
@@ -100,7 +91,6 @@ class MysqlGrammar implements DBInterface {
 		}
 		return false;
 	}
-
 	public function insert($string) {
 		// TODO: Implement insert() method.
 	}

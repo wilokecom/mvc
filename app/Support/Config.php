@@ -50,6 +50,7 @@ class Config{
 	 *
 	 * @return Closure | Array | String | NULL
 	 */
+	//Done
 	public function getParam($target, $hasChain=false){
 		self::$aValue = isset(self::$aValue) ? self::$aValue[$target] : null;
 		if ( $hasChain ){

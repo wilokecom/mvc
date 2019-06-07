@@ -1,8 +1,6 @@
 <?php
 
 namespace MVC\Database;
-
-
 interface DBInterface {
 	public function connect();
 	public function select($string);
