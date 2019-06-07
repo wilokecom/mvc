@@ -20,7 +20,7 @@ function addAction($hook, $aInfo){
 }
 
 function incViewFile($file){
-	include MVC_VIEWS . $file . '.php';
+	include MVC_VIEWS . $file .'.php';
 }
 
 function mvcEnqueueScript($url){
@@ -37,7 +37,7 @@ function mvcEnqueueStyle($url){
 
 require_once  './vendor/autoload.php';
 
-require_once  './configs/general.php';
+require_once  './configs/general.php';  
 
 new GeneralScriptsController;
 new App;

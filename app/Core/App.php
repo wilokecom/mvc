@@ -7,7 +7,7 @@ class App {
 	protected $oControllerInstance;
 	protected $aParams = [];
 
-	public function parseUrl(){
+	public function     parseUrl(){
 		if ( isset($_GET['route']) ){
 			return explode('/', filter_var(rtrim($_GET['route'], '/'), FILTER_SANITIZE_URL));
 		}
@@ -72,16 +72,16 @@ class App {
 		if ( !empty($methodName) && $this->isMethodExist($methodName) ){
 			$this->methodName = $methodName;
 		}
-		call_user_func(array($this->oControllerInstance, $this->methodName), $this->aParams);
+        call_user_func(array($this->oControllerInstance, $this->methodName), $this->aParams);
 	}
 
 	public function __construct() {
 		$this->aParams = $this->parseUrl();
+
 		// Init Controller
 		$controllerName = $this->generateControllerName();
+
 		$this->initController($controllerName);
-
-
 		// Init Method
 		$methodName = $this->generateMethodName();
 		$this->callMethod($methodName);

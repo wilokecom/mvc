@@ -5,8 +5,8 @@ return [
 		'mysql' => array(
 			'host'     => 'localhost',
 			'username' => 'root',
-			'password' => 'root',
-			'db'       => 'mvc'
+			'password' => '',
+			'db'       => 'fantom'
 		)
 	]
 ];

@@ -27,6 +27,7 @@
      * 
      * @return $this
      */
+
     public static function addAction($hook, $aInfo){
         if ( !isset(self::$aHooks[$hook]) ){
             self::$aHooks[$hook] = array();
@@ -36,7 +37,7 @@
 
     /**
      * Print scripts
-     * 
+     *
      * @param string $hook
      * @param array  $aParams
      * 
