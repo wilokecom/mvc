@@ -1,22 +1,11 @@
-<?php
-//Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header, footer
-incViewFile('header');
-?>
-<!--Content-->
+<?php incViewFile('header'); ?>
 <div id="container">
-    <?php
-        //menu-bar
-        incViewFile('top-menu');
-    ?>
-    <div class="ui message green">
-        <div class="sixteen wide column">Hello! Thank for visitit MVC</div>
-    </div>
+    <?php incViewFile('top-menu'); ?>
 
-    <form class="ui form" method="post" action="http://localhost/mvc/user/login" name="form-login">
+    <form class="ui form" method="POST" action="<?php echo \MVC\Support\Route::get('user/handle-login'); ?>">
         <div class="field">
-            <label>{{UserName</label>
-            <input type="text" name="username" placeholder="UserName">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Username">
         </div>
         <div class="field">
             <label>Password</label>
@@ -34,4 +23,3 @@ incViewFile('header');
 <!--Footer-->
 <?php
 incViewFile('footer');
-?>

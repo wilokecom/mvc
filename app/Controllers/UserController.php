@@ -4,46 +4,85 @@ namespace MVC\Controllers;
 
 
 use MVC\Models\UserModel;
+use MVC\Support\Redirect;
+use MVC\Support\Session;
+use MVC\Support\Validator;
 
 class UserController extends Controller {
-	public function login(){
-		//var_export(UserModel::getUserById(1));
-        //Khởi tạo Session
-        //Nếu đã login rồi thì chuyển sang trang POST
-        if(isset($_POST['submit'])) {
-            $source = array('username' => $_POST['username']);//Validate
-            $username 	= $_POST['username'];
-            // Mã hóa dữ liệu theo kiểu MD5
-            $password 	= md5($_POST['password']);
-        }
+    /**
+     * @var string $loginSessionKey
+     */
+    protected static $loginSessionKey = 'user_logged_in';
+
+    public function login()
+    {
         $this->loadView('user/login');
-        UserModel::getUserById(1);
-	}
-	public function logout(){
-        $this->loadView('user/logout');
     }
-    public function register(){
-        //var_export(UserModel::getUserById(1));
+
+    public function register()
+    {
         $this->loadView('user/register');
     }
-    public function post (){
-        $this->loadView('user/post');
+
+    public function dashboard()
+    {
+        if (!self::isLoggedIn()) {
+            Redirect::to('user/register');
+        }
+
+        $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
+        $this->loadView('user/dashboard', $aUserInfo);
     }
-    public function handleRegister(){//Xử lý đăng nhập
-        if ( empty($_POST) ){
-            header('Location: ' . MVC_HOME_URL . '/user/register');
-            exit;
-        }else{
-            var_dump($_POST);die;
-        }
+
+    public static function isLoggedIn() {
+        return Session::has(self::$loginSessionKey);
     }
-    public function handleLogin(){
-        if ( empty($_POST) ){
-            header('Location: ' . MVC_HOME_URL . '/user/login');
-            exit;
+
+    public function handleLogout(){
+        Session::forget(self::$loginSessionKey);
+        Redirect::to('user/login');
+    }
+
+    public function handleRegister()
+    {
+        $status = Validator::validate(
+            array(
+                'username' => 'required|maxLength:50',
+                'email'    => 'required|maxLength:100',
+                'password' => 'required'
+            ),
+            $_POST
+        );
+
+        if ($status !== true) {
+            Session::add('register_error', $status);
+            Redirect::to('user/register');
         }
-        else{
-            var_dump($_POST);die;
+
+        if (UserModel::emailExists($_POST['email'])) {
+            Session::add('register_error', 'Oops! This email is already exist');
+            Redirect::to('user/register');
         }
+
+        if (UserModel::usernameExists($_POST['username'])) {
+            Session::add('register_error', 'Oops! This username is already exist');
+            Redirect::to('user/register');
+        }
+
+        $status = UserModel::insertNewUser($_POST['username'], $_POST['email'], $_POST['password']);
+        if (!$status) {
+            Session::add('register_error', 'Oops! Something went error');
+            Redirect::to('user/register');
+        }
+
+        Session::add('user_logged_in', $_POST['username']);
+
+        Session::forget('register_error');
+        Redirect::to('user/dashboard');
+    }
+
+    public function handleLogin()
+    {
+
     }
 }
