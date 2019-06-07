@@ -9,33 +9,6 @@ class Controller{
 	protected $modelName;
 	protected $oBlade;
 
-	protected function generateModelFile(){
-		return $this->modelName . '.php';
-	}
-
-	protected function generateModelDir() {
-		return MVC_MODELS . $this->generateModelFile();
-	}
-
-	protected function isModelExists(){
-		return file_exists($this->generateModelDir());
-	}
-
-	protected function parseModelName($model){
-		$this->modelName = str_replace('Controller', 'Model', $model);
-	}
-
-	protected function loadModel($model){
-		$this->parseModelName($model);
-
-		if ( $this->isModelExists() ){
-			require_once $this->generateModelDir();
-			return new $this->modelName;
-		}
-
-		return false;
-	}
-
 	protected function initPlace(){
 		if ( empty($this->oBlade) ){
 			$this->oBlade = new Blade(MVC_VIEWS, MVC_CACHE);
@@ -43,12 +16,13 @@ class Controller{
 
 		return $this->oBlade;
 	}
-
+    //Done
 	public function loadView($viewFile, $aData = []){
 		try{
+		    //Không hiểu câu lệnh này
 			extract($aData);
 			//$this->initPlace();
-			require_once MVC_VIEWS . $viewFile . '.php';
+			require_once MVC_VIEWS . $viewFile . '.php';//Nhảy đến views/home/index
 			//$this->oBlade->make($viewFile, $aData);
 		}catch (\Exception $oException){
 			throw $oException;

@@ -20,7 +20,7 @@
 
 ;(function ($, window, document, undefined) {
 
-$.site = $.fn.site = function(parameters) {
+$.site = $.fn.site = sfunction(parameters) {
   var
     time           = new Date().getTime(),
     performance    = [],

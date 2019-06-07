@@ -1,7 +1,7 @@
 <?php
 namespace MVC\Controllers;
 
-class CategoryController{
+class ArticleController{
 	public function __construct() {
 		echo __CLASS__;
 	}
