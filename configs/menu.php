@@ -2,27 +2,27 @@
 return [
     'topMenu' => array(
         array(
-            'name'  => 'Home',
+            'name' => 'Home',
             'route' => 'home',
             'isLoggedIn' => false
         ),
         array(
-            'name'  => 'Login',
+            'name' => 'Login',
             'route' => 'user/login',
             'isLoggedIn' => false
         ),
         array(
-            'name'  => 'Register',
+            'name' => 'Register',
             'route' => 'user/register',
             'isLoggedIn' => false
         ),
         array(
-            'name'  => 'Logout',
+            'name' => 'Logout',
             'route' => 'user/handle-logout',
             'isLoggedIn' => true
         ),
         array(
-            'name'  => 'Post',
+            'name' => 'Post',
             'route' => 'post'
         )
     )
