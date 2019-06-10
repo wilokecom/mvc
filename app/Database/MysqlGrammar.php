@@ -7,17 +7,17 @@ class MysqlGrammar implements DBInterface
     /*
     * @param Array
     */
-    private $aDBConfiguration;
+    private $aDBConfiguration;//Mảng lưu thông tin DB
 
     /*
     * @param instanceof \mysqli
     */
-    private $oConnect = null;
-    private $oSTMT = null;
-
+    private $oConnect = null;//Object kết nối đến DB mysqli
+    private $oSTMT = null;//Tạo đối tượng prepared
+    //Hàm khởi tạo
     public function __construct($aDBConfiguration)
     {
-        $this->aDBConfiguration = $aDBConfiguration;
+        $this->aDBConfiguration = $aDBConfiguration;//Mảng lưu thông tin DB
     }
 
     /*
@@ -25,14 +25,17 @@ class MysqlGrammar implements DBInterface
     *
     * @return $this
     */
+    //Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
     public function prepare($query, array $aArgs)
     {
-        $aParams     = array();
+        $aParams = array();
+        //Tạo đối tượng preapred
         $this->oSTMT = $this->oConnect->prepare($query);
-
+        //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
+        //function ($carry, $args) use (&$aParams):Hàm ẩn danh
+        //lamda và cloasure
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
-
             switch ($args) {
                 case is_float($args):
                     $carry .= 'd';
@@ -47,10 +50,9 @@ class MysqlGrammar implements DBInterface
                     $carry .= 'b';
                     break;
             }
-
             return $carry;
         }, '');
-
+        // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
         $this->oSTMT->bind_param($types, ...$aParams);
 
         return $this;
@@ -61,18 +63,20 @@ class MysqlGrammar implements DBInterface
      *
      * @return mixed
      */
+
+    //Select
     public function select($string = '')
     {
+        //Thực thi câu truy vấn, nếu thành công trả về phương thức get_result(), nếu không trả về false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
-        $this->oSTMT->close();
+        $this->oSTMT->close();//Ngắt kết nối
 
-        if (!$oResult) {
+        if (!$oResult) {//Nếu kết quả câu truy vấn trả về rỗng
             return false;
         }
-
         $aRows = [];
-        if (isset($oResult) && $oResult instanceof \mysqli_result) {
-            while (null !== ($aRow = $oResult->fetch_assoc())) {
+        if (isset($oResult) && $oResult instanceof \mysqli_result) {//=true
+            while (null !== ($aRow = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
                 $aRows[] = $aRow;
             }
         }
@@ -84,10 +88,12 @@ class MysqlGrammar implements DBInterface
      *
      * @return bool
      */
+    //Insert
     public function insert($string = '')
     {
+        //Thực thị câu lệnh truy vấn
         $status = $this->oSTMT->execute();
-        $this->oSTMT->close();
+        $this->oSTMT->close();//Ngắt kết nối
         return $status;
     }
 
@@ -106,8 +112,10 @@ class MysqlGrammar implements DBInterface
     /*
      * Connecting to database
     */
+    //Connect DB
     public function connect()
     {
+        //Connect
         if ($this->oConnect === null) {
             $this->oConnect = new \mysqli(
                 $this->aDBConfiguration['host'],

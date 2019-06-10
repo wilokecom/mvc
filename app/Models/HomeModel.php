@@ -1,7 +1,9 @@
 <?php
 
-class HomeModel {
-	public function index(){
-		echo 'dad';
-	}
+class HomeModel
+{
+    public function index()
+    {
+        echo 'dad';
+    }
 }

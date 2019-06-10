@@ -8,81 +8,113 @@ use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
     /**
      * @var string $loginSessionKey
      */
     protected static $loginSessionKey = 'user_logged_in';
-
+    //Phương thức login-Hiển thị giao diện
     public function login()
     {
+        $this->redirectToDashboard();
         $this->loadView('user/login');
     }
-
+    //Phương thức register-Hiển thị giao diện
     public function register()
     {
+        $this->redirectToDashboard();
         $this->loadView('user/register');
     }
-
+    public function redirectToDashboard(){
+        if(self::isLoggedIn()) {
+            Redirect::to('user/dashboard');
+        }
+    }
+    //Phương thức dashboard()-Sau khi login thành công
     public function dashboard()
     {
-        if (!self::isLoggedIn()) {
-            Redirect::to('user/register');
+        if(!self::isLoggedIn()) {
+            Redirect::to('user/login');
         }
-
         $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
         $this->loadView('user/dashboard', $aUserInfo);
     }
-
-    public static function isLoggedIn() {
+    //Kiểm tra đã loggin chưa
+    public static function isLoggedIn()
+    {
         return Session::has(self::$loginSessionKey);
     }
-
-    public function handleLogout(){
+    //Xử lý khi nhấn logout
+    public function handleLogout()
+    {
         Session::forget(self::$loginSessionKey);
         Redirect::to('user/login');
     }
-
+    //Xủ lý khi nhấn submit
     public function handleRegister()
     {
+        //Nhảy đến ClassLoader.php, require file Validator.php, xử lý phương thức validate
+        //Kiểm tra-nếu có lỗi thì hiển thị thông báo lỗi, nếu không có thì bỏ qua
         $status = Validator::validate(
             array(
                 'username' => 'required|maxLength:50',
-                'email'    => 'required|maxLength:100',
+                'email' => 'required|maxLength:100',
                 'password' => 'required'
             ),
             $_POST
         );
-
+        //Nếu có lỗi, khởi tạo và add Session, chuyển về đường dẫn user/register
         if ($status !== true) {
             Session::add('register_error', $status);
             Redirect::to('user/register');
         }
-
+        //Kiểm tra emial có tồn tại hay không
+        //Include file UserModel extend DB Factory--> include DB Factory
+        //Nhảy đến phương thức UserModel::emailExists
         if (UserModel::emailExists($_POST['email'])) {
             Session::add('register_error', 'Oops! This email is already exist');
             Redirect::to('user/register');
         }
-
+        //Nhảy đến phương thức UserModel::usernameExists
         if (UserModel::usernameExists($_POST['username'])) {
             Session::add('register_error', 'Oops! This username is already exist');
             Redirect::to('user/register');
         }
-
+        ////Nhảy đến phương thức UserModel::insertNewUser
         $status = UserModel::insertNewUser($_POST['username'], $_POST['email'], $_POST['password']);
         if (!$status) {
             Session::add('register_error', 'Oops! Something went error');
             Redirect::to('user/register');
         }
-
-        Session::add('user_logged_in', $_POST['username']);
-
+        Session::add(self::$loginSessionKey, $_POST['username']);//include file app/Support/Session.php, lưu username biến $Session
         Session::forget('register_error');
-        Redirect::to('user/dashboard');
+        Redirect::to('user/dashboard');//Include file app/Support/redirect
     }
-
+    //Xử lý khi nhấn loggin
     public function handleLogin()
     {
+        $status = Validator::validate(
+            array(
+                'username' => 'required|maxLength:50',
+                //'email' => 'required|maxLength:100',
+                'password' => 'required'
+            ),
+            $_POST
+        );
+        if ($status !== true) {
+            Session::add('login_error', $status);
+            Redirect::to('user/login');
+        }
+        $aStatus = UserModel::checkUser($_POST['username'], $_POST['password']);
 
+        if($aStatus!=true){
+            Session::add('login_error','invalid username or password');
+            Redirect::to('user/login');
+        }
+
+        Session::add(self::$loginSessionKey, $_POST['username']);//include file app/Support/Session.php, lưu username biến $Session
+        Session::forget('login_error');
+        Redirect::to('user/dashboard');
     }
 }
