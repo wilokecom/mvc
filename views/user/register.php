@@ -1,6 +1,7 @@
 <?php
 use \MVC\Support\Route;
 use \MVC\Support\Session;
+
 incViewFile('header');
 ?>
 <div id="container">

@@ -11,4 +11,4 @@ define('MVC_SOURCES_URL', MVC_HOME_URL . 'sources/');
 define('MVC_CACHE', MVC_DIR . 'cache/');
 define('MVC_MODELS', MVC_DIR . 'app/Models/');
 define('MVC_CONFIG', MVC_DIR . 'configs/');
-define('MVC_VIEWS_ACTION',MVC_VIEWS.'home');
+define('MVC_VIEWS_ACTION', MVC_VIEWS . 'home');

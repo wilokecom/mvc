@@ -95,7 +95,13 @@ use MVC\Support\Validator;
 //         Session::destroy();
 //     }
 // }
-class UserController extends Controller {
+
+/**
+ * Class UserController
+ * @package MVC\Controllers
+ */
+class UserController extends Controller
+{
     /**
      * @var string $loginSessionKey
      */
@@ -103,11 +109,19 @@ class UserController extends Controller {
 
     public function login()
     {
+        if (self::isLoggedIn()) {
+            Redirect::to('user/dashboard');
+        }
+
         $this->loadView('user/login');
     }
 
     public function register()
     {
+        if (self::isLoggedIn()) {
+            Redirect::to('user/dashboard');
+        }
+
         $this->loadView('user/register');
     }
 
@@ -121,11 +135,13 @@ class UserController extends Controller {
         $this->loadView('user/dashboard', $aUserInfo);
     }
 
-    public static function isLoggedIn() {
+    public static function isLoggedIn()
+    {
         return Session::has(self::$loginSessionKey);
     }
 
-    public function handleLogout(){
+    public function handleLogout()
+    {
         Session::forget(self::$loginSessionKey);
         Redirect::to('user/login');
     }
@@ -135,7 +151,7 @@ class UserController extends Controller {
         $status = Validator::validate(
             array(
                 'username' => 'required|maxLength:50',
-                'email'    => 'required|maxLength:100',
+                'email' => 'required|maxLength:100',
                 'password' => 'required'
             ),
             $_POST
@@ -163,13 +179,30 @@ class UserController extends Controller {
         }
 
         Session::add('user_logged_in', $_POST['username']);
-
         Session::forget('register_error');
         Redirect::to('user/dashboard');
     }
 
     public function handleLogin()
     {
-
+        $status = Validator::validate(
+            array(
+                'username' => 'required|maxLength:50',
+                'password' => 'required'
+            ),
+            $_POST
+        );
+        if ($status !== true) {
+            Session::add('register_error', $status);
+            Redirect::to('user/register');
+        }
+        $aStatus = UserModel::checkUser($_POST['username'], $_POST['password']);
+        if ($status != true) {
+            Session::add('login_error', 'invalid username or password');
+            Redirect::to('user/login');
+        }
+        Session::add(self::$loginSessionKey, $_POST['username']);
+        Session::forget('login_error');
+        Redirect::to('user/dashboard');
     }
 }

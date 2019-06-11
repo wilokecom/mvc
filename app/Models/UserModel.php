@@ -5,22 +5,23 @@ namespace MVC\Models;
 
 use MVC\Database\DBFactory;
 
-class UserModel extends DBFactory {
+class UserModel extends DBFactory
+{
 
-	/*
-	 * Get User name by User ID
-	 *
-	 * @param Int
-	 * @return array
-	 */
-	// public static function getUserById($userID)
- //    {
-	// 	return self::connect()->queryPrepared("SELECT * FROM users WHERE ID=?", array($userID));
-	// }
-	// public static function registerUser($username,$password,$email)
- //    {
- //        return self::connect()->queryPrepared("INSERT INTO users(username,password,email,) VALUES ('{$username}','{$password}','{$email}')");
- //    }
+    /*
+     * Get User name by User ID
+     *
+     * @param Int
+     * @return array
+     */
+    // public static function getUserById($userID)
+    //    {
+    // 	return self::connect()->queryPrepared("SELECT * FROM users WHERE ID=?", array($userID));
+    // }
+    // public static function registerUser($username,$password,$email)
+    //    {
+    //        return self::connect()->queryPrepared("INSERT INTO users(username,password,email,) VALUES ('{$username}','{$password}','{$email}')");
+    //    }
     /*
      * Get User name by User ID
      *
@@ -75,8 +76,27 @@ class UserModel extends DBFactory {
     public static function insertNewUser($username, $email, $password)
     {
         $aParams = array($username, $email, md5($password));
-        $query   = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
         return self::connect()->prepare($query, $aParams)->insert();
+    }
+
+    /**
+     * Check whether username exists or not
+     *
+     * @param string $username
+     *
+     * @return bool
+     */
+    public static function checkUser($username, $password)
+    {
+        $query = "SELECT * FROM users WHERE  username = ? AND password = ? ORDER BY ID LIMIT  1";
+        $aParam = array($username,md5($password));
+        $aStatus = self::connect()->prepare($query, $aParam)->select();
+        if (!$aStatus) {
+            return false;
+        }
+
+        return $aStatus[0]; // tra ve ket qua dang mang
     }
 }

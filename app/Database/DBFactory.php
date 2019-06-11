@@ -1,5 +1,6 @@
 <?php
 namespace MVC\Database;
+
 abstract class DBFactory
 {
     /*
@@ -12,7 +13,7 @@ abstract class DBFactory
      *
      * @return \MVC\Database\DBInterface
      */
-    protected static function connect() : DBInterface
+    protected static function connect():DBInterface
     {
         $grammar = getConfig('database')->getParam('default');
         switch ($grammar) {

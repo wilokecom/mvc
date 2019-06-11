@@ -2,7 +2,6 @@
 
 namespace MVC\Support;
 
-
 class Redirect
 {
     public static function to($route)

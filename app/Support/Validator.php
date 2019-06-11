@@ -2,7 +2,6 @@
 
 namespace MVC\Support;
 
-
 class Validator
 {
     /**
@@ -26,7 +25,7 @@ class Validator
 
         $aConditionals = array();
         foreach ($aRawParse as $cond) {
-            $aConditionAndParams = explode(':', trim($cond));
+            $aConditionAndParams = explode(':', trim($cond)); //phá dấu 2 chấm
             $aConditionals[] = array(
                 'func'  => trim($aConditionAndParams[0]),
                 'param' => isset($aConditionAndParams[1]) ? trim($aConditionAndParams[1]) : ''
@@ -69,6 +68,17 @@ class Validator
         }
 
         return self::success();
+    }
+
+    protected static function url($key)
+    {
+        if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
+            return self::success();
+        }
+
+        if (!filter_var(self::$aData[$key], FILTER_VALIDATE_URL)) {
+            return self::error('Invalid email address');
+        }
     }
 
     protected static function email($key)

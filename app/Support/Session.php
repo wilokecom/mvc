@@ -2,7 +2,6 @@
 
 namespace MVC\Support;
 
-
 class Session
 {
     // Session initialize

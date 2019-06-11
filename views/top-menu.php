@@ -8,13 +8,17 @@ use \MVC\Controllers\UserController;
     $aTopMenuItems = getConfig('menu')->getParam('topMenu');
     $route         = isset($_GET['route']) && ! empty($_GET['route']) ? $_GET['route'] : 'home';
     foreach ($aTopMenuItems as $aMenuName) :
-        if (isset($aMenuName['isLoggedIn'])){
+        if (isset($aMenuName['isLoggedIn']))
+        {
             if (UserController::isLoggedIn() && !$aMenuName['isLoggedIn']) {
                 continue;
-            } elseif (
+            }
+            elseif
+            (
                 !UserController::isLoggedIn()
                 && $aMenuName['isLoggedIn']
-            ) {
+            )
+            {
                 continue;
             }
         }
