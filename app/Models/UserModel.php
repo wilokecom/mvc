@@ -7,39 +7,26 @@ use MVC\Database\DBFactory;
 
 class UserModel extends DBFactory
 {
-
-    /*
-     * Get User name by User ID
-     *
-     * @param Int
-     * @return array
-     */
-    // public static function getUserById($userID)
-    //    {
-    // 	return self::connect()->queryPrepared("SELECT * FROM users WHERE ID=?", array($userID));
-    // }
-    // public static function registerUser($username,$password,$email)
-    //    {
-    //        return self::connect()->queryPrepared("INSERT INTO users(username,password,email,) VALUES ('{$username}','{$password}','{$email}')");
-    //    }
     /*
      * Get User name by User ID
      *
      * @param Int
      * @return array
     */
+    //Done.Thực thi câu lệnh query, trả về kết quả dưới dạng mảng
     public static function getUserByUsername($username)
     {
         $query = "SELECT * FROM users WHERE username=? ORDER BY ID LIMIT 1";
         $aParam = array($username);
 
-        $aStatus = self::connect()->prepare($query, $aParam)->select();
+        $aStatus = self::connect()->prepare($query, $aParam)->select();//Thực thi câu lệnh query và trả về kết quả
         if (!$aStatus) {
             return false;
         }
 
-        return $aStatus[0];
+        return $aStatus[0];//Trả về kết qủa dưới dạng mảng
     }
+
 
     /**
      * Check whether username exists or not
@@ -48,6 +35,8 @@ class UserModel extends DBFactory
      *
      * @return bool
      */
+    //Kiểm tra username có tồn tại hay không
+    //Trả về mảng
     public static function usernameExists($username)
     {
         return self::connect()->prepare("SELECT username FROM users WHERE username=?", array($username))->select();
@@ -60,6 +49,8 @@ class UserModel extends DBFactory
      *
      * @return bool
      */
+    //Kiểm tra email có tồn tại hay không
+    //Trả về mảng
     public static function emailExists($username)
     {
         return self::connect()->prepare("SELECT email FROM users WHERE email=?", array($username))->select();
@@ -73,30 +64,23 @@ class UserModel extends DBFactory
      *
      * @return bool
      */
+    //Insert new user
     public static function insertNewUser($username, $email, $password)
     {
         $aParams = array($username, $email, md5($password));
         $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-
         return self::connect()->prepare($query, $aParams)->insert();
     }
 
-    /**
-     * Check whether username exists or not
-     *
-     * @param string $username
-     *
-     * @return bool
-     */
+    //checkUser
     public static function checkUser($username, $password)
     {
-        $query = "SELECT * FROM users WHERE  username = ? AND password = ? ORDER BY ID LIMIT  1";
-        $aParam = array($username,md5($password));
-        $aStatus = self::connect()->prepare($query, $aParam)->select();
+        $query = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
+        $aParam = array($username, md5($password));
+        $aStatus = self::connect()->prepare($query, $aParam)->select();//Thực thi câu lệnh query và trả về kết quả
         if (!$aStatus) {
             return false;
         }
-
-        return $aStatus[0]; // tra ve ket qua dang mang
+        return $aStatus[0];//Trả về kết qủa dưới dạng mảng
     }
 }

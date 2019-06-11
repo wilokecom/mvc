@@ -7,134 +7,40 @@ use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
 
-// class UserController extends Controller
-// {
-// //	public function index(){
-// //		var_export(UserModel::getUserById(1));
-// //		session::init();
-// //	}
-
-//     public function login()
-//     {
-
-//         if(Session::get('loggedIn')==true){
-//             $this->redirect('users','login');
-//         }
-//         $this->loadView('users/login');
-//     }
-
-//     public function Register(){
-//         $this->loadView('users/register');
-//     }
-
-//     public function handleLogin(){
-//         if ( empty($_POST) ){
-//             header('Location: ' . MVC_HOME_URL . '/user/login');
-//             exit;
-//         }
-//         else{
-//             var_dump($_POST);die;
-//         }
-//     }
-
-//     public function handleRegister(){
-// //        if ( empty($_POST) )
-// //        {
-// //            header('Location: ' . MVC_HOME_URL . '/user/register');
-// //            exit;
-// //        }
-// //        else
-// //        {
-// //            var_dump($_POST);die;
-//           var_export(UserModel::registerUser('cuong','aaaa','cuong@gmail.com'));
-//            // session::init();
-// //            if($_POST['username'])
-// //            {
-// //                $username = $_POST['username'];
-// //            }
-// //            if($_POST['password'])
-// //            {
-// //                $password = $_POST['password'];
-// //            }
-// //            if($_POST['email'])
-// //            {
-// //                $email = $_POST['email'];
-// //            }
-
-//     //    }
-//     }
-
-// //    public function login1(){
-// //
-// //        if(Session::get('loggedIn')==true){
-// //            $this->redirect('home','login');
-// //        }
-// //
-// //        if(isset($_POST['submit'])){
-// //            $source 	= array('username' => $_POST['username']);
-// //            $username 	= $_POST['username'];
-// //            $password 	= md5($_POST['password']);
-// //            $validate = new Validate($source);
-// //
-// //            $validate->addRule('username', 'existRecord', array('database' => $this->db, 'query' => "SELECT `id` FROM `user` WHERE `username` = '$username' AND `password` = '$password'"));
-// //
-// //            $validate->run();
-// //            if($validate->isValid()==true){
-// //                Session::set('loggedIn', true);
-// //                $this->redirect('group','index');
-// //            }else{
-// //                $this->view->errors = $validate->showErrors();
-// //            }
-// //        }
-// //
-// //        $this->view->render('user/login');
-// //    }
-
-//     public function logout(){
-//         $this->view->render('user/logout');
-//         Session::destroy();
-//     }
-// }
-
-/**
- * Class UserController
- * @package MVC\Controllers
- */
 class UserController extends Controller
 {
     /**
      * @var string $loginSessionKey
      */
     protected static $loginSessionKey = 'user_logged_in';
-
+    //Phương thức login-Hiển thị giao diện
     public function login()
     {
-        if (self::isLoggedIn()) {
-            Redirect::to('user/dashboard');
-        }
-
+        $this->redirectToDashboard();//Nếu đã login thì chuyển đến trang dashboard
         $this->loadView('user/login');
     }
-
+    //Phương thức register-Hiển thị giao diện
     public function register()
     {
-        if (self::isLoggedIn()) {
-            Redirect::to('user/dashboard');
-        }
-
+        $this->redirectToDashboard();////Nếu đã login thì chuyển đến trang dashboard
         $this->loadView('user/register');
     }
-
+    //Nếu đã login thì chuyển đến trang dashboard
+    public function redirectToDashboard(){
+        if(self::isLoggedIn()) {
+            Redirect::to('user/dashboard');
+        }
+    }
+    //Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
     public function dashboard()
     {
-        if (!self::isLoggedIn()) {
-            Redirect::to('user/register');
+        //Nếu chưa login thì chuyển đến trang login
+        if(!self::isLoggedIn()) {
+            Redirect::to('user/login');
         }
-
         $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
         $this->loadView('user/dashboard', $aUserInfo);
     }
-
     public static function isLoggedIn()
     {
         return Session::has(self::$loginSessionKey);
@@ -145,9 +51,11 @@ class UserController extends Controller
         Session::forget(self::$loginSessionKey);
         Redirect::to('user/login');
     }
-
+    //Xủ lý khi nhấn submit
     public function handleRegister()
     {
+        //Nhảy đến ClassLoader.php, require file Validator.php, xử lý phương thức validate
+        //Kiểm tra-nếu có lỗi thì hiển thị thông báo lỗi, nếu không có thì bỏ qua
         $status = Validator::validate(
             array(
                 'username' => 'required|maxLength:50',
@@ -156,52 +64,54 @@ class UserController extends Controller
             ),
             $_POST
         );
-
+        //Nếu có lỗi, khởi tạo và add Session, chuyển về đường dẫn user/register
         if ($status !== true) {
             Session::add('register_error', $status);
             Redirect::to('user/register');
         }
-
+        //Kiểm tra emial có tồn tại hay không
+        //Include file UserModel extend DB Factory--> include DB Factory
+        //Nhảy đến phương thức UserModel::emailExists
         if (UserModel::emailExists($_POST['email'])) {
             Session::add('register_error', 'Oops! This email is already exist');
             Redirect::to('user/register');
         }
-
+        //Nhảy đến phương thức UserModel::usernameExists
         if (UserModel::usernameExists($_POST['username'])) {
             Session::add('register_error', 'Oops! This username is already exist');
             Redirect::to('user/register');
         }
-
+        ////Nhảy đến phương thức UserModel::insertNewUser
         $status = UserModel::insertNewUser($_POST['username'], $_POST['email'], $_POST['password']);
         if (!$status) {
             Session::add('register_error', 'Oops! Something went error');
             Redirect::to('user/register');
         }
-
-        Session::add('user_logged_in', $_POST['username']);
+        Session::add(self::$loginSessionKey, $_POST['username']);//include file app/Support/Session.php, lưu username biến $Session
         Session::forget('register_error');
-        Redirect::to('user/dashboard');
+        Redirect::to('user/dashboard');//Include file app/Support/redirect
     }
-
+    //Xử lý khi nhấn loggin
     public function handleLogin()
     {
         $status = Validator::validate(
             array(
                 'username' => 'required|maxLength:50',
+                //'email' => 'required|maxLength:100',
                 'password' => 'required'
             ),
             $_POST
         );
         if ($status !== true) {
-            Session::add('register_error', $status);
-            Redirect::to('user/register');
-        }
-        $aStatus = UserModel::checkUser($_POST['username'], $_POST['password']);
-        if ($status != true) {
-            Session::add('login_error', 'invalid username or password');
+            Session::add('login_error', $status);
             Redirect::to('user/login');
         }
-        Session::add(self::$loginSessionKey, $_POST['username']);
+        $aStatus = UserModel::checkUser($_POST['username'], $_POST['password']);
+        if($aStatus!=true){
+            Session::add('login_error','invalid username or password');
+            Redirect::to('user/login');
+        }
+        Session::add(self::$loginSessionKey, $_POST['username']);//include file app/Support/Session.php, lưu username biến $Session
         Session::forget('login_error');
         Redirect::to('user/dashboard');
     }

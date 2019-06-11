@@ -5,6 +5,7 @@ namespace MVC\Support;
 class Session
 {
     // Session initialize
+    //Start Session
     public static function init()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -19,7 +20,7 @@ class Session
      */
     public static function add($key, $val)
     {
-        self::init();
+        self::init();//Start Session
 
         $_SESSION[$key] = $val;
     }
@@ -31,11 +32,12 @@ class Session
      *
      * @return void
      */
+    //Hủy biến Session
     public static function forget($key)
     {
         self::init();
         if (isset($_SESSION[$key])) {
-            unset($_SESSION[$key]);
+            unset($_SESSION[$key]);//Hủy Session
         }
     }
 
@@ -44,6 +46,7 @@ class Session
      *
      * @return bool
      */
+    //Kiểm tra xem Session có tồn tại hay không
     public static function has($key)
     {
         self::init();

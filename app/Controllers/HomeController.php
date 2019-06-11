@@ -1,5 +1,4 @@
 <?php
-
 namespace MVC\Controllers;
 
 class HomeController extends Controller

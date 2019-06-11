@@ -9,7 +9,6 @@
  * @link     http://wiloke.com
  * @since    1.0.0
  */
-
 namespace MVC\Controllers;
 
 /**
@@ -28,13 +27,13 @@ class GeneralScriptsController
     //Done.Lấy đường dẫn css
     public function semanticUiCSS()
     {
-        mvcEnqueueStyle(MVC_SOURCES_URL . 'css/style.css');//Chạy đến hàm mvcEnqueueStyle-file index.php
+        //Chạy đến hàm mvcEnqueueStyle-file index.php
+        mvcEnqueueStyle(MVC_SOURCES_URL . 'css/style.css');
         mvcEnqueueStyle(MVC_ASSETS_URL . 'semantic/semantic.min.css');
     }
 
     //Done:Lấy đường dẫn JS
-    public function sematicUiJS()
-    {
+    public function sematicUiJS(){
         mvcEnqueueScript('https://code.jquery.com/jquery-3.4.1.min.js');
         mvcEnqueueScript(MVC_ASSETS_URL . 'semantic/semantic.min.js');
     }

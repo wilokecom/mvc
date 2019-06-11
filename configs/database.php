@@ -1,12 +1,12 @@
 <?php
 return [
-    'default' => 'mysql',
+    'default' => 'mysqli',
     'connections' => [
-        'mysql' => array(
+        'mysqli' => array(
             'host' => 'localhost',
             'username' => 'root',
             'password' => '',
-            'db'       => 'fantom'
+            'db' => 'fantom'
         )
     ]
 ];

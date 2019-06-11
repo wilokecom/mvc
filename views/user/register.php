@@ -21,18 +21,23 @@ incViewFile('header');
             <p><?php echo Session::get('register_error'); ?></p>
         </div>
         <?php endif; ?>
-
         <div class="field">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Username">
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" placeholder="Username">
         </div>
         <div class="field">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Password">
+            <label for="password">Password</label>
+            <input id="password" type="text" name="password" placeholder="Password">
         </div>
         <div class="field">
-            <label>Email</label>
-            <input type="email" name="email" placeholder="Email">
+            <label for="email">Email</label>
+            <input id="email" type="text" name="email" placeholder="Email">
+        </div>
+        <div class="field">
+            <div class="ui checkbox">
+                <input id="agree-term" name="agree_term" type="checkbox" class="hidden">
+                <label for="agree-term">I agree to the Terms and Conditions</label>
+            </div>
         </div>
         <button class="ui button" type="submit">Submit</button>
     </form>

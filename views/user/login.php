@@ -1,17 +1,16 @@
 <?php
-
 use MVC\Support\Session;
-
-incViewFile('header'); ?>
-<div id="container">
-    <?php incViewFile('top-menu'); ?>
-    <?php if (Session::has('login_error')):?>
-    <div class="ui error message">
-        <p><?php echo Session::get('login_error'); ?></p>
-    </div>
-    <?php endif; ?>
-
-    <form class="ui form" method="POST" action="<?php echo \MVC\Support\Route::get('user/handle-login'); ?>">
+incViewFile('header');
+?>
+    <div id="container">
+        <?php incViewFile('top-menu'); ?>
+        <?php
+        if (Session::has('login_error')):?>
+            <div class="ui error message">
+                <p><?php echo Session::get('login_error'); ?></p>
+            </div>
+        <?php endif;
+        ?>
         <form class="ui form" method="POST" action="<?php echo \MVC\Support\Route::get('user/handle-login'); ?>">
             <div class="field">
                 <label for="username">Username</label>
@@ -29,7 +28,7 @@ incViewFile('header'); ?>
             </div>
             <button class="ui button" type="submit">Submit</button>
         </form>
-</div>
-<!--Footer-->
+    </div>
+    <!--Footer-->
 <?php
 incViewFile('footer');

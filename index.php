@@ -1,11 +1,7 @@
 <?php
-
-use MVC\Support\HandleAction;
-use MVC\Core\App;
 use MVC\Controllers\GeneralScriptsController;
-
-require_once './configs/general.php';
-
+use MVC\Core\App;
+use MVC\Support\HandleAction;
 //Cài đặt cảnh báo
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -31,7 +27,7 @@ function addAction($hook, $aInfo)
     //Nhảy đến phương thức loadClass trong file ClassLoder.php
     //HandleAction:Class
     //addAction:Phương thức tĩnh
-    HandleAction::addAction($hook, $aInfo);
+    HandleAction::addAction($hook, $aInfo);//require file HandleAction.php và nhảy đến hàm addAction($hook, $aInfo)
 }
 
 //include file view
@@ -39,8 +35,8 @@ function incViewFile($file)
 {
     include MVC_VIEWS . $file . '.php';
 }
+//Done.Trả về đường dẫn url file JS
 
-////Done.Trả về đường dẫn url file JS
 function mvcEnqueueScript($url)
 {
     ?>
@@ -56,8 +52,8 @@ function mvcEnqueueStyle($url)
     <?php
 }
 
-//$composer_autoload_files=array();
-require_once './vendor/autoload.php';
-
-new GeneralScriptsController;
-new App;
+require_once './vendor/autoload.php';//Nhảy đến file vendor/autoload.php
+require_once './configs/general.php';
+//Chưa hiểu
+new GeneralScriptsController;//require file GeneralScriptsController.php và nhảy đến hàm construct
+new App;//require file App.php và nhảy đến hàm construct
