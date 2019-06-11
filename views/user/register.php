@@ -29,6 +29,10 @@ incViewFile('header');
             <input id="password" type="text" name="password" placeholder="Password">
         </div>
         <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="text" name="email" placeholder="Email">
+        </div>
+        <div class="field">
             <div class="ui checkbox">
                 <input id="agree-term" name="agree_term" type="checkbox" class="hidden">
                 <label for="agree-term">I agree to the Terms and Conditions</label>

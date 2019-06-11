@@ -17,23 +17,25 @@ class UserController extends Controller
     //Phương thức login-Hiển thị giao diện
     public function login()
     {
-        $this->redirectToDashboard();
+        $this->redirectToDashboard();//Nếu đã login thì chuyển đến trang dashboard
         $this->loadView('user/login');
     }
     //Phương thức register-Hiển thị giao diện
     public function register()
     {
-        $this->redirectToDashboard();
+        $this->redirectToDashboard();////Nếu đã login thì chuyển đến trang dashboard
         $this->loadView('user/register');
     }
+    //Nếu đã login thì chuyển đến trang dashboard
     public function redirectToDashboard(){
         if(self::isLoggedIn()) {
             Redirect::to('user/dashboard');
         }
     }
-    //Phương thức dashboard()-Sau khi login thành công
+    //Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
     public function dashboard()
     {
+        //Nếu chưa login thì chuyển đến trang login
         if(!self::isLoggedIn()) {
             Redirect::to('user/login');
         }
@@ -107,12 +109,10 @@ class UserController extends Controller
             Redirect::to('user/login');
         }
         $aStatus = UserModel::checkUser($_POST['username'], $_POST['password']);
-
         if($aStatus!=true){
             Session::add('login_error','invalid username or password');
             Redirect::to('user/login');
         }
-
         Session::add(self::$loginSessionKey, $_POST['username']);//include file app/Support/Session.php, lưu username biến $Session
         Session::forget('login_error');
         Redirect::to('user/dashboard');

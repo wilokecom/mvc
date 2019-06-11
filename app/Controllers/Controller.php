@@ -1,16 +1,13 @@
 <?php
 
 namespace MVC\Controllers;
-
 use Jenssegers\Blade\Blade;
-
 class Controller
 {
     protected $oViewInstance;
     protected $oControllerInstance;
     protected $modelName;
     protected $oBlade;
-
     //Tạm thời không dùng
     protected function initPlace()
     {
@@ -19,7 +16,6 @@ class Controller
         }
         return $this->oBlade;
     }
-
     //Done
     public function loadView($viewFile, $aData = [])
     {

@@ -2,7 +2,6 @@
 use MVC\Controllers\GeneralScriptsController;
 use MVC\Core\App;
 use MVC\Support\HandleAction;
-
 //Cài đặt cảnh báo
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -29,21 +28,18 @@ function addAction($hook, $aInfo)
     //addAction:Phương thức tĩnh
     HandleAction::addAction($hook, $aInfo);//require file HandleAction.php và nhảy đến hàm addAction($hook, $aInfo)
 }
-
 //include file view
 function incViewFile($file)
 {
     include MVC_VIEWS . $file . '.php';
 }
-
-////Done.Trả về đường dẫn url file JS
+//Done.Trả về đường dẫn url file JS
 function mvcEnqueueScript($url)
 {
     ?>
     <script src="<?php echo filter_var($url, FILTER_SANITIZE_URL); ?>"></script>
     <?php
 }
-
 //Done.Trả về đường dẫn url file css
 function mvcEnqueueStyle($url)
 {

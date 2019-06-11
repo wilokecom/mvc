@@ -1,7 +1,5 @@
 <?php
-
 use MVC\Support\Session;
-
 incViewFile('header');
 ?>
     <div id="container">
