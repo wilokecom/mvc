@@ -23,7 +23,6 @@ class GeneralScriptsController
         addAction('mvcHead', array($this, 'semanticUiCSS'));
         addAction('mvcFooter', array($this, 'sematicUiJS'));
     }
-
     //Done.Lấy đường dẫn css
     public function semanticUiCSS()
     {
@@ -31,7 +30,6 @@ class GeneralScriptsController
         mvcEnqueueStyle(MVC_SOURCES_URL . 'css/style.css');
         mvcEnqueueStyle(MVC_ASSETS_URL . 'semantic/semantic.min.css');
     }
-
     //Done:Lấy đường dẫn JS
     public function sematicUiJS()
     {   //Chạy đến hàm mvcEnqueueScript-file index.php

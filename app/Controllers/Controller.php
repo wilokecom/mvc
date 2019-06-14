@@ -16,7 +16,8 @@ class Controller
         }
         return $this->oBlade;
     }
-    //Done
+  
+    //Done, nhảy đến thư mục views
     public function loadView($viewFile, $aData = [])
     {
         try {

@@ -22,8 +22,14 @@ return [
             'isLoggedIn' => true
         ),
         array(
+            'name' => 'Dashboard',
+            'route' => 'user/dashboard',
+            'isLoggedIn' => true
+        ),
+        array(
             'name' => 'Post',
-            'route' => 'post'
+            'route' => 'post/add',
+            'isLoggedIn' => true
         )
     )
 ];

@@ -49,9 +49,10 @@ class Validator
             'msg' => $msg
         );
     }
-    //Check xem có tồn tại phần tử mảng của biến $_POST hay không
+    //Max length
     protected static function maxLength($key, $length)
     {
+        //Nếu độ dài không tồn tại hoặc bằng 0
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
             return self::success();
         }
@@ -59,7 +60,6 @@ class Validator
         if (strlen(self::$aData[$key]) > $length) {
             return self::error('The maximum length of ' . $key . ' is ' . $length);
         }
-
         return self::success();
     }
     //Check xem có tồn tại phần tử mảng của biến $_POST hay không
@@ -68,10 +68,8 @@ class Validator
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
             return self::error('The ' . $key . ' is required');
         }
-
         return self::success();
     }
-
     protected static function email($key)
     {
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
@@ -84,6 +82,28 @@ class Validator
 
         return self::success();
     }
+    //Kiểm tra định dạng file image
+    protected static function checkType($key){
+        $type=array("image/jpeg","image/jpg","image/bmp","image/gif","image/png");
+        if(!in_array(self::$aData[$key],$type)){
+             return self::error('Invalid image '. $key);
+        }
+        return self::success();
+    }
+    //Max Size
+    protected static function maxSize($key,$size)
+    {
+        //Nếu kích thước không tồn tại hoặc bằng 0
+        if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
+            return self::success();
+        }
+        //Kiểm tra kích thước của ảnh
+        if (self::$aData[$key]> $size) {
+            return self::error('The maximum size of ' . $key . ' is ' . $size);
+        }
+        return self::success();
+    }
+
     //Kiểm tra điều kiện
     protected static function checkConditional($aConditionals, $key)
     {
@@ -102,10 +122,8 @@ class Validator
                 }
             }
         }
-
         return true;
     }
-
     /**
      * Setup configuration and data
      *

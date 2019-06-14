@@ -2,4 +2,4 @@
 /.idea/*
 /vendor/*
 /vendor1/*
-/composer.lock
+composer.lock
