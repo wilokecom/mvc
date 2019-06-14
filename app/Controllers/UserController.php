@@ -2,7 +2,6 @@
 
 namespace MVC\Controllers;
 
-
 use MVC\Models\UserModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
@@ -14,6 +13,13 @@ class UserController extends Controller
      * @var string $loginSessionKey
      */
     protected static $loginSessionKey = 'user_logged_in';
+    //Phương thức mặc định, url:/mvc/user/
+    public function index(){
+        //Nếu chưa đăng nhập
+        $this->redirectToUserLogin();
+        //Nếu đã đăng nhập
+        $this->redirectToDashboard();
+    }
     //Phương thức login-Hiển thị giao diện
     public function login()
     {
@@ -26,17 +32,24 @@ class UserController extends Controller
         $this->redirectToDashboard();
         $this->loadView('user/register');
     }
-    public function redirectToDashboard(){
-        if(self::isLoggedIn()) {
+    //Chuyển về trang user/login
+    public function redirectToUserLogin(){
+        if (!self::isLoggedIn()) {
+            Redirect::to('user/login');
+        }
+    }
+    //Chuyển về trang dashboard
+    public function redirectToDashboard()
+    {
+        if (self::isLoggedIn()) {
             Redirect::to('user/dashboard');
         }
     }
     //Phương thức dashboard()-Sau khi login thành công
     public function dashboard()
     {
-        if(!self::isLoggedIn()) {
-            Redirect::to('user/login');
-        }
+        //Nếu chưa đăng nhập chuyển về trang login
+        $this->redirectToUserLogin();
         $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
         $this->loadView('user/dashboard', $aUserInfo);
     }
@@ -48,7 +61,9 @@ class UserController extends Controller
     //Xử lý khi nhấn logout
     public function handleLogout()
     {
+        //Hủy Session Login
         Session::forget(self::$loginSessionKey);
+        //Chuyển đến trang Login
         Redirect::to('user/login');
     }
     //Xủ lý khi nhấn submit
@@ -69,7 +84,7 @@ class UserController extends Controller
             Session::add('register_error', $status);
             Redirect::to('user/register');
         }
-        //Kiểm tra emial có tồn tại hay không
+        //Kiểm tra email có tồn tại hay không
         //Include file UserModel extend DB Factory--> include DB Factory
         //Nhảy đến phương thức UserModel::emailExists
         if (UserModel::emailExists($_POST['email'])) {
@@ -82,8 +97,8 @@ class UserController extends Controller
             Redirect::to('user/register');
         }
         ////Nhảy đến phương thức UserModel::insertNewUser
-        $status = UserModel::insertNewUser($_POST['username'], $_POST['email'], $_POST['password']);
-        if (!$status) {
+        $aStatus = UserModel::insertNewUser($_POST['username'], $_POST['email'], $_POST['password']);
+        if (!$aStatus) {
             Session::add('register_error', 'Oops! Something went error');
             Redirect::to('user/register');
         }
@@ -108,12 +123,13 @@ class UserController extends Controller
         }
         $aStatus = UserModel::checkUser($_POST['username'], $_POST['password']);
 
-        if($aStatus!=true){
-            Session::add('login_error','invalid username or password');
+        if ($aStatus != true) {
+            Session::add('login_error', 'invalid username or password');
             Redirect::to('user/login');
         }
-
-        Session::add(self::$loginSessionKey, $_POST['username']);//include file app/Support/Session.php, lưu username biến $Session
+        //Thêm Session[$loginSessionKey]=$_POST['username']
+        Session::add(self::$loginSessionKey, $_POST['username']);
+        //Destroy error
         Session::forget('login_error');
         Redirect::to('user/dashboard');
     }

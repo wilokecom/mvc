@@ -10,7 +10,6 @@ class Controller
     protected $oControllerInstance;
     protected $modelName;
     protected $oBlade;
-
     //Tạm thời không dùng
     protected function initPlace()
     {
@@ -19,8 +18,7 @@ class Controller
         }
         return $this->oBlade;
     }
-
-    //Done
+    //Done, nhảy đến thư mục views
     public function loadView($viewFile, $aData = [])
     {
         try {

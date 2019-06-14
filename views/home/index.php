@@ -1,22 +1,23 @@
 <?php
 //Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header, footer
-    incViewFile('header');
+//Thêm file định dạnh CSS-JS cho header,body,footer
+    incViewFile('header');//Hiển thị Header
 ?>
-<!--Content-->
+<!--Body-->
 <div id="container">
+    <!--Top-menu-->
     <?php
-        //menu-bar
         incViewFile('top-menu');
     ?>
+    <!--Content-->
     <div class="ui message green">
-        <div class="sixteen wide column">Hello! Thank for visitit MVC</div>
+        <div class="sixteen wide column">Hello! Thank for visited MVC</div>
         <h1>Đây là trang HOME</h1>
     </div>
-
-
 </div>
 <!--Footer-->
 <?php
+    //Include file views/footer->Không có gì
     incViewFile('footer');
 ?>
+

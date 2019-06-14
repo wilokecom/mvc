@@ -53,6 +53,7 @@ class MysqlGrammar implements DBInterface
             return $carry;
         }, '');
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
+//        var_dump($aParams);die;
         $this->oSTMT->bind_param($types, ...$aParams);
 
         return $this;
@@ -70,7 +71,6 @@ class MysqlGrammar implements DBInterface
         //Thực thi câu truy vấn, nếu thành công trả về phương thức get_result(), nếu không trả về false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
         $this->oSTMT->close();//Ngắt kết nối
-
         if (!$oResult) {//Nếu kết quả câu truy vấn trả về rỗng
             return false;
         }
@@ -84,19 +84,18 @@ class MysqlGrammar implements DBInterface
     }
 
     /**
-     * insert value
-     *
-     * @return bool
+     * @param string $string
+     * @return mixed
      */
     //Insert
     public function insert($string = '')
     {
         //Thực thị câu lệnh truy vấn
-        $status = $this->oSTMT->execute();
+        $this->oSTMT->execute();
+        $id = $this->oSTMT->insert_id;
         $this->oSTMT->close();//Ngắt kết nối
-        return $status;
+        return $id;
     }
-
     /**
      * Delete value
      *
@@ -108,7 +107,6 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $status;
     }
-
     /*
      * Connecting to database
     */
