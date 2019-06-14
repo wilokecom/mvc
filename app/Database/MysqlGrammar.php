@@ -55,7 +55,6 @@ class MysqlGrammar implements DBInterface
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
 //        var_dump($aParams);die;
         $this->oSTMT->bind_param($types, ...$aParams);
-
         return $this;
     }
 

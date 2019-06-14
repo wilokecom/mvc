@@ -1,10 +1,10 @@
 <?php
-
 use MVC\Support\Session;
 
 //Nhảy đến function incViewFile -file index.php
 //Thêm file định dạnh CSS-JS cho header,body,footer
 incViewFile('header');//Hiển thị Header
+
 ?>
     <!--Body-->
     <div id="container">
