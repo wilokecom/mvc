@@ -21,14 +21,24 @@ class UserController extends Controller
     //Phương thức login-Hiển thị giao diện
     public function login()
     {
+<<<<<<< HEAD
         $this->redirectToDashboard();
         $this->loadView("user/login");
+=======
+        $this->redirectToDashboard();//Nếu đã login thì chuyển đến trang dashboard
+        $this->loadView('user/login');
+>>>>>>> 908e665a0ca901b8f65af5f2fb70ca81619edf6e
     }
     //Phương thức register-Hiển thị giao diện
     public function register()
     {
+<<<<<<< HEAD
         $this->redirectToDashboard();
         $this->loadView("user/register");
+=======
+        $this->redirectToDashboard();////Nếu đã login thì chuyển đến trang dashboard
+        $this->loadView('user/register');
+>>>>>>> 908e665a0ca901b8f65af5f2fb70ca81619edf6e
     }
     //Chuyển về trang user/login
     public function redirectToUserLogin(){
@@ -36,18 +46,26 @@ class UserController extends Controller
             Redirect::to("user/login");
         }
     }
+<<<<<<< HEAD
     //Chuyển về trang dashboard
     public function redirectToDashboard()
     {
         if (self::isLoggedIn()) {
             Redirect::to("user/dashboard");
+=======
+  
+    public function redirectToDashboard(){
+        if(self::isLoggedIn()) {
+            Redirect::to('user/dashboard');
+>>>>>>> 908e665a0ca901b8f65af5f2fb70ca81619edf6e
         }
     }
-    //Phương thức dashboard()-Sau khi login thành công
+    //Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
     public function dashboard()
     {
         //Nếu chưa đăng nhập chuyển về trang login
         $this->redirectToUserLogin();
+
         $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
         $this->loadView("user/dashboard", $aUserInfo);
     }
@@ -129,7 +147,13 @@ class UserController extends Controller
         //Thêm Session[$loginSessionKey]=$_POST["username"]
         Session::add(self::$loginSessionKey, $_POST["username"]);
         //Destroy error
+<<<<<<< HEAD
         Session::forget("login_error");
         Redirect::to("user/dashboard");
+=======
+
+        Session::forget('login_error');
+        Redirect::to('user/dashboard');
+>>>>>>> 908e665a0ca901b8f65af5f2fb70ca81619edf6e
     }
 }

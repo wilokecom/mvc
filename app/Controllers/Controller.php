@@ -1,9 +1,7 @@
 <?php
 
 namespace MVC\Controllers;
-
 use Jenssegers\Blade\Blade;
-
 class Controller
 {
     protected $oViewInstance;
@@ -18,6 +16,7 @@ class Controller
         }
         return $this->oBlade;
     }
+  
     //Done, nhảy đến thư mục views
     public function loadView($viewFile, $aData = [])
     {
