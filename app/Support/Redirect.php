@@ -8,7 +8,7 @@ class Redirect
     public static function to($route)
     {
         //Điều hướng trang
-        header('Location: ' . Route::get($route));//include fileapp/Support/Route.php
+        header("Location: " . Route::get($route));//include fileapp/Support/Route.php
         exit();
     }
 }

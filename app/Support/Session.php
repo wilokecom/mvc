@@ -62,7 +62,7 @@ class Session
     public static function get($key)
     {
         self::init();
-        return self::has($key) ? $_SESSION[$key] : '';
+        return self::has($key) ? $_SESSION[$key] : "";
     }
 
     /**

@@ -34,9 +34,9 @@ class Config
             self::$aConfiguration[$fileName];
         } else {
             //Kiểm tra đường dẫn app/configs
-            if (file_exists(MVC_CONFIG . $fileName . '.php')) {
+            if (file_exists(MVC_CONFIG . $fileName . ".php")) {
                 //Lưu thông tin tên file, nội dung file dưới dạng mảng
-                self::$aConfiguration[$fileName] = include MVC_CONFIG . $fileName . '.php';
+                self::$aConfiguration[$fileName] = include MVC_CONFIG . $fileName . ".php";
             } else {
                 self::$aConfiguration[$fileName] = array();
             }
@@ -69,7 +69,7 @@ class Config
         self::$aValue = isset(self::$aValue[$target]) ? self::$aValue[$target] : null;
         if ($hasChain) {
             return $this;//Tiếp tục trỏ đến phương thức tiếp theo-->getParam($grammar));
-            //self::$oDB = new MysqlGrammar(getConfig('database')->getParam('connections', true)->getParam($grammar));
+            //self::$oDB = new MysqlGrammar(getConfig("database")->getParam("connections", true)->getParam($grammar));
         }
         return self::$aValue;
     }

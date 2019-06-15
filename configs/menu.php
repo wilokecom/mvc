@@ -1,35 +1,35 @@
 <?php
 return [
-    'topMenu' => array(
+    "topMenu" => array(
         array(
-            'name' => 'Home',
-            'route' => 'home',
-            'isLoggedIn' => false
+            "name" => "Home",
+            "route" => "home",
+            "isLoggedIn" => false
         ),
         array(
-            'name' => 'Login',
-            'route' => 'user/login',
-            'isLoggedIn' => false
+            "name" => "Login",
+            "route" => "user/login",
+            "isLoggedIn" => false
         ),
         array(
-            'name' => 'Register',
-            'route' => 'user/register',
-            'isLoggedIn' => false
+            "name" => "Register",
+            "route" => "user/register",
+            "isLoggedIn" => false
         ),
         array(
-            'name' => 'Logout',
-            'route' => 'user/handle-logout',
-            'isLoggedIn' => true
+            "name" => "Logout",
+            "route" => "user/handle-logout",
+            "isLoggedIn" => true
         ),
         array(
-            'name' => 'Dashboard',
-            'route' => 'user/dashboard',
-            'isLoggedIn' => true
+            "name" => "Dashboard",
+            "route" => "user/dashboard",
+            "isLoggedIn" => true
         ),
         array(
-            'name' => 'Post',
-            'route' => 'post/add',
-            'isLoggedIn' => true
+            "name" => "Post",
+            "route" => "post/add",
+            "isLoggedIn" => true
         )
     )
 ];

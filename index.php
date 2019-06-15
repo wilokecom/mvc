@@ -4,8 +4,8 @@ use MVC\Core\App;
 use MVC\Support\HandleAction;
 
 //Cài đặt cảnh báo
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 //Done
 function getConfig($fileName)
@@ -33,7 +33,7 @@ function addAction($hook, $aInfo)
 //include file views/  .Include header và footer
 function incViewFile($file)
 {
-    include MVC_VIEWS . $file . '.php';
+    include MVC_VIEWS . $file . ".php";
 }
 
 ////Done.Trả về đường dẫn url file JS
@@ -51,8 +51,8 @@ function mvcEnqueueStyle($url)
     <?php
 }
 //$composer_autoload_files=array();
-require_once './vendor/autoload.php';//Nhảy đến file vendor/autoload.php
-require_once './configs/general.php';
+require_once "./vendor/autoload.php";//Nhảy đến file vendor/autoload.php
+require_once "./configs/general.php";
 //Load file CSS và file JS
 new GeneralScriptsController;//require file GeneralScriptsController.php và nhảy đến hàm construct
 new App;//require file App.php và nhảy đến hàm construct

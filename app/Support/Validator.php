@@ -1,4 +1,5 @@
 <?php
+
 namespace MVC\Support;
 
 class Validator
@@ -22,31 +23,32 @@ class Validator
     protected static function parseConditionals($rawConditionals)
     {
         //Phá chuỗi và trim
-        $aRawParse = explode('|', trim($rawConditionals));
+        $aRawParse = explode("|", trim($rawConditionals));
         //Khai báo mảng rỗng
         $aConditionals = array();
         //Lấy các phần tử mảng
         foreach ($aRawParse as $cond) {
-            $aConditionAndParams = explode(':', trim($cond));
+            $aConditionAndParams = explode(":", trim($cond));
             $aConditionals[] = array(
-                'func'  => trim($aConditionAndParams[0]),
-                'param' => isset($aConditionAndParams[1]) ? trim($aConditionAndParams[1]) : ''
+                "func" => trim($aConditionAndParams[0]),
+                "param" => isset($aConditionAndParams[1]) ? trim($aConditionAndParams[1]) : ""
             );
         }
-        //arr('func'=> ,'param'=>)
+        //arr("func"=> ,"param"=>)
         return $aConditionals;
     }
     //Trả về mảng có giá trị success
     protected static function success()
     {
-        return array('status' => 'success');
+        return array("status" => "success");
     }
+
     //Trả về mảng có giá trị error
     protected static function error($msg)
     {
         return array(
-            'status' => 'error',
-            'msg' => $msg
+            "status" => "error",
+            "msg" => $msg
         );
     }
     //Max length
@@ -58,7 +60,7 @@ class Validator
         }
         //Kiểm tra chiều dài của chuỗi
         if (strlen(self::$aData[$key]) > $length) {
-            return self::error('The maximum length of ' . $key . ' is ' . $length);
+            return self::error("The maximum length of " . $key . " is " . $length);
         }
         return self::success();
     }
@@ -66,7 +68,7 @@ class Validator
     protected static function required($key)
     {
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
-            return self::error('The ' . $key . ' is required');
+            return self::error("The " . $key . " is required");
         }
         return self::success();
     }
@@ -77,48 +79,48 @@ class Validator
         }
 
         if (!filter_var(self::$aData[$key], FILTER_VALIDATE_EMAIL)) {
-            return self::error('Invalid email address');
+            return self::error("Invalid email address");
         }
 
         return self::success();
     }
     //Kiểm tra định dạng file image
-    protected static function checkType($key){
-        $type=array("image/jpeg","image/jpg","image/bmp","image/gif","image/png");
-        if(!in_array(self::$aData[$key],$type)){
-             return self::error('Invalid image '. $key);
+    protected static function checkType($key)
+    {
+        $type = array("image/jpeg", "image/jpg", "image/bmp", "image/gif", "image/png");
+        if (!in_array(self::$aData[$key], $type)) {
+            return self::error("Invalid image " . $key);
         }
         return self::success();
     }
     //Max Size
-    protected static function maxSize($key,$size)
+    protected static function maxSize($key, $size)
     {
         //Nếu kích thước không tồn tại hoặc bằng 0
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
             return self::success();
         }
         //Kiểm tra kích thước của ảnh
-        if (self::$aData[$key]> $size) {
-            return self::error('The maximum size of ' . $key . ' is ' . $size);
+        if (self::$aData[$key] > $size) {
+            return self::error("The maximum size of " . $key . " is " . $size);
         }
         return self::success();
     }
-
     //Kiểm tra điều kiện
     protected static function checkConditional($aConditionals, $key)
     {
         //Duyệt các phần tử mảng
         foreach ($aConditionals as $aConditional) {
-            if (!method_exists(__CLASS__, $aConditional['func'])) {
-                throw new \RuntimeException('Method with name ' . $aConditional['func'] . ' does not exist');
+            if (!method_exists(__CLASS__, $aConditional["func"])) {
+                throw new \RuntimeException("Method with name " . $aConditional["func"] . " does not exist");
             } else {
                 $aStatus = call_user_func_array(
-                    array(__CLASS__, $aConditional['func']),
-                    array($key, $aConditional['param'])
+                    array(__CLASS__, $aConditional["func"]),
+                    array($key, $aConditional["param"])
                 );
 
-                if ($aStatus['status'] == 'error') {
-                    return $aStatus['msg'];
+                if ($aStatus["status"] == "error") {
+                    return $aStatus["msg"];
                 }
             }
         }
@@ -151,5 +153,4 @@ class Validator
         self::$aData = [];
         return true;
     }
-
 }
