@@ -3,12 +3,8 @@ use MVC\Support\Session;
 
 //Nhảy đến function incViewFile -file index.php
 //Thêm file định dạnh CSS-JS cho header,body,footer
-<<<<<<< HEAD
-incViewFile("header");//Hiển thị Header
-=======
-incViewFile('header');//Hiển thị Header
 
->>>>>>> 908e665a0ca901b8f65af5f2fb70ca81619edf6e
+incViewFile("header");//Hiển thị Header
 ?>
     <!--Body-->
     <div id="container">
