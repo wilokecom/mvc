@@ -79,7 +79,8 @@ class UserController extends Controller
             ),
             $_POST
         );
-        //Nếu có lỗi, khởi tạo và add Session, chuyển về đường dẫn user/register
+
+        //Nếu có lỗi, khởi tạo và add Session, chuyển về đường dẫn
         if ($status !== true) {
             Session::add("register_error", $status);
             Redirect::to("user/register");
