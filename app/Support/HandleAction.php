@@ -8,8 +8,6 @@
  */
 
 namespace MVC\Support;
-
-
 class HandleAction
 {
 
@@ -38,14 +36,14 @@ class HandleAction
         mvcHead arr(
                             0=>arr  (
                                         0=>{MVC\Controller\GeneralScriptController}
-                                        1=>'semanticUiCSS'
+                                        1=>"semanticUiCSS"
                                     )
                             )
                      )
         mvcFooter arr(
                             0=>arr  (
                                         0=>{MVC\Controller\GeneralScriptController}
-                                        1=>'semanticUiJS'
+                                        1=>"semanticUiJS"
                                     )
                             )
                      )

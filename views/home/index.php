@@ -1,13 +1,13 @@
 <?php
 //Nhảy đến function incViewFile -file index.php
 //Thêm file định dạnh CSS-JS cho header,body,footer
-    incViewFile('header');//Hiển thị Header
+    incViewFile("header");//Hiển thị Header
 ?>
 <!--Body-->
 <div id="container">
     <!--Top-menu-->
     <?php
-        incViewFile('top-menu');
+        incViewFile("top-menu");
     ?>
     <!--Content-->
     <div class="ui message green">
@@ -18,6 +18,6 @@
 <!--Footer-->
 <?php
     //Include file views/footer->Không có gì
-    incViewFile('footer');
+    incViewFile("footer");
 ?>
 

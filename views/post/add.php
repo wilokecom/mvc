@@ -3,28 +3,28 @@
 use \MVC\Support\Route;
 use \MVC\Support\Session;
 
-incViewFile('header');
+incViewFile("header");
 ?>
     <div id="container">
         <!--Top-menu-->
         <?php
-        incViewFile('top-menu');
+        incViewFile("top-menu");
         ?>
         <!--Error-->
         <?php
-        $hasError = Session::has('add-error');
+        $hasError = Session::has("post_error");
         if ($hasError) {
-            $formClass = 'ui form error';
+            $formClass = "ui form error";
         } else {
-            $formClass = 'ui form';
+            $formClass = "ui form";
         }
         //
         ?>
-        <form class="<?php echo $formClass; ?>" method="POST" action="<?php echo Route::get('post/handle-add');?>" enctype="multipart/form-data">
+        <form class="<?php echo $formClass; ?>" method="POST" action="<?php echo Route::get("post/handle-add");?>" enctype="multipart/form-data">
              <!--Display Error-->
         <?php if ($hasError) : ?>
             <div class="ui error message">
-                <p><?php echo Session::get('post_error'); ?></p>
+                <p><?php echo Session::get("post_error"); ?></p>
             </div>
         <?php endif; ?>
             <!--Information-->
@@ -67,15 +67,15 @@ incViewFile('header');
                     </div>
                 </div>
             </div>
-            <!--Tittle-->
+            <!--Title-->
             <div class="field">
-                <label for="post-tittle">Tittle</label>
-                <input id="post-tittle" type="text" name="post-tittle">
+                <label for="post-title">title</label>
+                <input id="post-title" type="text" name="post-title" placeholder="Title">
             </div>
             <!--Content-->
             <div class="field">
                 <label for="post-content">Content</label>
-                <textarea id="post-content" rows="2" name="post-content"></textarea>
+                <textarea id="post-content" rows="2" name="post-content" placeholder="Content"></textarea>
             </div>
             <!--Image-->
             <div class="ui action input">
@@ -96,5 +96,5 @@ incViewFile('header');
         </form>
     </div>
 <?php
-incViewFile('footer');
+incViewFile("footer");
 

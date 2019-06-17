@@ -4,8 +4,8 @@ namespace MVC\Core;
 class App
 {
     //Đường dẫn URL:admin-home/login-admin-home/1
-    protected $controllerName = 'HomeController';//Controller
-    protected $methodName = 'index';//Action
+    protected $controllerName = "HomeController";//Controller
+    protected $methodName = "index";//Action
     protected $oControllerInstance;//Đối tượng của Class Controller
     protected $aParams = [];//Param
     //explode:Phá chuỗi thành mảng
@@ -13,35 +13,35 @@ class App
     //rtrim:Xóa khoảng trắng và kí tự / ở cuối
     public function parseUrl()
     {
-        if (isset($_GET['route'])) {
-            return explode('/', filter_var(rtrim($_GET['route'], '/'), FILTER_SANITIZE_URL));
+        if (isset($_GET["route"])) {
+            return explode("/", filter_var(rtrim($_GET["route"], "/"), FILTER_SANITIZE_URL));
         }
     }
     //array_map:Trả về mảng.Truyền tham số $name vào function($item)
     protected function parseName($name)
     {
-        $name = explode('-', $name);
+        $name = explode("-", $name);
 
         $aParseName = array_map(function ($item) {
             return ucfirst($item);
         }, $name);
 
-        return implode($aParseName, '');
+        return implode($aParseName, "");
     }
     //AdminHomeController
     protected function generateControllerName()
     {
         if (empty($this->aParams)) {
-            return '';
+            return "";
         }
-        $controllerName = $this->parseName($this->aParams[0]) . 'Controller';
+        $controllerName = $this->parseName($this->aParams[0]) . "Controller";
         unset($this->aParams[0]);//Xóa phần tử mảng
         return $controllerName;
     }
     //Trả về file Controller.php
     protected function generateControllerFile($controllerName)
     {
-        return $controllerName . '.php';
+        return $controllerName . ".php";
     }
     //Kiểm tra đường dẫn đến file Controller.php có tồn tại
     protected function isControllerExists($controllerName)
@@ -56,7 +56,7 @@ class App
         }
         require_once MVC_CONTROLLERS . $this->generateControllerFile($this->controllerName);
         //VD:\MVC\Controllers\HomeController
-        $this->controllerName = '\MVC\Controllers\\' . $this->controllerName;
+        $this->controllerName = "\MVC\Controllers\\" . $this->controllerName;
         //VD:{MVC\Controllers\HomeController}
         $this->oControllerInstance = new $this->controllerName;
     }
@@ -70,7 +70,7 @@ class App
     protected function generateMethodName()
     {
         if (empty($this->aParams) || !isset($this->aParams[1])) {
-            return '';
+            return "";
         }
         if (isset($this->aParams[1])) {
             $methodName = $this->parseName($this->aParams[1]);

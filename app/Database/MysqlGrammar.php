@@ -38,20 +38,20 @@ class MysqlGrammar implements DBInterface
             $aParams[] = $args;
             switch ($args) {
                 case is_float($args):
-                    $carry .= 'd';
+                    $carry .= "d";
                     break;
                 case is_integer($args):
-                    $carry .= 'i';
+                    $carry .= "i";
                     break;
                 case is_string($args):
-                    $carry .= 's';
+                    $carry .= "s";
                     break;
                 default:
-                    $carry .= 'b';
+                    $carry .= "b";
                     break;
             }
             return $carry;
-        }, '');
+        }, "");
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
 //        var_dump($aParams);die;
         $this->oSTMT->bind_param($types, ...$aParams);
@@ -65,7 +65,7 @@ class MysqlGrammar implements DBInterface
      */
 
     //Select
-    public function select($string = '')
+    public function select($string = "")
     {
         //Thực thi câu truy vấn, nếu thành công trả về phương thức get_result(), nếu không trả về false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
@@ -87,7 +87,7 @@ class MysqlGrammar implements DBInterface
      * @return mixed
      */
     //Insert
-    public function insert($string = '')
+    public function insert($string = "")
     {
         //Thực thị câu lệnh truy vấn
         $this->oSTMT->execute();
@@ -100,7 +100,7 @@ class MysqlGrammar implements DBInterface
      *
      * @return bool
      */
-    public function delete($string = '')
+    public function delete($string = "")
     {
         $status = $this->oSTMT->execute();
         $this->oSTMT->close();
@@ -115,10 +115,10 @@ class MysqlGrammar implements DBInterface
         //Connect
         if ($this->oConnect === null) {
             $this->oConnect = new \mysqli(
-                $this->aDBConfiguration['host'],
-                $this->aDBConfiguration['username'],
-                $this->aDBConfiguration['password'],
-                $this->aDBConfiguration['db']
+                $this->aDBConfiguration["host"],
+                $this->aDBConfiguration["username"],
+                $this->aDBConfiguration["password"],
+                $this->aDBConfiguration["db"]
             );
 
             /* check connection */

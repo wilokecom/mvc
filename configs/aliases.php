@@ -1,4 +1,4 @@
 <?php
 return [
-    'db' => 'MVC\Database\DB::class'
+    "db" => "MVC\Database\DB::class"
 ];

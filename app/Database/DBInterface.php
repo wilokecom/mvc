@@ -5,9 +5,9 @@ interface DBInterface
 {
     public function connect();
 
-    public function select($string = '');
+    public function select($string = "");
 
-    public function insert($string = '');
+    public function insert($string = "");
 
-    public function delete($string = '');
+    public function delete($string = "");
 }

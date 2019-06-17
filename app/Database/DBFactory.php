@@ -19,22 +19,22 @@ abstract class DBFactory
         //Nhảy đến hàm getConfig-file index.php
         //Include file \Support\Config(database)
         //Nhảy đến hàm construct của file \Support\Config(database)
-        //Nhảy đến phương thức getParam('default')
+        //Nhảy đến phương thức getParam("default")
         //Trả về thư viện mysqli
-        $grammar = getConfig('database')->getParam('default');
+        $grammar = getConfig("database")->getParam("default");
         switch ($grammar) {
-            case 'sqlite':
-                self::$oDB = new MysqlGrammar(getConfig('database')->getParam('connections', true)->getParam($grammar));
+            case "sqlite":
+                self::$oDB = new MysqlGrammar(getConfig("database")->getParam("connections", true)->getParam($grammar));
 
                 return self::$oDB->connect();
                 break;
-            case 'mysqli':
+            case "mysqli":
                 //Include app/Database/MysqlGrammar.php implement DBInterface.php-->Include DBInterface.php
                 //Nhảy đến hàm construct của file \Support\Config(database)
-                //Nhảy đến phương thức getParam(connections', true))
+                //Nhảy đến phương thức getParam(connections", true))
                 //Nhảy đến phương thức getParam(mysqli)
                 //Chú ý ở đây hàm construc bị ghi đè
-                self::$oDB = new MysqlGrammar(getConfig('database')->getParam('connections', true)->getParam($grammar));
+                self::$oDB = new MysqlGrammar(getConfig("database")->getParam("connections", true)->getParam($grammar));
                 return self::$oDB->connect();
                 break;
         }
