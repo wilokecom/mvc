@@ -13,11 +13,10 @@ class Session
         }
     }
 
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
+  /**
+   * @param $key
+   * @param $val
+   */
     public static function add($key, $val)
     {
         self::init();//Start Session

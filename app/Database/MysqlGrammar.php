@@ -1,32 +1,39 @@
 <?php
-
 namespace MVC\Database;
 
+/**
+ * Class MysqlGrammar
+ * @package MVC\Database
+ */
 class MysqlGrammar implements DBInterface
 {
-    /*
-    * @param Array
-    */
+    /**
+     * @var
+     */
     private $aDBConfiguration;//Mảng lưu thông tin DB
-
-    /*
-    * @param instanceof \mysqli
-    */
+    /**
+     * @var null
+     */
     private $oConnect = null;//Object kết nối đến DB mysqli
+    /**
+     * @var null
+     */
     private $oSTMT = null;//Tạo đối tượng prepared
-    //Hàm khởi tạo
-    public function __construct($aDBConfiguration)
+    /**
+     * MysqlGrammar constructor.
+     * @param $aDBConfiguration
+     */
+    public function __construct($aDBConfiguration)//Hàm khởi tạo
     {
         $this->aDBConfiguration = $aDBConfiguration;//Mảng lưu thông tin DB
     }
-
-    /*
-    * Prepare before querying
-    *
-    * @return $this
-    */
-    //Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
-    public function prepare($query, array $aArgs)
+    /**
+     * @return $this
+     * @param array $aArgs
+     * @param       $query
+     */
+    public function prepare($query,
+        array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
     {
         $aParams = array();
         //Tạo đối tượng preapred
@@ -53,19 +60,15 @@ class MysqlGrammar implements DBInterface
             return $carry;
         }, "");
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
-//        var_dump($aParams);die;
+        //      var_dump($aParams);die;
         $this->oSTMT->bind_param($types, ...$aParams);
         return $this;
     }
-
     /**
      * Get value
-     *
      * @return mixed
      */
-
-    //Select
-    public function select($string = "")
+    public function select($string = "")//Select
     {
         //Thực thi câu truy vấn, nếu thành công trả về phương thức get_result(), nếu không trả về false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
@@ -75,19 +78,18 @@ class MysqlGrammar implements DBInterface
         }
         $aRows = [];
         if (isset($oResult) && $oResult instanceof \mysqli_result) {//=true
-            while (null !== ($aRow = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
+            while (null !== ($aRow
+                    = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
                 $aRows[] = $aRow;
             }
         }
         return $aRows;
     }
-
     /**
-     * @param string $string
      * @return mixed
+     * @param string $string
      */
-    //Insert
-    public function insert($string = "")
+    public function insert($string = "")//Insert
     {
         //Thực thị câu lệnh truy vấn
         $this->oSTMT->execute();
@@ -97,7 +99,6 @@ class MysqlGrammar implements DBInterface
     }
     /**
      * Delete value
-     *
      * @return bool
      */
     public function delete($string = "")
@@ -106,27 +107,23 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $status;
     }
-    /*
-     * Connecting to database
-    */
-    //Connect DB
-    public function connect()
+    /**
+     * @return $this|mixed
+     */
+    public function connect()//Connect DB
     {
         //Connect
         if ($this->oConnect === null) {
-            $this->oConnect = new \mysqli(
-                $this->aDBConfiguration["host"],
+            $this->oConnect = new \mysqli($this->aDBConfiguration["host"],
                 $this->aDBConfiguration["username"],
                 $this->aDBConfiguration["password"],
-                $this->aDBConfiguration["db"]
-            );
-
+                $this->aDBConfiguration["db"]);
             /* check connection */
             if ($this->oConnect->connect_errno) {
-                throw new \RuntimeException("Connect failed: %s\n", $this->oConnect->connect_error);
+                throw new \RuntimeException("Connect failed: %s\n",
+                    $this->oConnect->connect_error);
             }
         }
-
         return $this;
     }
 }

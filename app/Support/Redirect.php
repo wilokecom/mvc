@@ -2,6 +2,10 @@
 
 namespace MVC\Support;
 
+/**
+ * Class Redirect
+ * @package MVC\Support
+ */
 class Redirect
 {
     //Điều hướng trang
