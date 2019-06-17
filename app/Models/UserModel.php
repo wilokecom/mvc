@@ -1,10 +1,7 @@
 <?php
 
 namespace MVC\Models;
-
-
 use MVC\Database\DBFactory;
-
 class UserModel extends DBFactory
 {
     /*
@@ -50,8 +47,6 @@ class UserModel extends DBFactory
     {
         return self::connect()->prepare("SELECT email FROM users WHERE email=?", array($username))->select();
     }
-
-
     /**
      * Check whether username exists or not
      *

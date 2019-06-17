@@ -3,7 +3,7 @@
 <head>
     <title>MVC</title>
     <!--Add file script-->
-    <script src ="<?php echo MVC_ASSETS_DIR ?>js/01.js"></script>
+    <script type="javascript" src="<?php echo MVC_ASSETS_DIR ?>js/01.js">" </script>
     <?php
     //Add file CSS
     //mvcHead là key của mảng chứa đường dẫn đến file CSS trong file app/Support/HandleAction.php

@@ -1,41 +1,70 @@
 <?php
+
 namespace MVC\Controllers;
+
 use MVC\Models\PostModel;
 use MVC\Models\UserModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
+
+/**
+ * Class UserController
+ * @package MVC\Controllers
+ */
 class UserController extends Controller
 {
     /**
+     * Store login Session
+     *
      * @var string $loginSessionKey
      */
     protected static $loginSessionKey = "user_logged_in";
+
     //Phương thức mặc định, url:/mvc/user/
-    public function index(){
+
+    /**
+     *
+     */
+    public function index()
+    {
         //Nếu chưa đăng nhập
         $this->redirectToUserLogin();
         //Nếu đã đăng nhập
         $this->redirectToDashboard();
     }
+
     //Phương thức login-Hiển thị giao diện
+
+    /**
+     * @throws \Exception
+     */
     public function login()
     {
         $this->redirectToDashboard();
         $this->loadView("user/login");
     }
+
     //Phương thức register-Hiển thị giao diện
+
+    /**
+     * @throws \Exception
+     * @return mixed
+     */
     public function register()
     {
         $this->redirectToDashboard();
         $this->loadView("user/register");
     }
+
     //Chuyển về trang user/login
-    public function redirectToUserLogin(){
+    public function redirectToUserLogin()
+    {
         if (!self::isLoggedIn()) {
             Redirect::to("user/login");
         }
     }
+
     //Chuyển về trang dashboard
     public function redirectToDashboard()
     {
@@ -43,6 +72,7 @@ class UserController extends Controller
             Redirect::to("user/dashboard");
         }
     }
+
     //Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
     public function dashboard()
     {
@@ -50,13 +80,16 @@ class UserController extends Controller
         $this->redirectToUserLogin();
 
         $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
+
         $this->loadView("user/dashboard", $aUserInfo);
     }
+
     //Kiểm tra đã loggin chưa
     public static function isLoggedIn()
     {
         return Session::has(self::$loginSessionKey);
     }
+
     //Xử lý khi nhấn logout
     public function handleLogout()
     {
@@ -65,6 +98,7 @@ class UserController extends Controller
         //Chuyển đến trang Login
         Redirect::to("user/login");
     }
+
     //Xủ lý khi nhấn submit
     public function handleRegister()
     {
@@ -75,7 +109,7 @@ class UserController extends Controller
                 "username" => "required|maxLength:50",
                 "email" => "required|maxLength:100",
                 "password" => "required",
-                "agree_term"=>"required"
+                "agree_term" => "required"
             ),
             $_POST
         );
@@ -106,7 +140,9 @@ class UserController extends Controller
         Session::forget("register_error");
         Redirect::to("user/dashboard");//Include file app/Support/redirect
     }
+
     //Xử lý khi nhấn loggin
+
     public function handleLogin()
     {
         $status = Validator::validate(

@@ -94,7 +94,7 @@ class MysqlGrammar implements DBInterface
         $id = $this->oSTMT->insert_id;
         $this->oSTMT->close();//Ngắt kết nối
         return $id;
-    }
+}
     /**
      * Delete value
      *

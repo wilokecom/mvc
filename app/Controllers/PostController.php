@@ -4,16 +4,30 @@ use MVC\Models\PostModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
+
+/**
+ * Class PostController
+ *
+ * @package MVC\Controllers
+ */
 class PostController extends Controller
 {
     //Lưu Sesion Login
     protected static $loginSessionKey = "user_logged_in";
     //Phương thức mặc định, đường dẫn url:mvc/post/
+
+    /**
+     * @return
+     */
     public function index()
     {
         //Nhảy đến phương thức add
         Redirect::to("post/add");
     }
+
+    /**
+     * @throws \Exception
+     */
     public function add()
     {
         $this->loadView("post/add");

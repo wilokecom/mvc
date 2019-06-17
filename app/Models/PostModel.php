@@ -17,7 +17,6 @@ class PostModel extends DBFactory
         }
         return $aStatus[0]["ID"];
     }
-
     //Insert Post
     public static function insertPost($userID, $post_status, $post_type, $post_title, $post_content, $post_mime_type, $guid)
     {
@@ -26,7 +25,6 @@ class PostModel extends DBFactory
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare($query, $aParams)->insert();
     }
-
     //Insert PostMeta
     public static function insertPostMeta($meta_key, $meta_value, $lastID)
     {
@@ -35,14 +33,12 @@ class PostModel extends DBFactory
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare($query, $aParams)->insert();
     }
-
     public static function getPost($postID)
     {
         $aParams = array($postID);
         $query = "SELECT * FROM posts WHERE ID = ?";
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         $aPosts = self::connect()->prepare($query, $aParams)->select();
-
         if (!$aPosts) {
             return false;
         }
