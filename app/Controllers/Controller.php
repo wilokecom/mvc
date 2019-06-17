@@ -16,14 +16,15 @@ class Controller
         }
         return $this->oBlade;
     }
-    //Done
+  
+    //Done, nhảy đến thư mục views
     public function loadView($viewFile, $aData = [])
     {
         try {
             //Không hiểu câu lệnh này
             extract($aData);
             //$this->initPlace();
-            require_once MVC_VIEWS . $viewFile . '.php';//Nhảy đến views/home/index
+            require_once MVC_VIEWS . $viewFile . ".php";//Nhảy đến views/home/index
             //$this->oBlade->make($viewFile, $aData);
         } catch (\Exception $oException) {
             throw $oException;

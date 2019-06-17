@@ -4,6 +4,6 @@ class HomeModel
 {
     public function index()
     {
-        echo 'dad';
+        echo "dad";
     }
 }

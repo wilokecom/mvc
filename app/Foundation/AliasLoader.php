@@ -1,8 +1,6 @@
 <?php
 
 namespace MVC\Foundation;
-
-
 class AliasLoader
 {
     /**
@@ -100,7 +98,7 @@ class AliasLoader
      */
     protected function prependToLoaderStack()
     {
-        spl_autoload_register([$this, 'load'], true, true);
+        spl_autoload_register([$this, "load"], true, true);
     }
 
     /**

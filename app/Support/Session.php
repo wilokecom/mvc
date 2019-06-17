@@ -58,10 +58,11 @@ class Session
      *
      * @return string
      */
+    //Nếu Sesion tồn tại, trả về Session
     public static function get($key)
     {
         self::init();
-        return self::has($key) ? $_SESSION[$key] : '';
+        return self::has($key) ? $_SESSION[$key] : "";
     }
 
     /**
@@ -69,6 +70,7 @@ class Session
      *
      * @return void
      */
+    //Hủy Session
     public static function destroy()
     {
         session_destroy();

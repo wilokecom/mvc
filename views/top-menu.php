@@ -1,26 +1,31 @@
 <?php
-
 use MVC\Support\Route as Route;
 use \MVC\Controllers\UserController;
-
 ?>
 <div class="ui pointing menu">
     <?php
-    //Trả về mảng
-    $aTopMenuItems = getConfig('menu')->getParam('topMenu');
-    $route = isset($_GET['route']) && !empty($_GET['route']) ? $_GET['route'] : 'home';//user/dashboard
-    //$aMenuName=arr(name=>'Post', route=>'post')
-    foreach ($aTopMenuItems as $aMenuName) :
-        if (isset($aMenuName['isLoggedIn'])) {
-            if ((UserController::isLoggedIn() && !$aMenuName['isLoggedIn']) || (!UserController::isLoggedIn() && $aMenuName['isLoggedIn'])) {
+    //Trả về mảng của phần tử topMenu trong file config có đường dẫn app/configs/menu
+    $aTopMenuItems = getConfig("menu")->getParam("topMenu");
+    //Lấy đường dẫn url
+    $route = isset($_GET["route"]) && !empty($_GET["route"]) ? $_GET["route"] : "home";//user/dashboard
+    //Duyệt các phần tử mảng $aTopMenuItems
+    foreach ($aTopMenuItems as $aMenuName) ://Dấu ":" dùng với endforeach
+        if (isset($aMenuName["isLoggedIn"])) {//Nếu tồn tại phần tử "isLoggedIn" trong mảng $aMenuName
+            //Nếu đã login thì chỉ hiển thị Logout, Post
+            //Nêu chưa login thì hiển thị Home, Login, Register
+            if ((UserController::isLoggedIn() && !$aMenuName["isLoggedIn"]) || (!UserController::isLoggedIn() && $aMenuName["isLoggedIn"])) {
                 continue;
             }
         }
-        $wrapperClass = $route == $aMenuName['route'] ? 'active item' : 'item';//item
+        //$wrapperClass dùng để hiển thị class
+        //Nếu $aMenuName["route"]= url hiện tại thì class là "active item"
+        //Nếu $aMenuName["route"]!=url hiện tại thì class là "item"
+        $wrapperClass = $route == $aMenuName["route"] ? "active item" : "item";//item
         ?>
-        <a href="<?php echo Route::get($aMenuName['route']); ?>" class="<?php echo $wrapperClass; ?>"><!--mvc/post-->
+        <!--Hiển thị menu đường dẫn-->
+        <a href="<?php echo Route::get($aMenuName["route"]); ?>" class="<?php echo $wrapperClass; ?>"><!--mvc/post/index-->
             <?php
-            echo $aMenuName['name']; //Post
+            echo $aMenuName["name"]; //Post
             ?>
         </a>
     <?php

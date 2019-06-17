@@ -8,8 +8,6 @@
  */
 
 namespace MVC\Support;
-
-
 class HandleAction
 {
 
@@ -18,7 +16,7 @@ class HandleAction
      *
      * @var array
      */
-    protected static $aHooks;//array, thuộc tính
+    protected static $aHooks;//array(mvcHead:lưu file CSS, mvcFooter:Lưu file JS)
 
     /**
      * Register hooks
@@ -28,7 +26,7 @@ class HandleAction
      *
      * @return $this
      */
-    //Done
+    //Phương thức add Action
     public static function addAction($hook, $aInfo)
     {
         if (!isset(self::$aHooks[$hook])) {//=true
@@ -38,14 +36,14 @@ class HandleAction
         mvcHead arr(
                             0=>arr  (
                                         0=>{MVC\Controller\GeneralScriptController}
-                                        1=>'semanticUiCSS'
+                                        1=>"semanticUiCSS"
                                     )
                             )
                      )
         mvcFooter arr(
                             0=>arr  (
                                         0=>{MVC\Controller\GeneralScriptController}
-                                        1=>'semanticUiJS'
+                                        1=>"semanticUiJS"
                                     )
                             )
                      )
@@ -61,7 +59,7 @@ class HandleAction
      *
      * @return void
      */
-    //Done
+    //Phương thức doAction
     public static function doAction($hook, $aParams = array())
     {
         if (isset(self::$aHooks[$hook]) && !empty(self::$aHooks)) {//=true

@@ -18,16 +18,12 @@ class UserModel extends DBFactory
     {
         $query = "SELECT * FROM users WHERE username=? ORDER BY ID LIMIT 1";
         $aParam = array($username);
-
         $aStatus = self::connect()->prepare($query, $aParam)->select();//Thực thi câu lệnh query và trả về kết quả
         if (!$aStatus) {
             return false;
         }
-
         return $aStatus[0];//Trả về kết qủa dưới dạng mảng
     }
-
-
     /**
      * Check whether username exists or not
      *
@@ -41,7 +37,6 @@ class UserModel extends DBFactory
     {
         return self::connect()->prepare("SELECT username FROM users WHERE username=?", array($username))->select();
     }
-
     /**
      * Check whether username exists or not
      *
