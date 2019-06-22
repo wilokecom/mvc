@@ -12,6 +12,7 @@ incViewFile("header"); //Header
     incViewFile("top-menu");
     $aUserInfo = $aData[0];
     $aPost     = $aData[1];
+    $post_author=$aPost["post_author"];
     ?>
     <!--Content-->
     <div class="ui success message">
