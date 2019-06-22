@@ -18,7 +18,6 @@ class UserController extends Controller
      * @var string
      */
     protected static $loginSessionKey = "user_logged_in";
-
     /**
      * Phương thức mặc định, url:/mvc/user/
      */
@@ -29,7 +28,6 @@ class UserController extends Controller
         //Nếu đã đăng nhập
         $this->redirectToDashboard();
     }
-
     /**
      * Phương thức login-Hiển thị giao diện
      * @throws \Exception
@@ -39,7 +37,6 @@ class UserController extends Controller
         $this->redirectToDashboard();
         $this->loadView("user/login");
     }
-
     /**
      * Phương thức register-Hiển thị giao diện
      * @throws \Exception
@@ -49,7 +46,6 @@ class UserController extends Controller
         $this->redirectToDashboard();
         $this->loadView("user/register");
     }
-
     /**
      * Chuyển về trang user/login
      */
@@ -59,7 +55,6 @@ class UserController extends Controller
             Redirect::to("user/login");
         }
     }
-
     /**
      * Chuyển về trang dashboard
      */
@@ -69,19 +64,26 @@ class UserController extends Controller
             Redirect::to("user/dashboard");
         }
     }
-
     /**
      * Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
      * @throws \Exception
      */
-    public function dashboard()//Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
+    public function dashboard()
     {
         //Nếu chưa đăng nhập chuyển về trang login
         $this->redirectToUserLogin();
-        $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
-        $this->loadView("user/dashboard", $aUserInfo);
+        //Lấy thông tin bảng User
+        $aUserInfo = UserModel::getUserByUsername(
+            $_SESSION[self::$loginSessionKey]
+        );
+        //Lấy thông tin bảng Post
+        $aPosts = PostModel::getPostbyPostAuthor($aUserInfo["ID"]);
+        if (!$aPosts) { //Nếu $aPosts=false thì trả về mảng rỗng
+            $aPosts = array();
+        }
+        $aData = array_merge($aUserInfo, $aPosts);
+        $this->loadView("user/dashboard", $aUserInfo, $aPosts);
     }
-
     /**
      * Kiểm tra đã loggin chưa
      * @return bool
@@ -90,7 +92,6 @@ class UserController extends Controller
     {
         return Session::has(self::$loginSessionKey);
     }
-
     /**
      * Xử lý khi nhấn logout
      */
@@ -101,7 +102,6 @@ class UserController extends Controller
         //Chuyển đến trang Login
         Redirect::to("user/login");
     }
-
     /**
      * Xử lý handleRegister
      */
@@ -109,12 +109,15 @@ class UserController extends Controller
     {
         //Nhảy đến ClassLoader.php, require file Validator.php, xử lý phương thức validate
         //Kiểm tra-nếu có lỗi thì hiển thị thông báo lỗi, nếu không có thì bỏ qua
-        $status = Validator::validate(array(
-            "username" => "required|maxLength:50",
-            "email" => "required|maxLength:100",
-            "password" => "required",
-            "agree_term" => "required"
-        ), $_POST);
+        $status = Validator::validate(
+            array(
+                "username" => "required|maxLength:50",
+                "email" => "required|maxLength:100",
+                "password" => "required",
+                "agree_term" => "required"
+            ),
+            $_POST
+        );
         //Nếu có lỗi, khởi tạo và add Session, chuyển về đường dẫn
         if ($status !== true) {
             Session::add("register_error", $status);
@@ -143,17 +146,21 @@ class UserController extends Controller
         Session::forget("register_error");
         Redirect::to("user/dashboard");//Include file app/Support/redirect
     }
-
     /**
      * Xử lý phương thước handleLogin
      */
     public function handleLogin()
     {
-        $status = Validator::validate(array(
-            "username" => "required|maxLength:50",
-            //"email" => "required|maxLength:100",
-            "password" => "required"
-        ), $_POST);
+        //$userID = UserModel::getUserID($username);
+        //$aPosts = PostModel::getPost($userID);
+        $status = Validator::validate(
+            array(
+                "username" => "required|maxLength:50",
+                //"email" => "required|maxLength:100",
+                "password" => "required"
+            ),
+            $_POST
+        );
         if ($status !== true) {
             Session::add("login_error", $status);
             Redirect::to("user/login");

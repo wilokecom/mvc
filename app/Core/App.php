@@ -30,9 +30,6 @@ class App
      * @var array
      */
     protected $aParams = [];//Param
-    //explode:Phá chuỗi thành mảng
-    //filter_var:Kiểm tra đường dẫn url
-    //rtrim:Xóa khoảng trắng và kí tự / ở cuối
     /**
      * explode:Phá chuỗi thành mảng
      * filter_var:Kiểm tra đường dẫn url
@@ -46,11 +43,11 @@ class App
         }
     }
     /**
+     * array_map:Trả về mảng.Truyền tham số $name vào function($item)
      * @return string
-     *
      * @param $name
      */
-    protected function parseName($name)//array_map:Trả về mảng.Truyền tham số $name vào function($item)
+    protected function parseName($name)
     {
         $name = explode("-", $name);
         $aParseName = array_map(function ($item) {

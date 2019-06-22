@@ -120,8 +120,7 @@ class MysqlGrammar implements DBInterface
                 $this->aDBConfiguration["db"]);
             /* check connection */
             if ($this->oConnect->connect_errno) {
-                throw new \RuntimeException("Connect failed: %s\n",
-                    $this->oConnect->connect_error);
+                throw new \RuntimeException("Connect failed: %s\n", $this->oConnect->connect_error);
             }
         }
         return $this;

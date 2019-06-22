@@ -37,6 +37,7 @@ incViewFile("header");//Hiển thị Header
         <div class="field">
             <label for="password">Password</label>
             <input id="password" type="password" name="password" placeholder="Password">
+            <input type="checkbox" onclick="myFunction()">Show Password
         </div>
         <!--Email-->
         <div class="field">
@@ -44,10 +45,6 @@ incViewFile("header");//Hiển thị Header
             <input id="email" type="text" name="email" placeholder="Email">
         </div>
         <!--Checkbox-->
-        <div class="field">
-            <label for="email">Email</label>
-            <input id="email" type="text" name="email" placeholder="Email">
-        </div>
         <div class="field">
             <div class="ui checkbox">
                 <input id="agree-term" name="agree_term" type="checkbox" class="hidden">

@@ -34,7 +34,10 @@ class GeneralScriptsController
     public function sematicUiJS()  //Done:Lấy đường dẫn JS
     {
         //Chạy đến hàm mvcEnqueueScript-file index.php
-        mvcEnqueueScript("https://code.jquery.com/jquery-3.4.1.min.js");
+        mvcEnqueueScript(MVC_ASSETS_URL."js/jquery-3.4.1.min.js");
         mvcEnqueueScript(MVC_ASSETS_URL . "semantic/semantic.min.js");
+        mvcEnqueueScript(MVC_ASSETS_URL . "js/showContent_jquery.js");
+        mvcEnqueueScript(MVC_ASSETS_URL . "js/showPassword_jquery.js");
+        mvcEnqueueScript(MVC_ASSETS_URL . "js/focusInput_jquery.js");
     }
 }

@@ -10,17 +10,21 @@ use MVC\Database\DBFactory;
  */
 class PostModel extends DBFactory
 {
-    //Lấy userID
-    public static function getUserID($username)
-    {
-        $aParams = array($username);
-        $query = "SELECT *FROM users WHERE username=? ORDER BY ID LIMIT 1";
-        $aStatus = self::connect()->prepare($query, $aParams)->select();
-        if (!$aStatus) {
-            return false;
-        }
-        return $aStatus[0]["ID"];
-    }
+
+    /**
+     * @return bool
+     * @param $username
+     */
+//    public static function getUserID($username)//Lấy userID
+//    {
+//        $aParams = array($username);
+//        $query = "SELECT *FROM users WHERE username=? ORDER BY ID LIMIT 1";
+//        $aStatus = self::connect()->prepare($query, $aParams)->select();
+//        if (!$aStatus) {
+//            return false;
+//        }
+//        return $aStatus[0]["ID"];
+//    }
     /**
      * @return mixed
      * @param $post_status
@@ -31,7 +35,7 @@ class PostModel extends DBFactory
      * @param $guid
      * @param $userID
      */
-    public static function insertPost(
+    public static function insertPost(//Insert Post
         $userID,
         $post_status,
         $post_type,
@@ -59,19 +63,20 @@ class PostModel extends DBFactory
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare($query, $aParams)->insert();
     }
-    /**
+    /**|
+     * Trả về tất cả các bài
      * @return bool
-     * @param $postID
+     * @param $postAuthor
      */
-    public static function getPost($postID)
+    public static function getPostbyPostAuthor($postAuthor)
     {
-        $aParams = array($postID);
-        $query = "SELECT * FROM posts WHERE ID = ?";
+        $aParams = array($postAuthor);
+        $query = "SELECT * FROM posts WHERE post_author = ?";
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         $aPosts = self::connect()->prepare($query, $aParams)->select();
         if (!$aPosts) {
             return false;
         }
-        return $aPosts[0];
+        return $aPosts;
     }
 }
