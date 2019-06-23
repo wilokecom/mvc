@@ -1,11 +1,12 @@
 <?php
 use MVC\Support\Session;
+
 incViewFile('header');
 ?>
     <div id="container">
         <?php incViewFile('top-menu'); ?>
         <?php
-        if (Session::has('login_error')):?>
+        if (Session::has('login_error')) : ?>
             <div class="ui error message">
                 <p><?php echo Session::get('login_error'); ?></p>
             </div>

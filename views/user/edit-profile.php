@@ -15,9 +15,15 @@ incViewFile('header');
         incViewFile('top-menu');//Top-menu
         ?>
         <form class="ui form" action="<?php echo \MVC\Support\Route::get('user/upload')?>" enctype="multipart/form-data" method="post">
+<!--            <div class="field">-->
+<!--                <label>Upload</label>-->
+<!--                -->
+<!--            </div>-->
             <div class="field">
-                <label>Upload</label>
+                <label>Ảnh đại diện : </label>
+                <img src= "<?php if(isset($meta_value)) echo MVC_ASSETS_URL.'Images'.'/'.$meta_value;?>" width="150" height="150">
                 <input type="file" name="file-upload">
+                <!--                <input type="file" name="file-upload" >-->
             </div>
 <!--            <div class="ui action input">-->
 <!--                <input id="featured-image" type="file" placeholder="Featured Image" name="file-upload">-->
@@ -26,15 +32,25 @@ incViewFile('header');
 
             <div class="field">
                 <label>Họ Tên</label>
-                <input type="text" name="fullname" placeholder="full-name">
+                <input type="text" name="fullname" placeholder="full-name" value="<?php if(isset($meta_key)){echo $meta_key;}?>">
             </div>
+
             <div class="field">
-                <div class="ui checkbox">
-                    <input id="agree-to-term" type="checkbox" tabindex="0" class="hidden">
-                    <label for="agree-to-term" >I agree to the Terms and Conditions</label>
-                </div>
+                <label>UserName</label>
+                <input type="text" name="username" placeholder="full-name" value="<?php if(isset($username)){echo $username;}?>">
             </div>
-            <button class="ui button" type="submit">Submit</button>
+
+            <div class="field">
+                <label>PassWord</label>
+                <input type="text" name="password" placeholder="full-name" value="<?php if(isset($password)){echo $password;}?>">
+            </div>
+
+            <div class="field">
+                <label>Email</label>
+                <input type="text" name="email" placeholder="full-name" value="<?php if(isset($email)){echo $email;}?>">
+            </div>
+
+            <button class="ui button" type="Save">Save</button>
         </form>
     </div>
 <?php

@@ -87,7 +87,7 @@ class UserModel extends DBFactory
      * @param $password
      * Insert new user
      * @return mixed
-     *              Check whether username exists or not
+     * Check whether username exists or not
      */
     public static function insertNewUser($username, $email, $password)
     {
@@ -127,5 +127,39 @@ class UserModel extends DBFactory
         $query = "INSERT INTO user_meta (meta_key, meta_value,user_id) VALUES (?,?,$userID) ";
         $aParams = array($fullname,$fileUpload);
         return self::connect()->prepare($query,$aParams)->insert();
+    }
+
+    /**
+     * @param $userID
+     *
+     * @return bool
+     */
+    public static function getUser_metaID($userID)
+    {
+        $aParams = array($userID);
+        $query = "SELECT * FROM user_meta WHERE user_id=? ORDER BY umeta_id LIMIT  1";
+        $aStatus = self::connect()->prepare($query, $aParams)->select();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0];
+    }
+
+    /**
+     * @param $meta_key
+     * @param $meta_value
+     * @param $user_id
+     *
+     * @return bool
+     */
+    public static function updateUser_meta($meta_key,$meta_value,$user_id)
+    {
+        $aParams = array();
+        $query = "UPDATE user_meta SET meta_key = $meta_key , meta_value = $meta_value WHERE user_id = $user_id ";
+        $aStatus = self::connect()->prepare($query, $aParams)->select();
+        if(!$aStatus){
+            return false;
+        }
+        return $aStatus[0];
     }
 }

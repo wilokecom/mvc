@@ -33,8 +33,13 @@ return [
             'route' => 'post'
         ),
         array(
-            'name' => 'Profile',
+            'name' => 'Edit-Profile',
             'route' => 'user/edit-profile',
+            'isLoggedIn' => true
+        ),
+        array(
+            'name' => 'Profile',
+            'route' => 'user/Profile',
             'isLoggedIn' => true
         )
     )

@@ -215,7 +215,7 @@ class Validator
      * @param $size
      *
      * @return array
-     *              Kiếm tra và qui định size của file ảnh
+     * Kiếm tra và qui định size của file ảnh
      */
     protected static function checkSize($key, $size)
     {

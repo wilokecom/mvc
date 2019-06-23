@@ -21,6 +21,7 @@ class Session
      * @param string $key
      * @param $val
      * @return string
+     *
      */
     public static function add($key, $val)
     {

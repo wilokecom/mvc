@@ -15,6 +15,7 @@ class Controller
     protected $oControllerInstance;
     protected $modelName;
     protected $oBlade;
+
     /**
      * @return \Jenssegers\Blade\Blade
      * //Tạm thời không dùng
@@ -32,6 +33,7 @@ class Controller
     /**
      * @param       $viewFile
      * @param array $aData
+     * @param array $aData2
      *
      * @throws \Exception
      */
@@ -41,7 +43,8 @@ class Controller
          * hàm bẫy lỗi
          */
         try {
-            extract($aData);
+            //hàm extract gán key của mảng $aData[]  vào tên của giá trị (value)
+                extract($aData);
             //$this->initPlace();
             require_once MVC_VIEWS . $viewFile . '.php';//Nhảy đến views/home/index
             //$this->oBlade->make($viewFile, $aData);

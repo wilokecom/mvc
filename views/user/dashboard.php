@@ -6,8 +6,9 @@ incViewFile('header'); //Header
     incViewFile('top-menu');//Top-menu
     ?>
     <div class="ui success message">
-        <div class="header">Hello <span style="color:red;"><?php echo $username; ?></span>!<!--Hello username-->
-<!--            <p>Nhấn vào button Post để post bài.</p>-->
+        <div class="header">Hello <span style="color:red;"> <?php echo $username; ?> </span>!<!--Hello username-->
+            <?php echo $ID;?>
+            <?php echo $email;?>
         </div>
     </div>
 

@@ -28,9 +28,10 @@ class UserController extends Controller
         $this->redirectToDashboard();//Nếu đã login thì chuyển đến trang dashboard
         $this->loadView('user/login');
     }
+
     /**
      * @throws \Exception
-     *                   //Phương thức register-Hiển thị giao diện
+     * Phương thức register-Hiển thị giao diện
      */
     public function register()
     {
@@ -45,6 +46,7 @@ class UserController extends Controller
             Redirect::to('user/dashboard');
         }
     }
+
     /**
      * @throws \Exception
      *  //Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
@@ -56,6 +58,8 @@ class UserController extends Controller
             Redirect::to('user/login');
         }
         $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
+        // $aUserMetaInfo = UserModel::getUserID($_SESSION[self::$loginSessionKey]);
+//        $aUserInfo2 =
         $this->loadView('user/dashboard', $aUserInfo);
         var_dump($aUserInfo);
     }
@@ -79,17 +83,71 @@ class UserController extends Controller
     }
 
     /**
+     * return array
      * @throws \Exception
-     *                   //Kiểm tra URL editProfile , chưa đăng nhập thì không vào được edit-profile
      */
-    public function editProfile()
+    public function profile()
     {
-        $this->loadView('user/edit-profile');
         if (!self::isLoggedIn()) {
             Redirect::to('user/login');
         }
-        $aUserInfo=UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
-        var_dump($aUserInfo);
+        $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
+//        var_dump($aUserInfo);
+        $username = Session::get(self::$loginSessionKey);
+        $userID = UserModel::getUserID($username);
+        $aName = UserModel::getUser_metaID($userID);
+//        var_dump($aName);
+
+        if (!$aName) {
+            $aName = array();
+            $this->loadView('user/profile', $aUserInfo);
+        }
+        $aData = array_merge($aUserInfo, $aName);
+        $this->loadView('user/profile', $aData);
+//        var_dump($aUserInfo);
+    }
+
+    /**
+     * @throws \Exception
+     * Kiểm tra URL editProfile , chưa đăng nhập thì không vào được edit-profile
+     */
+    public function editProfile()
+    {
+        if (!self::isLoggedIn()) {
+            Redirect::to('user/login');
+        }
+
+        $username = Session::get(self::$loginSessionKey);
+        $userID = UserModel::getUserID($username);
+        $aName = UserModel::getUser_metaID($userID);
+        $aUserInfo = UserModel::getUserByUsername($_SESSION[self::$loginSessionKey]);
+        if (!$aName) {
+            $aName = array();
+            $this->loadView('user/edit-profile', $aUserInfo);
+//            var_dump($aUserInfo);
+        }
+        else {
+            $aData = array_merge($aUserInfo, $aName);
+            $this->loadView('user/edit-profile', $aData);
+        }
+
+        $aData = array_merge($aUserInfo, $aName);
+
+        $status = Validator::validate(
+            array(
+                'fullname' => 'required|maxLength:50',
+                'name' => 'required|maxLength:50',
+                'type' => 'required|checkType',
+                'destination' => 'required|maxLength:100',
+                'username' => 'required|maxLength:50',
+                'password' => 'required|maxLength:20',
+                'email' => 'required|maxLength:50'
+            ),
+            $aData
+        );
+        if ($status !== true) {
+            Session::add('') ;
+        }
     }
 
     /**
@@ -112,13 +170,14 @@ class UserController extends Controller
             Session::add('register_error', $status);
             Redirect::to('user/register');
         }
-        //Kiểm tra emial có tồn tại hay không
+        //Kiểm tra Email có tồn tại hay không
         //Include file UserModel extend DB Factory--> include DB Factory
         //Nhảy đến phương thức UserModel::emailExists
         if (UserModel::emailExists($_POST['email'])) {
             Session::add('register_error', 'Oops! This email is already exist');
             Redirect::to('user/register');
         }
+        //Kiểm tra Username có tồn tại hay không
         //Nhảy đến phương thức UserModel::usernameExists
         if (UserModel::usernameExists($_POST['username'])) {
             Session::add('register_error', 'Oops! This username is already exist');
@@ -139,7 +198,6 @@ class UserController extends Controller
 
     /**
      * Xử lý khi nhấn loggin
-     *
      */
     public function handleLogin()
     {
@@ -175,19 +233,23 @@ class UserController extends Controller
     {
 
         $fileUpload = $_FILES['file-upload'];
+//        var_dump($fileUpload);
         /**
          * //Nếu tên file upload khác rỗngs
          */
         if ($fileUpload['name'] != null) {
             $filename = $fileUpload['tmp_name'];//Đường dẫn tạm file upload
-            $destination = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];//Đường dẫn chứa file upload- asset
+            $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];//Đường dẫn chứa file upload- asset
             move_uploaded_file($filename, $destination);
         }
         $aData = array_merge($_POST, $fileUpload);
+
         $status = Validator::validate(
             array(
                 'fullname' => 'required|maxLength:50',
-                'type' => 'required|checkType'
+                'name' => 'required|maxLength:50',
+                'type' => 'required|checkType',
+                'destination' => 'required|maxLength:100'
             ),
             $aData
         );
@@ -199,13 +261,18 @@ class UserController extends Controller
 
         $username = Session::get(self::$loginSessionKey);
         $userID = UserModel::getUserID($username);
-        var_dump($userID);
+
         ////Nhảy đến phương thức UserModel::insertNewUser
-        $astatusUser = UserModel::insertUserMeta( $aData['fullname'], $aData['type'],$userID);
+        $astatusUser = UserModel::insertUserMeta($aData['fullname'], $aData['name'], $userID);
+
         if (!$astatusUser) {
             Session::add('edit-profile_error', 'Oops! Something went error');
             Redirect::to('user/edit-profile');
         }
+
+//        Session::forget('login_error');
+//        Redirect::to('user/profile');
+//          var_dump($aData);
     }
 }
 

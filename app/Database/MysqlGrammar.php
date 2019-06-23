@@ -51,6 +51,11 @@ class MysqlGrammar implements DBInterface
         $aParams = array();
         //Tạo đối tượng preapred
         $this->oSTMT = $this->oConnect->prepare($query);
+
+        if (!$this->oSTMT) {
+            var_dump($this->oConnect->error);
+        }
+
         //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
         //function ($carry, $args) use (&$aParams):Hàm ẩn danh
         //lamda và cloasure
