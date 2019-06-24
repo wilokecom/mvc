@@ -23,7 +23,7 @@ function getConfig($fileName)//Done
 function doAction($hook)
 {
     //Nhảy đến phương thức loadClass trong file ClassLoder.php
-    //Nhanyr đến file app/Support/HandleAction.php .Phương thức doAction
+    //Nhảy đến file app/Support/HandleAction.php .Phương thức doAction
     HandleAction::doAction($hook);
 }
 /**

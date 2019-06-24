@@ -1,10 +1,8 @@
 <?php
-
 namespace MVC\Controllers;
 
 /**
  * Class CategoryController
- *
  * @package MVC\Controllers
  */
 class CategoryController

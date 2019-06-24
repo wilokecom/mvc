@@ -2,3 +2,10 @@
     max-width: 1200px;
     margin: 20px auto;
 }
+/*Show more content*/
+.morecontent span {
+    display: none;
+}
+.morelink {
+    display: block;
+}

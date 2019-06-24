@@ -2,6 +2,7 @@
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
+use MVC\Models\UserModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
@@ -32,6 +33,13 @@ class PostController extends Controller
         $this->loadView("post/add");
     }
     /**
+     * @throws \Exception
+     */
+    public function edit()
+    {
+        $this->loadView("post/edit");
+    }
+    /**
      * Phương thức handleAdd()
      */
     public function handleAdd()
@@ -49,7 +57,7 @@ class PostController extends Controller
         $status = Validator::validate(
             array(
                 "post-title" => "required|maxLength:100",
-                "post-content" => "required|maxLength:1000",
+                "post-content" => "required|maxLength:10000",
                 "name" => "required|maxLength:20",
                 "type" => "checkType",
                 "size" => "maxSize:500000"
@@ -64,7 +72,7 @@ class PostController extends Controller
         //Lấy username login
         $username = Session::get(self::$loginSessionKey);
         //Lấy userID
-        $userID = PostModel::getUserID($username);
+        $userID = UserModel::getUserByUsername($username)["ID"];
         //Lấy guid
         $guid = MVC_HOME_URL . "post/add/" . $aData["post-type"] . "_id="
                 . $userID;
@@ -101,5 +109,15 @@ class PostController extends Controller
         move_uploaded_file($imagename, $destination);
         //Destroy Error
         Session::forget("post_error");
+        //Quay trở lịa trang dashboard
+        Redirect::to("user/dashboard");
+    }
+    /**
+     *
+     */
+    public function handleEdit ()
+    {
+        Redirect::to("user/dashboard");
     }
 }
+
