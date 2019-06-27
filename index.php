@@ -74,3 +74,4 @@ require_once "./configs/general.php";
 //Load file CSS và file JS
 new GeneralScriptsController;//require file GeneralScriptsController.php và nhảy đến hàm construct
 new App;//require file App.php và nhảy đến hàm construct
+

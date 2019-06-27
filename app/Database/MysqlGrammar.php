@@ -78,8 +78,7 @@ class MysqlGrammar implements DBInterface
         }
         $aRows = [];
         if (isset($oResult) && $oResult instanceof \mysqli_result) {//=true
-            while (null !== ($aRow
-                    = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
+            while (null !== ($aRow = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
                 $aRows[] = $aRow;
             }
         }
@@ -96,6 +95,17 @@ class MysqlGrammar implements DBInterface
         $id = $this->oSTMT->insert_id;
         $this->oSTMT->close();//Ngắt kết nối
         return $id;
+    }
+    /**
+     * @return mixed
+     * @param string $string
+     */
+    public function update($string = "")//Insert
+    {
+        //Thực thị câu lệnh truy vấn
+        $status = $this->oSTMT->execute();
+        $this->oSTMT->close();
+        return $status;
     }
     /**
      * Delete value
