@@ -14,10 +14,6 @@ use MVC\Support\Validator;
 class PostController extends Controller
 {
     /**
-     * @var string
-     */
-    protected static $loginSessionKey = "user_logged_in";//Lưu Sesion Login
-    /**
      * Phương thức mặc định, đường dẫn url:mvc/post/
      */
     public function index()//Phương thức mặc định, đường dẫn url:mvc/post/
@@ -30,28 +26,53 @@ class PostController extends Controller
      */
     public function add()
     {
+        //Nếu chưa đăng nhập chuyển về trang login
+        UserController::redirectToUserLogin();
         $this->loadView("post/add");
     }
     /**
+     * @param $aParam
      * @throws \Exception
      */
-    public function edit()
+    public function edit($aParam)
     {
-        $this->loadView("post/edit");
+        //Nếu chưa đăng nhập chuyển về trang login
+        UserController::redirectToUserLogin();
+        //Lấy PostID
+        $post_id = $aParam[2];
+        unset($aParam[2]);//Xóa Param
+        //Lấy thông tin bảng Post theo PostID
+        $aPostInfo = PostModel::getPostbyPostID($post_id);
+        if (!$aPostInfo) { //Nếu $aPosts=false thì trả về mảng rỗng
+            $aPostInfo = array();
+        }
+        //$aPostInfo=$aPostInfo[$id];
+        //$aData = array_merge($aUserInfo, $aPostInfo);
+        $this->loadView("post/edit", $aPostInfo, $post_id);
+    }
+    /**
+     * Xóa thông tin bảng post
+     */
+    public function delete()
+    {
+        //Lấy post_id
+        $post_id = $_POST["post_id"];
+        //Xóa dữ liệu bảng Post
+        $aPostInfo = PostModel::deletePostbyPostID($post_id);
+        if ($aPostInfo) {
+            echo "Delete Success";
+        } else {
+            echo "Delete Error";
+        }
     }
     /**
      * Phương thức handleAdd()
      */
     public function handleAdd()
     {
-        echo "<pre>";
-        print_r($_POST);
-        print_r($_FILES["image-upload"]);
-        echo "</pre>";
         $imageUpload = $_FILES["image-upload"];
         $aData       = array_merge(
-            $_POST,
-            $imageUpload
+            $_POST, $imageUpload
         );//Gộp 2 mảng để Validate
         //Validate cả $_POST và $_FILE
         $status = Validator::validate(
@@ -70,7 +91,7 @@ class PostController extends Controller
             Redirect::to("post/add");
         }
         //Lấy username login
-        $username = Session::get(self::$loginSessionKey);
+        $username = Session::get(UserController::$loginSessionKey);
         //Lấy userID
         $userID = UserModel::getUserByUsername($username)["ID"];
         //Lấy guid
@@ -89,18 +110,18 @@ class PostController extends Controller
         if (!$aStatusPost) {
             Session::add(
                 "post_error",
-                "Oops! Something went Post error"
+                "Oops! Something went Post_Add error"
             );
             Redirect::to("post/add");
         }
-        //Insert vào bảng PostMeta
+        // Insert vào bảng PostMeta
         $aStatusMeta = PostModel::insertPostMeta(
             "phone number",
             $aData["phone-number"],
             $aStatusPost
         );
         if (!$aStatusMeta) {
-            Session::add("post_error", "Oops! Something went PostMeta error");
+            Session::add("post_error", "Oops! Something went Post_Meta error");
             Redirect::to("post/add");
         }
         $imagename = $imageUpload["tmp_name"];//Đường dẫn tạm file upload
@@ -113,10 +134,42 @@ class PostController extends Controller
         Redirect::to("user/dashboard");
     }
     /**
-     *
+     * @param $aParam
      */
-    public function handleEdit ()
+    public function handleEdit($aParam)
     {
+        //Lấy PostID
+        $id = $aParam[2];
+        echo "<pre>";
+        print_r($_POST);
+        echo "</pre>";
+        //Validate $_POST
+        $status = Validator::validate(
+            array(
+                "post-title" => "required|maxLength:100",
+                "post-content" => "required|maxLength:10000",
+            ),
+            $_POST
+        );
+        //Nếu có lỗi, khởi tạo và add Session, chuyển về đường dẫn post/edit/id/
+        if ($status !== true) {
+            Session::add("post_error", $status);
+            Redirect::to("post/edit/" . $id . "/");
+        }
+        //Update bảng Post theo PostID
+        $aStatusPost = PostModel::updatePostbyPostID(
+            $_POST["post-status"], $_POST["post-type"], $_POST["post-title"],
+            $_POST["post-content"], $id
+        );
+        if (!$aStatusPost) {
+            Session::add(
+                "post_error",
+                "Oops! Something went Post_Edit error"
+            );
+            Redirect::to("post/edit/" . $id . "/");
+        }
+        Session::forget("post_error");
+        //Quay trở lại trang dashboard
         Redirect::to("user/dashboard");
     }
 }

@@ -17,16 +17,16 @@ class UserController extends Controller
      * Biến lưu Session user login
      * @var string
      */
-    protected static $loginSessionKey = "user_logged_in";
+    public static $loginSessionKey = "user_logged_in";
     /**
      * Phương thức mặc định, url:/mvc/user/
      */
     public function index()//Phương thức mặc định, url:/mvc/user/
     {
         //Nếu chưa đăng nhập
-        $this->redirectToUserLogin();
+        self::redirectToUserLogin();
         //Nếu đã đăng nhập
-        $this->redirectToDashboard();
+        self::redirectToDashboard();
     }
     /**
      * Phương thức login-Hiển thị giao diện
@@ -34,22 +34,25 @@ class UserController extends Controller
      */
     public function login()//Login
     {
-        $this->redirectToDashboard();
+        //Nếu đã login
+        self::redirectToDashboard();
+        //Nếu chưa login
         $this->loadView("user/login");
     }
+
     /**
      * Phương thức register-Hiển thị giao diện
      * @throws \Exception
      */
     public function register()//Phương thức register-Hiển thị giao diện
     {
-        $this->redirectToDashboard();
+        self::redirectToDashboard();
         $this->loadView("user/register");
     }
     /**
      * Chuyển về trang user/login
      */
-    public function redirectToUserLogin() //Chuyển về trang user/login
+    public static function redirectToUserLogin() //Chuyển về trang user/login
     {
         if (!self::isLoggedIn()) {
             Redirect::to("user/login");
@@ -58,31 +61,33 @@ class UserController extends Controller
     /**
      * Chuyển về trang dashboard
      */
-    public function redirectToDashboard()//Chuyển về trang dashboard
+    public static function redirectToDashboard()//Chuyển về trang dashboard
     {
         if (self::isLoggedIn()) {
             Redirect::to("user/dashboard");
         }
     }
+
     /**
+     * url:user/dashboard
      * Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
      * @throws \Exception
      */
     public function dashboard()
     {
         //Nếu chưa đăng nhập chuyển về trang login
-        $this->redirectToUserLogin();
+        self::redirectToUserLogin();
         //Lấy thông tin bảng User
         $aUserInfo = UserModel::getUserByUsername(
             $_SESSION[self::$loginSessionKey]
         );
         //Lấy thông tin bảng Post
-        $aPosts = PostModel::getPostbyPostAuthor($aUserInfo["ID"]);
-        if (!$aPosts) { //Nếu $aPosts=false thì trả về mảng rỗng
-            $aPosts = array();
+        $aPostInfo = PostModel::getPostbyPostAuthor($aUserInfo["ID"]);
+        if (!$aPostInfo) { //Nếu $aPosts=false thì trả về mảng rỗng
+            $aPostInfo = array();
         }
-        $aData = array_merge($aUserInfo, $aPosts);
-        $this->loadView("user/dashboard", $aUserInfo, $aPosts);
+        //$aData = array_merge($aUserInfo, $aPostInfo);
+        $this->loadView("user/dashboard", $aUserInfo, $aPostInfo);
     }
     /**
      * Kiểm tra đã loggin chưa
@@ -174,6 +179,6 @@ class UserController extends Controller
         Session::add(self::$loginSessionKey, $_POST["username"]);
         //Destroy error
         Session::forget("login_error");
-        Redirect::to("user/dashboard");//Include file app/Support/redirec
+        Redirect::to("user/dashboard");//Include file app/Support/redirect
     }
 }
