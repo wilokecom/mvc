@@ -29,7 +29,7 @@ incViewFile('header');
             </div>
 
             <div class="field">
-                <label style="color: Green;">Email : </label>
+                <label style="color: Green;">Email :</label>
                 <span style="font-weight: bold; font-size: 20px; color: red;"><?php echo $email; ?></span>
             </div>
             <button class="ui button" type="submit">Edit</button>
