@@ -52,7 +52,7 @@ class UserController extends Controller
      *
      * @throws \Exception
      */
-    public function register()//Phương thức register-Hiển thị giao diện
+    public function register()
     {
         self::redirectToDashboard();
         $this->loadView("user/register");
@@ -61,7 +61,7 @@ class UserController extends Controller
     /**
      * Chuyển về trang user/login
      */
-    public static function redirectToUserLogin() //Chuyển về trang user/login
+    public static function redirectToUserLogin()
     {
         if (!self::isLoggedIn()) {
             Redirect::to("user/login");
@@ -71,7 +71,7 @@ class UserController extends Controller
     /**
      * Chuyển về trang dashboard
      */
-    public static function redirectToDashboard()//Chuyển về trang dashboard
+    public static function redirectToDashboard()
     {
         if (self::isLoggedIn()) {
             Redirect::to("user/dashboard");
@@ -97,40 +97,41 @@ class UserController extends Controller
             $_SESSION[self::$loginSessionKey]
         );
         $aPostInfo = PostModel::getPostbyPostAuthor($aUserInfo["ID"]);
-        if (!$aPostInfo) { //Nếu $aPosts=false thì trả về mảng rỗng
+        if (!$aPostInfo) {
             $aPostInfo = array();
         }
         $this->loadView("user/dashboard", $aUserInfo, $aPostInfo);
     }
 
     /**
-     * Kiểm tra đã loggin chưa
+     * Checked Logged in
      *
      * @return bool
      */
-    public static function isLoggedIn()//Kiểm tra đã loggin chưa
+    public static function isLoggedIn()
     {
         return Session::has(self::$loginSessionKey);
     }
 
     /**
-     * Xử lý khi nhấn logout
+     * Solving logout
+     * Destroy  Login Session
+     * Chuyển đến trang Login
      */
-    public function handleLogout()//Xử lý khi nhấn logout
+    public function handleLogout()
     {
-        //Hủy Session Login
         Session::forget(self::$loginSessionKey);
-        //Chuyển đến trang Login
         Redirect::to("user/login");
     }
 
     /**
-     * Xử lý handleRegister
+     * Solving handleRegister when submit
+     * Run into ClassLoader.php , required file Validator , solving method validate
+     * Check and display error
      */
-    public function handleRegister()//Xủ lý khi nhấn submit
+
+    public function handleRegister()
     {
-        //Nhảy đến ClassLoader.php, require file Validator.php, xử lý phương thức validate
-        //Kiểm tra-nếu có lỗi thì hiển thị thông báo lỗi, nếu không có thì bỏ qua
         $status = Validator::validate(
             array(
                 "username" => "required|maxLength:50",
@@ -241,7 +242,6 @@ class UserController extends Controller
             $this->loadView('user/edit-profile', $aData);
         }
         $aData = array_merge($aUserInfo, $aName);
-        var_dump($aData);
     }
 
     /**
@@ -288,7 +288,6 @@ class UserController extends Controller
 
         $aStatus = UserModel::updateUser_meta($aData['fullname'], $aData['name'], $ID);
         $aStatus2 = UserModel::updateUser($aData['username'], $aData['email'], $aData['password'], $ID);
-        var_dump($aData);
 
         Session::forget('login_error');
         Redirect::to('user/profile');
@@ -305,8 +304,7 @@ class UserController extends Controller
          */
         if ($fileUpload['name'] != null) {
             $filename = $fileUpload['tmp_name'];//Đường dẫn tạm file upload
-            $destination = $fileUpload['destination'] =
-                MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
+            $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
             move_uploaded_file($filename, $destination);
         }
         $aData = array_merge($_POST, $fileUpload);

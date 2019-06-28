@@ -33,7 +33,6 @@ incViewFile('header');
             <button class="ui button" type="submit">Edit</button>
         </form>
     </div>
-    <!--Footer-->
 
 <?php
 

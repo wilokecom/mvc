@@ -28,7 +28,7 @@ class UserModel extends DBFactory
         if (!$aStatus) {
             return false;
         }
-        return $aStatus[0];//Trả về kết qủa dưới dạng mảng
+        return $aStatus[0];
     }
 
     /**
@@ -123,8 +123,7 @@ class UserModel extends DBFactory
      * @param string $username
      *
      */
-
-    public static function emailExists($username)//Kiểm tra email có tồn tại hay không
+    public static function emailExists($username)
     {
         return self::connect()
             ->prepare("SELECT email FROM users WHERE email=?", array($username))
@@ -141,7 +140,7 @@ class UserModel extends DBFactory
      * @param $username
      * Nhảy đến phương thức insert() file MysqlGrammar.php
      */
-    public static function insertNewUser($username, $email, $password)//Insert new user
+    public static function insertNewUser($username, $email, $password)
     {
         $aParams = array($username, $email, md5($password));
         $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
