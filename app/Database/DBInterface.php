@@ -36,4 +36,11 @@ interface DBInterface
      * @return mixed
      */
     public function delete($string = '');
+
+    /**
+     * @param string $string
+     *
+     * @return mixed
+     */
+    public function update($string = '');
 }

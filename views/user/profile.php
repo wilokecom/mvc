@@ -12,11 +12,11 @@ incViewFile('header');
                 <img src="<?php if (isset($meta_value)) {
                     echo MVC_ASSETS_URL . 'Images' . '/' . $meta_value;
                 } ?>" width="150" height="150">
-                <!--                <input type="file" name="file-upload" >-->
+
             </div>
 
             <div class="field">
-                <label style="color: Green;">Họ Tên : </label>
+                <label style="color: Green;">Meta_Key : </label>
                 <span style="font-weight: bold; font-size: 20px; color: red;"><?php if (isset($meta_key)) {
                         echo $meta_key;
                     } ?></span>
@@ -36,7 +36,7 @@ incViewFile('header');
         </form>
     </div>
     <!--Footer-->
-    
+
 <?php
 
 incViewFile('footer');

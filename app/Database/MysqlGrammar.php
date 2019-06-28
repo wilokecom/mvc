@@ -83,6 +83,22 @@ class MysqlGrammar implements DBInterface
     }
 
     /**
+     * @param string $string
+     *
+     * @return mixed
+     */
+    public function  update($string = '')
+    {
+        $oResult = $this->oSTMT->execute();
+//        var_dump($oResult); die ;
+        if (false === $oResult) {
+            die('execute() failed: ' . htmlspecialchars($this->oSTMT->error));
+        }
+        $this->oSTMT->close();//Ngắt kết nối
+        return $oResult;
+    }
+
+    /**
      * Get value
      *
      * @return mixed

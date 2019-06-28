@@ -14,16 +14,18 @@ incViewFile('header');
         <?php
         incViewFile('top-menu');//Top-menu
         ?>
-        <form class="ui form" action="<?php echo \MVC\Support\Route::get('user/upload')?>" enctype="multipart/form-data" method="post">
+        <form class="ui form" action="<?php echo \MVC\Support\Route::get('user/handleEditProfile')?>" enctype="multipart/form-data" method="post">
 <!--            <div class="field">-->
 <!--                <label>Upload</label>-->
 <!--                -->
 <!--            </div>-->
-            <div class="field">
+            <div class="field" >
                 <label>Ảnh đại diện : </label>
-                <img src= "<?php if(isset($meta_value)) echo MVC_ASSETS_URL.'Images'.'/'.$meta_value;?>" width="150" height="150">
-                <input type="file" name="file-upload">
-                <!--                <input type="file" name="file-upload" >-->
+                <img id="img" src= "<?php if(isset($meta_value)) echo MVC_ASSETS_URL.'Images'.'/'.$meta_value;?>" width="150" height="150">
+
+                <input type="file" name="file-upload" multiple="true">
+
+<!--                value="mvc/assets/Images/3.jpg"-->
             </div>
 <!--            <div class="ui action input">-->
 <!--                <input id="featured-image" type="file" placeholder="Featured Image" name="file-upload">-->
@@ -31,23 +33,23 @@ incViewFile('header');
 <!--            </div>-->
 
             <div class="field">
-                <label>Họ Tên</label>
-                <input type="text" name="fullname" placeholder="full-name" value="<?php if(isset($meta_key)){echo $meta_key;}?>">
+                <label>Trường Meta_Key</label>
+                    <input type="text" name="fullname" placeholder="full-name" value="<?php if(isset($meta_key)){echo $meta_key;}?>">
             </div>
 
             <div class="field">
                 <label>UserName</label>
-                <input type="text" name="username" placeholder="full-name" value="<?php if(isset($username)){echo $username;}?>">
+                <input type="text" name="username" placeholder="username" value="<?php if(isset($username)){echo $username;}?>">
             </div>
 
             <div class="field">
                 <label>PassWord</label>
-                <input type="text" name="password" placeholder="full-name" value="<?php if(isset($password)){echo $password;}?>">
+                <input type="text" name="password" placeholder="password" value="<?php if(isset($password)){echo $password;}?>">
             </div>
 
             <div class="field">
                 <label>Email</label>
-                <input type="text" name="email" placeholder="full-name" value="<?php if(isset($email)){echo $email;}?>">
+                <input type="text" name="email" placeholder="email" value="<?php if(isset($email)){echo $email;}?>">
             </div>
 
             <button class="ui button" type="Save">Save</button>

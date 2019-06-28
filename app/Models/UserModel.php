@@ -4,6 +4,7 @@ namespace MVC\Models;
 
 
 use MVC\Database\DBFactory;
+use MVC\Support\Session;
 
 /**
  * Class UserModel
@@ -36,6 +37,21 @@ class UserModel extends DBFactory
 
         return $aStatus[0];//Trả về kết qủa dưới dạng mảng
 
+    }
+
+    /**
+     * @param $ID
+     * @return bool
+     */
+    public static function getUserByID($ID)
+    {
+        $query = "SELECT * FROM users WHERE ID=? "; //ORDER ID LIMIT 1
+        $aParam = array($ID);
+        $aStatus = self::connect()->prepare($query,$aParam)->select();
+        if (!$aStatus){
+            return false;
+        }
+        return $aStatus[0];
     }
 
     /**
@@ -83,9 +99,10 @@ class UserModel extends DBFactory
 
     /**
      * @param string $username
-     * @param $email
-     * @param $password
+     * @param        $email
+     * @param        $password
      * Insert new user
+     *
      * @return mixed
      * Check whether username exists or not
      */
@@ -102,6 +119,7 @@ class UserModel extends DBFactory
      * @param $password
      * Kiểm tra users
      * thực thi câu lệnh query tìm đến người dùng đăng nhập
+     *
      * @return bool
      */
     public static function checkUser($username, $password)
@@ -122,11 +140,11 @@ class UserModel extends DBFactory
      *
      * @return mixed
      */
-    public  static function insertUserMeta($fullname, $fileUpload,$userID)
+    public static function insertUserMeta($fullname, $fileUpload, $userID)
     {
         $query = "INSERT INTO user_meta (meta_key, meta_value,user_id) VALUES (?,?,$userID) ";
-        $aParams = array($fullname,$fileUpload);
-        return self::connect()->prepare($query,$aParams)->insert();
+        $aParams = array($fullname, $fileUpload);
+        return self::connect()->prepare($query, $aParams)->insert();
     }
 
     /**
@@ -148,18 +166,54 @@ class UserModel extends DBFactory
     /**
      * @param $meta_key
      * @param $meta_value
-     * @param $user_id
+     * @param $userID
      *
      * @return bool
      */
-    public static function updateUser_meta($meta_key,$meta_value,$user_id)
+    public static function updateUser_meta($meta_key, $meta_value, $userID)
     {
-        $aParams = array();
-        $query = "UPDATE user_meta SET meta_key = $meta_key , meta_value = $meta_value WHERE user_id = $user_id ";
-        $aStatus = self::connect()->prepare($query, $aParams)->select();
-        if(!$aStatus){
+        $aParams = array($meta_key, $meta_value, $userID);
+        $query = "UPDATE user_meta SET meta_key = ? , meta_value = ? WHERE user_id = ?";
+        $aStatus = self::connect()->prepare($query, $aParams)->update();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0];
+//        var_dump($query);
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     * @param $email
+     * @param $ID
+     *
+     * @return bool
+     */
+    public static function updateUser($username,$email,$password,$ID)
+    {
+        $aParams = array($username, $email, md5($password),$ID);
+        $query = "UPDATE users SET username = ?, email=?, password=? WHERE ID=?";
+        $aStatus = self::connect()->prepare($query,$aParams)->update();
+        if (!$aStatus) {
             return false;
         }
         return $aStatus[0];
     }
+
+    public static function getField($metaKey, $userID)
+    {
+        "Select meta_value From usermeta where meta_key='" . $metaKey . "' AND user_id=" . $userID;
+    }
+
+//    public static function getEmail($userID)
+//    {
+//        "Select * From usermeta where user_id=" . $userID;
+// ORDER BY umeta_id LIMIT  1
+//        array(
+//            'profile' => '',
+//            'email' => ''
+//        )
+//    }
 }
+
