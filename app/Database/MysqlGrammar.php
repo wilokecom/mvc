@@ -1,8 +1,10 @@
 <?php
+
 namespace MVC\Database;
 
 /**
  * Class MysqlGrammar
+ *
  * @package MVC\Database
  */
 class MysqlGrammar implements DBInterface
@@ -19,28 +21,34 @@ class MysqlGrammar implements DBInterface
      * @var null
      */
     private $oSTMT = null;//Tạo đối tượng prepared
+
     /**
      * MysqlGrammar constructor.
+     *
      * @param $aDBConfiguration
      */
     public function __construct($aDBConfiguration)//Hàm khởi tạo
     {
         $this->aDBConfiguration = $aDBConfiguration;//Mảng lưu thông tin DB
     }
+
     /**
      * @return $this
+     *
      * @param array $aArgs
      * @param       $query
      */
     public function prepare($query,
-        array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
+                            array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
     {
         $aParams = array();
         //Tạo đối tượng preapred
         $this->oSTMT = $this->oConnect->prepare($query);
-        //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
-        //function ($carry, $args) use (&$aParams):Hàm ẩn danh
-        //lamda và cloasure
+        /**
+         *  //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
+         * //function ($carry, $args) use (&$aParams):Hàm ẩn danh
+         * //lamda và cloasure
+         * */
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
             switch ($args) {
@@ -58,14 +66,19 @@ class MysqlGrammar implements DBInterface
                     break;
             }
             return $carry;
-        }, "");
+        },"");
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
         //      var_dump($aParams);die;
-        $this->oSTMT->bind_param($types, ...$aParams);
+        if ($types != "") {
+            $this->oSTMT->bind_param($types, ...$aParams);
+        }
+
         return $this;
     }
+
     /**
      * Get value
+     *
      * @return mixed
      */
     public function select($string = "")//Select
@@ -84,8 +97,10 @@ class MysqlGrammar implements DBInterface
         }
         return $aRows;
     }
+
     /**
      * @return mixed
+     *
      * @param string $string
      */
     public function insert($string = "")//Insert
@@ -96,8 +111,10 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();//Ngắt kết nối
         return $id;
     }
+
     /**
      * @return mixed
+     *
      * @param string $string
      */
     public function update($string = "")//Insert
@@ -107,8 +124,10 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $status;
     }
+
     /**
      * Delete value
+     *
      * @return bool
      */
     public function delete($string = "")
@@ -117,6 +136,7 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $status;
     }
+
     /**
      * @return $this|mixed
      */

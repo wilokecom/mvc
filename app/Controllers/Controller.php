@@ -1,10 +1,12 @@
 <?php
+
 namespace MVC\Controllers;
 
 use Jenssegers\Blade\Blade;
 
 /**
  * Class Controller
+ *
  * @package MVC\Controllers
  */
 class Controller
@@ -25,8 +27,10 @@ class Controller
      * @var
      */
     protected $oBlade;
+
     /**
      * Tạm thời không dùng
+     *
      * @return \Jenssegers\Blade\Blade
      */
     protected function initPlace() //Tạm thời không dùng
@@ -36,19 +40,21 @@ class Controller
         }
         return $this->oBlade;
     }
+
     /**
      * @param       $viewFile
      * @param array $aData
+     *
      * @throws \Exception
+     * //Nhảy đến thư mục views
      */
-    public function loadView($viewFile, ... $aData)//Nhảy đến thư mục views
+
+    public function loadView($viewFile, $aData = [])
     {
         try {
-            //Phá mảng và lưu vào biến, không nên dùng
-            //extract($aData);
+            extract($aData);
             //$this->initPlace();
-            require_once MVC_VIEWS . $viewFile
-                         . ".php";//Nhảy đến views/home/index
+            require_once MVC_VIEWS . $viewFile . ".php";
             //$this->oBlade->make($viewFile, $aData);
         } catch (\Exception $oException) {
             throw $oException;

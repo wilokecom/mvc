@@ -1,8 +1,10 @@
 <?php
+
 namespace MVC\Support;
 
 /**
  * Class Validator
+ *
  * @package MVC\Support
  */
 class Validator
@@ -17,6 +19,7 @@ class Validator
     protected static $aData = [];//Mảng lưu giá trị của biến $_POST
     /**
      * @return array
+     *
      * @param string $rawConditionals
      */
     //Phân tích điều kiện validate
@@ -29,7 +32,7 @@ class Validator
         //Lấy các phần tử mảng
         foreach ($aRawParse as $cond) {
             $aConditionAndParams = explode(":", trim($cond));
-            $aConditionals[]     = array(
+            $aConditionals[] = array(
                 "func" => trim($aConditionAndParams[0]),
                 "param" => isset($aConditionAndParams[1]) ? trim(
                     $aConditionAndParams[1]
@@ -49,6 +52,7 @@ class Validator
     }
     /**
      * @return array
+     *
      * @param $msg
      */
     //Trả về mảng có giá trị error
@@ -59,8 +63,10 @@ class Validator
             "msg" => $msg
         );
     }
+
     /**
      * @return array
+     *
      * @param $length
      * @param $key
      */
@@ -80,6 +86,7 @@ class Validator
     }
     /**
      * @return array
+     *
      * @param $key
      */
     //Check xem có tồn tại phần tử mảng của biến $_POST hay không
@@ -90,8 +97,10 @@ class Validator
         }
         return self::success();
     }
+
     /**
      * @return array
+     *
      * @param $key
      */
     protected static function email($key)
@@ -106,6 +115,7 @@ class Validator
     }
     /**
      * @return array
+     *
      * @param $key
      */
     //Kiểm tra định dạng file image
@@ -123,8 +133,10 @@ class Validator
         }
         return self::success();
     }
+
     /**
      * @return array
+     *
      * @param $size
      * @param $key
      */
@@ -142,6 +154,7 @@ class Validator
     }
     /**
      * @return bool
+     *
      * @param $key
      * @param $aConditionals
      */
@@ -167,8 +180,10 @@ class Validator
         }
         return true;
     }
+
     /**
      * @return bool
+     *
      * @param $aData
      * @param $aConditionals
      */
