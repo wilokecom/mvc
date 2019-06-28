@@ -3,3 +3,5 @@
 /vendor/*
 /vendor1/*
 /composer.lock
+/assets/Images/
+/.vscode/
