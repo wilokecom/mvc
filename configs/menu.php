@@ -40,6 +40,6 @@ return [
             'name' => 'Profile',
             'route' => 'user/Profile',
             'isLoggedIn' => true
-        )
+        ),
     )
 ];
