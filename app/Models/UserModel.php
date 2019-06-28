@@ -99,7 +99,7 @@ class UserModel extends DBFactory
     }
 
     /**
-     * Kiểm tra username có tồn tại hay không
+     * check  username existtance
      * Check whether username exists or not
      *
      * @return bool
@@ -114,8 +114,8 @@ class UserModel extends DBFactory
     }
 
     /**
-     * Kiểm tra email có tồn tại hay không
-     * Trả về mảng
+     * check  email existtance
+     * return array()
      * Check whether username exists or not
      *
      * @return bool

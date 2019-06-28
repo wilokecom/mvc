@@ -16,14 +16,14 @@ use MVC\Support\Validator;
 class UserController extends Controller
 {
     /**
-     * Biến lưu Session user login
+     * variable saves Session user login
      *
      * @var string
      */
     public static $loginSessionKey = "user_logged_in";
 
     /**
-     * Phương thức mặc định, url:/mvc/user/
+     * default method, url:/mvc/user/
      * if loged in !
      * if doesn't log in
      */
@@ -35,7 +35,7 @@ class UserController extends Controller
     }
 
     /**
-     * Phương thức login-Hiển thị giao diện
+     * method login-display
      * load view if logged in
      *
      * @throws \Exception
@@ -48,7 +48,7 @@ class UserController extends Controller
     }
 
     /**
-     * Phương thức register-Hiển thị giao diện
+     * method register-display
      *
      * @throws \Exception
      */
@@ -59,7 +59,7 @@ class UserController extends Controller
     }
 
     /**
-     * Chuyển về trang user/login
+     * redirect user/login
      */
     public static function redirectToUserLogin()
     {
@@ -69,7 +69,7 @@ class UserController extends Controller
     }
 
     /**
-     * Chuyển về trang dashboard
+     * redirect dashboard
      */
     public static function redirectToDashboard()
     {
@@ -79,11 +79,11 @@ class UserController extends Controller
     }
 
     /**
-     * //Nếu chưa đăng nhập chuyển về trang login
+     * if wasn't log in then redirect login page
      *  //get info from user table
      * url:user/dashboard
      * get info from post table
-     * Phương thức dashboard()-Sau khi login thành công-Hiển thị giao diện
+     * Method dashboard()-after login success- displays
      *        //$aData = array_merge($aUserInfo, $aPostInfo);
      *
      * @throws \Exception
@@ -116,7 +116,7 @@ class UserController extends Controller
     /**
      * Solving logout
      * Destroy  Login Session
-     * Chuyển đến trang Login
+     * redirect Login page
      */
     public function handleLogout()
     {
@@ -157,7 +157,6 @@ class UserController extends Controller
             Session::add("register_error", "Oops! This username is already exist");
             Redirect::to("user/register");
         }
-
 
         $aStatus = UserModel::insertNewUser($_POST["username"], $_POST["email"], $_POST["password"]);
         if (!$aStatus) {
@@ -257,11 +256,11 @@ class UserController extends Controller
 
         $fileUpload = $_FILES['file-upload'];
         /**
-         * //Nếu tên file upload khác rỗng
+         * if the name of  file upload not null
          */
         if ($fileUpload['name'] != null) {
-            $filename = $fileUpload['tmp_name'];//Đường dẫn tạm file upload
-            $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];//Đường dẫn chứa file upload- asset
+            $filename = $fileUpload['tmp_name'];
+            $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
             move_uploaded_file($filename, $destination);
         } elseif ($fileUpload['name'] == null) {
             $fileUpload['name'] = $aName['meta_value'];
@@ -300,10 +299,10 @@ class UserController extends Controller
     {
         $fileUpload = $_FILES['file-upload'];
         /**
-         * //Nếu tên file upload khác rỗngs
+         * if the name of file-upload not null
          */
         if ($fileUpload['name'] != null) {
-            $filename = $fileUpload['tmp_name'];//Đường dẫn tạm file upload
+            $filename = $fileUpload['tmp_name'];
             $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
             move_uploaded_file($filename, $destination);
         }
