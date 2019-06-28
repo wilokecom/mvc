@@ -3,7 +3,7 @@
 namespace MVC\Core;
 
 /**
- * Đường dẫn URL:admin-home/login-admin-home/1
+ * Link URL(Example):admin-home/login-admin-home/1
  * Class App
  *
  * @package MVC\Core
@@ -21,19 +21,19 @@ class App
      */
     protected $methodName = "index";//Action
     /**
-     * Đối tượng của Class Controller
+     * The object of Class Controller
      * @var
      */
-    protected $oControllerInstance;//Đối tượng của Class Controller
+    protected $oControllerInstance;
     /**
      * Param
      * @var array
      */
     protected $aParams = [];//Param
     /**
-     * explode:Phá chuỗi thành mảng
-     * filter_var:Kiểm tra đường dẫn url
-     * rtrim:Xóa khoảng trắng và kí tự / ở cuối
+     * explode:expode string to array
+     * filter_var:Check url path
+     * rtrim:Delete space and character "/" at the end of string
      * @return array
      */
     public function parseUrl()
@@ -43,7 +43,7 @@ class App
         }
     }
     /**
-     * array_map:Trả về mảng.Truyền tham số $name vào function($item)
+     * array_map:Return array.Transmit parameter $name to function($item)
      * @return string
      * @param $name
      */
@@ -57,37 +57,39 @@ class App
     }
 
     /**
+     * Return controller from url link
      * @return string
      */
-    protected function generateControllerName()//AdminHomeController
+    protected function generateControllerName()
     {
         if (empty($this->aParams)) {
             return "";
         }
         $controllerName = $this->parseName($this->aParams[0])."Controller";
-        unset($this->aParams[0]);//Xóa phần tử mảng
+        unset($this->aParams[0]);//Delete array element
         return $controllerName;
     }
     /**
+     * Return controllerName.php
      * @return string
-     *
      * @param $controllerName
      */
-    protected function generateControllerFile($controllerName)//AdminHomeController
+    protected function generateControllerFile($controllerName)
     {
         return $controllerName.".php";
     }
     /**
+     * Check file controller.php is exist or not
      * @return bool
-     *
      * @param $controllerName
      */
-    protected function isControllerExists($controllerName)//Kiểm tra đường dẫn đến file Controller.php có tồn tại
+    protected function isControllerExists($controllerName)
     {
         return file_exists(MVC_CONTROLLERS
             . $this->generateControllerFile($controllerName));
     }
     /**
+     * Init Class Controller
      * @param $controllerName
      */
     protected function initController($controllerName)//Khởi tạo Class Controller
@@ -95,13 +97,14 @@ class App
         if ($this->isControllerExists($controllerName)) {
             $this->controllerName = $controllerName;
         }
-        require_once MVC_CONTROLLERS . $this->generateControllerFile($this->controllerName); //VD:\MVC\Controllers\HomeController
-        $this->controllerName = "\MVC\Controllers\\" . $this->controllerName; //VD:{MVC\Controllers\HomeController}
+        //Ex:\MVC\Controllers\HomeController
+        require_once MVC_CONTROLLERS . $this->generateControllerFile($this->controllerName);
+        $this->controllerName = "\MVC\Controllers\\" . $this->controllerName; //Ex:{MVC\Controllers\HomeController}
         $this->oControllerInstance = new $this->controllerName;
     }
 
     /**
-     * Kiểm tra method có tồn tại hay không
+     * Check method is exist or not
      * method_exists(object, mothodName)
      * @return bool
      *
@@ -113,9 +116,10 @@ class App
     }
 
     /**
+     * Return Method name
      * @return string
      */
-    protected function generateMethodName()//Trả về mothod name:loginAdminHome
+    protected function generateMethodName()
     {
         if (empty($this->aParams) || !isset($this->aParams[1])) {
             return "";
@@ -127,9 +131,9 @@ class App
         }
     }
     /**
-     * call_user_func_array:Gọi đến phương thức $this->methodName
-     * $this->oControllerInstance:là 1 đối tượng của class
-     * array($this->aParams):Tham số truyền vào phương thức
+     * call_user_func_array:Call method $this->methodName
+     * $this->oControllerInstance:is an object of class
+     * array($this->aParams):parameter which is transmited method
      * @param $methodName
      */
     protected function callMethod($methodName)
@@ -137,23 +141,25 @@ class App
         if (!empty($methodName) && $this->isMethodExist($methodName)) {
             $this->methodName = $methodName;
         }
-        //Sau lệnh này sẽ nhảy đến method của Controller
+        //Go to method of Controller
         call_user_func_array(array(
             $this->oControllerInstance,
             $this->methodName
-        ), array($this->aParams));//loginAdminHome
+        ), array($this->aParams));
     }
     /**
      * App constructor.
      */
-    public function __construct()//Hàm khởi tạo
+    public function __construct()
     {
         $this->aParams = $this->parseUrl();
         // Init Controller
-        $controllerName = $this->generateControllerName();//AdminHomeController
+        $controllerName = $this->generateControllerName();
         $this->initController($controllerName);
         // Init Method
-        $methodName = $this->generateMethodName();//LoginAdminHome
+        $methodName = $this->generateMethodName();
+        //Init Param
+
         $this->callMethod($methodName);
     }
 }

@@ -1,8 +1,7 @@
 <?php
 use \MVC\Support\Route;
-
-//Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header,body,footer
+//Go to function incViewFile -file index.php
+//Add CSS-JS for header,body,footer
 incViewFile("header"); //Header
 ?>
 <!--Body-->
@@ -10,13 +9,16 @@ incViewFile("header"); //Header
     <!--Top-menu-->
     <?php
     incViewFile("top-menu");
-    $aUserInfo = $aData[0];
-    $aPostInfo = $aData[1];
+    if(isset($aData)){
+        $aUserInfo=$aData[0];
+        $aPostInfo=$aData[1];
+        $current_page=$aData[2];
+        $total_page=$aData[3];
+    }
     ?>
     <!--Content-->
     <div class="ui success message">
-        <div class="header">Hello <span
-                    style="color:red;"><?php echo $aUserInfo["username"]; ?></span>!
+        <div class="header">Hello <span style="color:red;"><?php echo $aUserInfo["username"]; ?></span>!
             <!--Hello username-->
             <p>Đây là trang Dashboard.</p>
         </div>
@@ -37,7 +39,6 @@ incViewFile("header"); //Header
         </thead>
         <tbody>
         <?php
-        $id=0;//Chỉ số mảng bài viết
         foreach ($aPostInfo as $aPostInfo) {
             echo "<tr>";
             echo "<td>" . $aPostInfo["post_author"] . "</td>";
@@ -55,7 +56,7 @@ incViewFile("header"); //Header
                 </a>
             </td>
             <td>
-                <a class="deleteItem" href="javascript:deleteItem(<?php echo $aPostInfo["ID"]?>)">
+                <a class="deleteItem" href="<?php echo $aPostInfo["ID"]?>">
                     <img width="16" src="<?php echo MVC_SOURCES_URL . "icon/icon_delete.png"; ?>">
                 </a>
             </td>
@@ -65,10 +66,31 @@ incViewFile("header"); //Header
         ?>
         </tbody>
     </table>
+    <!--Delete Result-->
     <div >
         <p id="delete-result" style="text-align:center;color: red;font-size: medium "></p>
     </div>
-    <!-- Hộp thoại cảnh báo-->
+    <!--Pagination-->
+    <div class="pagination">
+        <?php
+        // Display prev button
+        if ($current_page > 1 && $total_page > 1){?>
+            <a href="<?php echo Route::get("user/dashboard/page-".($current_page-1));?>">Prev|</a>
+        <?php
+        }
+        //Display number button
+        for ($page_number = 1; $page_number <= $total_page; $page_number++){?>
+            <a href="<?php echo Route::get("user/dashboard/page-".$page_number);?>"><?php echo $page_number."|";?></a>
+        <?php
+        }
+        // Display Next button
+        if ($current_page < $total_page && $total_page > 1){?>
+            <a href="<?php echo Route::get("user/dashboard/page-".($current_page+1));?>">Next|</a>
+        <?php
+        }
+        ?>
+    </div>
+    <!-- Delete Alert Dialog-->
     <div id="dialog-confirm" title="Xác nhận!!!!!!!" style= "display:none;">
         <p >
             <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
@@ -77,6 +99,6 @@ incViewFile("header"); //Header
     </div>
 </div>
 <?php
-//Include file views/footer->Không có gì
+//Include file views/footer
 incViewFile("footer");
 ?>

@@ -31,7 +31,7 @@ class UserModel extends DBFactory
      * @param $password
      * @param $username
      */
-    public static function checkUser($username, $password)//checkUser
+    public static function checkUserLogin($username, $password)//checkUser
     {
         $query = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
         $aParam = array($username, md5($password));
