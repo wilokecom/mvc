@@ -1,5 +1,3 @@
-// Show Password
-
 function showPassword()
 {
     "use strict";

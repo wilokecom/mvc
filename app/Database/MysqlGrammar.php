@@ -32,14 +32,13 @@ class MysqlGrammar implements DBInterface
      * @param array $aArgs
      * @param       $query
      */
-    public function prepare($query,
-        array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
+    public function prepare($query, array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
     {
         $aParams = array();
         //Tạo đối tượng preapred
         $this->oSTMT = $this->oConnect->prepare($query);
         //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
-        //function ($carry, $args) use (&$aParams):Hàm ẩn danh
+        //function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
         //lamda và cloasure
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
@@ -61,7 +60,9 @@ class MysqlGrammar implements DBInterface
         }, "");
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
         //      var_dump($aParams);die;
-        $this->oSTMT->bind_param($types, ...$aParams);
+        if($types!=""){
+            $this->oSTMT->bind_param($types, ...$aParams);
+        }
         return $this;
     }
     /**

@@ -4,8 +4,8 @@
     <title>MVC</title>
     <?php
     //Add file CSS
-    //mvcHead là key của mảng chứa đường dẫn đến file CSS trong file app/Support/HandleAction.php
-    doAction("mvcHead"); //Nhảy đến hàm doAction-file index.php
+    //mvcFooter is key of array contain link file CSS in file app/Support/HandleAction.php
+    doAction("mvcHead"); //Go to doAction-file index.php
     ?>
 </head>
 <body>

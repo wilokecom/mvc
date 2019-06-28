@@ -3,9 +3,10 @@
 use \MVC\Support\Route;
 use \MVC\Support\Session;
 
-//Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header,body,footer
-incViewFile("header");//Hiển thị Header
+/* Go to function incViewFile -file index.php
+ * Add CSS-JS for header,body,footer
+ */
+incViewFile("header");//Diplay Header
 ?>
 <!--Body-->
 <div id="container">
@@ -15,9 +16,9 @@ incViewFile("header");//Hiển thị Header
     <!--Error-->
     <?php
     $hasError = Session::has("register_error");//Get Error
-    if ($hasError) {//Nếu có lỗi
+    if ($hasError) {//If has error
         $formClass = "ui form error";
-    } else {//Nếu không có lỗi
+    } else {//If not has error
         $formClass = "ui form";
     }
     ?>

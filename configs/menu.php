@@ -30,6 +30,16 @@ return [
             "name" => "Post",
             "route" => "post/add",
             "isLoggedIn" => true
-        )
+        ),
+        array(
+            'name' => 'Edit-Profile',
+            'route' => 'user/edit-profile',
+            'isLoggedIn' => true
+        ),
+        array(
+            'name' => 'Profile',
+            'route' => 'user/Profile',
+            'isLoggedIn' => true
+        ),
     )
 ];

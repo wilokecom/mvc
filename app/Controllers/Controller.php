@@ -37,18 +37,16 @@ class Controller
         return $this->oBlade;
     }
     /**
-     * @param       $viewFile
+     * Go to views folder
+     * @param $viewFile
      * @param array $aData
      * @throws \Exception
      */
-    public function loadView($viewFile, ... $aData)//Nhảy đến thư mục views
+    public function loadView($viewFile, ... $aData)
     {
         try {
-            //Phá mảng và lưu vào biến, không nên dùng
             //extract($aData);
-            //$this->initPlace();
-            require_once MVC_VIEWS . $viewFile
-                         . ".php";//Nhảy đến views/home/index
+            require_once MVC_VIEWS . $viewFile . ".php";
             //$this->oBlade->make($viewFile, $aData);
         } catch (\Exception $oException) {
             throw $oException;
