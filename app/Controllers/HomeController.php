@@ -9,11 +9,11 @@ namespace MVC\Controllers;
 class HomeController extends Controller
 {
     /**
+     * Nhảy đến phương thức loadView của Class Controller
      * @throws \Exception
      */
     public function index()
     {
-        //Nhảy đến phương thức loadView của Class Controller
         $this->loadView("home/index");
     }
 }

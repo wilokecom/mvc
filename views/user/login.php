@@ -1,9 +1,9 @@
 <?php
 use MVC\Support\Session;
 
-//Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header,body,footer
-incViewFile("header");//Hiển thị Header
+//Go to function incViewFile -file index.php
+//Add CSS-JS cho header,body,footer
+incViewFile("header");//Display Header
 ?>
     <!--Body-->
     <div id="container">
@@ -18,9 +18,7 @@ incViewFile("header");//Hiển thị Header
         <?php endif;
         ?>
         <form class="ui form" method="POST"
-              action="<?php echo \MVC\Support\Route::get(
-                  "user/handle-login"
-              ); ?>">
+              action="<?php echo Route::get("user/handle-login"); ?>">
             <div class="field">
                 <label for="username">Username</label>
                 <input id="username" type="text" name="username"
@@ -36,6 +34,6 @@ incViewFile("header");//Hiển thị Header
         </form>
     </div>
 <?php
-//Include file views/footer->Không có gì
+//Include file views/footer
 incViewFile("footer");
 ?>

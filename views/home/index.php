@@ -1,6 +1,6 @@
 <?php
-//Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header,body,footer
+//Got to incViewFile -file index.php
+//Add CSS-JS for header,body,footer
     incViewFile("header");//Hiển thị Header
 ?>
 <!--Body-->

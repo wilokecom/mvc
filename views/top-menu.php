@@ -4,28 +4,27 @@ use \MVC\Controllers\UserController;
 ?>
 <div class="ui pointing menu">
     <?php
-    //Trả về mảng của phần tử topMenu trong file config có đường dẫn app/configs/menu
+    //Top menu app/configs/menu
     $aTopMenuItems = getConfig("menu")->getParam("topMenu");
-    //Lấy đường dẫn url
-    $route = isset($_GET["route"]) && !empty($_GET["route"]) ? $_GET["route"] : "home";//user/dashboard
-    //Duyệt các phần tử mảng $aTopMenuItems
-    foreach ($aTopMenuItems as $aMenuName) ://Dấu ":" dùng với endforeach
-        if (isset($aMenuName["isLoggedIn"])) {//Nếu tồn tại phần tử "isLoggedIn" trong mảng $aMenuName
-            //Nếu đã login thì chỉ hiển thị Logout, Post
-            //Nêu chưa login thì hiển thị Home, Login, Register
+    //Get url:user/dashboard
+    $route = isset($_GET["route"]) && !empty($_GET["route"]) ? $_GET["route"] : "home";
+    foreach ($aTopMenuItems as $aMenuName) ://Signal ":" use with endforeach
+        if (isset($aMenuName["isLoggedIn"])) {//If exist "isLoggedIn"in array $aMenuName
+            //If logined, display Logout, Post
+            //If not logined Home, Login, Register
             if ((UserController::isLoggedIn() && !$aMenuName["isLoggedIn"]) || (!UserController::isLoggedIn() && $aMenuName["isLoggedIn"])) {
                 continue;
             }
         }
-        //$wrapperClass dùng để hiển thị class
-        //Nếu $aMenuName["route"]= url hiện tại thì class là "active item"
-        //Nếu $aMenuName["route"]!=url hiện tại thì class là "item"
+        //$wrapperClass used for display class
+        //If $aMenuName["route"]= url, class is "active item"
+        //If $aMenuName["route"]!=url, class is "item"
         $wrapperClass = $route == $aMenuName["route"] ? "active item" : "item";//item
         ?>
-        <!--Hiển thị menu đường dẫn-->
+        <!--Display menu link-->
         <a href="<?php echo Route::get($aMenuName["route"]); ?>" class="<?php echo $wrapperClass; ?>"><!--mvc/post/index-->
             <?php
-            echo $aMenuName["name"]; //Post
+            echo $aMenuName["name"];
             ?>
         </a>
     <?php

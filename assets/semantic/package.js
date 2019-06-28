@@ -28,7 +28,7 @@ Package.onUse(function(api) {
 
     // release
     'semantic.css',
-    'semantic.Jquery'
+    'semantic.jquery'
   ], 'client');
 
 });

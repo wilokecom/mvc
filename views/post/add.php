@@ -21,7 +21,7 @@ incViewFile("header");
         //
         ?>
         <form class="<?php echo $formClass; ?>" method="POST" action="<?php echo Route::get("post/handle-add");?>" enctype="multipart/form-data">
-             <!--Display Error-->
+        <!--Display Error-->
         <?php if ($hasError) : ?>
             <div class="ui error message">
                 <p><?php echo Session::get("post_error"); ?></p>
