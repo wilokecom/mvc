@@ -3,21 +3,21 @@
 use \MVC\Support\Route;
 use \MVC\Support\Session;
 
-/**
- * jump into  function incViewFile -file index.php
- * Adding file  CSS-JS for header,body,footer
- */
 
-incViewFile("header");//Hiển thị Header
+/* Go to function incViewFile -file index.php
+ * Add CSS-JS for header,body,footer
+ */
+incViewFile("header");//Diplay Header
 ?>
 <!--Body-->
 <div id="container">
     <?php incViewFile("top-menu"); ?>
     <?php
-    $hasError = Session::has("register_error");
-    if ($hasError) {
+
+    $hasError = Session::has("register_error");//Get Error
+    if ($hasError) {//If has error
         $formClass = "ui form error";
-    } else {
+    } else {//If not has error
         $formClass = "ui form";
     }
     ?>

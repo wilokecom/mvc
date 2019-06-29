@@ -15,41 +15,33 @@ use MVC\Support\Validator;
  */
 class UserController extends Controller
 {
-    /**
-     * variable saves Session user login
-     *
+     * Save Session
      * @var string
      */
     public static $loginSessionKey = "user_logged_in";
-
-    /**
-     * default method, url:/mvc/user/
-     * if loged in !
-     * if doesn't log in
+  
+     * Default method, url:/mvc/user/
      */
     public function index()
     {
-
+        //If not logined
         self::redirectToUserLogin();
-        self::redirectToDashboard();
+        //If logined
     }
 
     /**
-     * method login-display
-     * load view if logged in
-     *
+     *  Login method-Show Interface
+     *  If logined, ruturn user/dashboard
+     *  If not logined, return user/login
      * @throws \Exception
      */
-    public function login()//Login
+    public function login()
     {
         self::redirectToDashboard();
-
         $this->loadView("user/login");
     }
 
-    /**
-     * method register-display
-     *
+     * Phương thức register-Show Interface
      * @throws \Exception
      */
     public function register()
@@ -59,7 +51,7 @@ class UserController extends Controller
     }
 
     /**
-     * redirect user/login
+     * If not logined, returned to user/login
      */
     public static function redirectToUserLogin()
     {
@@ -69,7 +61,7 @@ class UserController extends Controller
     }
 
     /**
-     * redirect dashboard
+     * Return to dashboard
      */
     public static function redirectToDashboard()
     {
@@ -77,35 +69,42 @@ class UserController extends Controller
             Redirect::to("user/dashboard");
         }
     }
-
     /**
-     * if wasn't log in then redirect login page
-     *  //get info from user table
-     * url:user/dashboard
-     * get info from post table
-     * Method dashboard()-after login success- displays
-     *        //$aData = array_merge($aUserInfo, $aPostInfo);
-     *
+     * @param $aParam
      * @throws \Exception
      */
-    public function dashboard()
+    public function dashboard($aParam)
     {
-
         self::redirectToUserLogin();
-
+        $total_records = PostModel::getRecordbyPostAuthor();
+        // current page and start
+        $current_page = isset($aParam[2]) ? explode("-", $aParam[2])[1] : 1;
+        unset($aParam[2]);
+        $limit = 4;
+        //Total page
+        $total_page = (ceil($total_records / $limit) > 0) ? ceil(
+            $total_records / $limit
+        ) : 1;
+        if ($current_page > $total_page) {
+            $current_page = $total_page;
+        } elseif ($current_page < 1) {
+            $current_page = 1;
+        }
+        //start
+        $start = ($current_page - 1) * $limit;
         $aUserInfo = UserModel::getUserByUsername(
             $_SESSION[self::$loginSessionKey]
         );
-        $aPostInfo = PostModel::getPostbyPostAuthor($aUserInfo["ID"]);
+        $aPostInfo = PostModel::getPostbyPostAuthor1($aUserInfo["ID"], $start, $limit);
+        //If $aPosts=false, return empty array
         if (!$aPostInfo) {
             $aPostInfo = array();
         }
-        $this->loadView("user/dashboard", $aUserInfo, $aPostInfo);
+        $this->loadView("user/dashboard", $aUserInfo, $aPostInfo, $current_page, $total_page);
     }
 
     /**
-     * Checked Logged in
-     *
+     * Check logined or not
      * @return bool
      */
     public static function isLoggedIn()
@@ -114,9 +113,9 @@ class UserController extends Controller
     }
 
     /**
-     * Solving logout
-     * Destroy  Login Session
-     * redirect Login page
+     * Handle when press logout
+     * Destroy Session Login
+     * Return to user/login
      */
     public function handleLogout()
     {
@@ -129,7 +128,7 @@ class UserController extends Controller
      * Run into ClassLoader.php , required file Validator , solving method validate
      * Check and display error
      */
-
+     */
     public function handleRegister()
     {
         $status = Validator::validate(
@@ -141,31 +140,22 @@ class UserController extends Controller
             ),
             $_POST
         );
-
+        //If has error, add error to Session, return to user/register
         if ($status !== true) {
             Session::add("register_error", $status);
             Redirect::to("user/register");
         }
 
 
-        if (UserModel::emailExists($_POST["email"])) {
-            Session::add("register_error", "Oops! This email is already exist");
-            Redirect::to("user/register");
-        }
-
-        if (UserModel::usernameExists($_POST["username"])) {
-            Session::add("register_error", "Oops! This username is already exist");
-            Redirect::to("user/register");
-        }
-
         $aStatus = UserModel::insertNewUser($_POST["username"], $_POST["email"], $_POST["password"]);
         if (!$aStatus) {
             Session::add("register_error", "Oops! Something went error");
             Redirect::to("user/register");
         }
+        //Save username to Session["user_logged_in"]
+        Session::add(self::$loginSessionKey, $_POST["username"]);
+        Session::forget("register_error");//delete Session
 
-        Session::add(self::$loginSessionKey, UserModel::getUserID($_POST['username']));
-        Session::forget("register_error");
         Redirect::to("user/dashboard");
     }
 
@@ -187,7 +177,7 @@ class UserController extends Controller
             Session::add("login_error", $status);
             Redirect::to("user/login");
         }
-        $aStatus = UserModel::checkUser($_POST["username"], $_POST["password"]);
+        $aStatus = UserModel::checkUserLogin($_POST["username"], $_POST["password"]);
         if ($aStatus != true) {
             Session::add("login_error", "invalid username or password");
             Redirect::to("user/login");
