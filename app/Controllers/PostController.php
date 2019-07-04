@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
@@ -31,33 +31,30 @@ class PostController extends Controller
         $this->loadView("post/add");
     }
     /**
-     * If not logined, return user/login
-     * @param $aParam
      * @throws \Exception
      */
-    public function edit($aParam)
+    public function edit()
     {
         UserController::redirectToUserLogin();
         //Get PostID
-        $post_id = $aParam[2];
-        unset($aParam[2]);//delete $aParam[2]
+        $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
         //Get PostInfo
-        $aPostInfo = PostModel::getPostbyPostID($post_id);
+        $aPostInfo = PostModel::getPostbyPostID($iPostID);
         //If $aPostInfo is false, return empty array
         if (!$aPostInfo) {
             $aPostInfo = array();
         }
-        $this->loadView("post/edit", $aPostInfo, $post_id);
+        $this->loadView("post/edit", $aPostInfo);
     }
     /**
      * Delete info post table
      */
     public function delete()
     {
-        //Get post_id
-        $post_id = $_POST["post_id"];
+        //Get PostID
+        $iPostID = isset($_POST["post_id"]) ? $_POST["post_id"] : null;
         //Get data post table
-        $aPostInfo = PostModel::deletePostbyPostID($post_id);
+        $aPostInfo = PostModel::deletePostbyPostID($iPostID);
         if ($aPostInfo) {
             echo "Delete Success";
         } else {
@@ -69,42 +66,41 @@ class PostController extends Controller
      */
     public function handleAdd()
     {
-        $imageUpload = $_FILES["image-upload"];
-        $aData       = array_merge(//merge array to validate
+        $aImageUpload = $_FILES["image-upload"];
+        $aData        = array_merge(//merge array to validate
             $_POST,
-            $imageUpload
+            $aImageUpload
         );
-        $status = Validator::validate(
+        $bStatus      = Validator::validate(
             array(
                 "post-title" => "required|maxLength:100",
                 "post-content" => "required|maxLength:10000",
                 "name" => "required|maxLength:20",
-                "type" => "checkType",
+                "type" => "checkImageType",
                 "size" => "maxSize:500000"
             ),
             $aData
         );
         //If has error, add error to Session, return post/add
-        if ($status !== true) {
-            Session::add("post_error", $status);
+        if ($bStatus !== true) {
+            Session::add("post_error", $bStatus);
             Redirect::to("post/add");
         }
         //Get username login
-        $username = Session::get(UserController::$loginSessionKey);
+        $sUserName = Session::get(UserController::$sLoginSessionKey);
         //Get userID
-        $userID = UserModel::getUserByUsername($username)["ID"];
+        $iUserID = UserModel::getUserByUsername($sUserName)["ID"];
         //Get guid
-        $guid = MVC_HOME_URL . "post/add/" . $aData["post-type"] . "_id="
-                . $userID;
+        $sGuid = MVC_HOME_URL . "post/add/" . $aData["post-type"] . "_id=" . $iUserID;
         //Insert to Post table
         $aStatusPost = PostModel::insertPost(
-            $userID,
+            $iUserID,
             $aData["post-status"],
             $aData["post-type"],
             $aData["post-title"],
             $aData["post-content"],
             $aData["type"],
-            $guid
+            $sGuid
         );
         if (!$aStatusPost) {
             Session::add(
@@ -120,13 +116,19 @@ class PostController extends Controller
             $aStatusPost
         );
         if (!$aStatusMeta) {
-            Session::add("post_error", "Oops! Something went Post_Meta error");
+            Session::add(
+                "post_error",
+                "Oops! Something went Post_Meta error"
+            );
             Redirect::to("post/add");
         }
-        $imagename = $imageUpload["tmp_name"];//Đường dẫn tạm file upload
+        $sImageName = $aImageUpload["tmp_name"];//Temporary file upload file
         //Link contains file upload(assets/image)
-        $destination = MVC_ASSETS_DIR . "image" . "/" . $imageUpload["name"];
-        move_uploaded_file($imagename, $destination);
+        $sDestination = MVC_ASSETS_DIR . "image" . "/" . $aImageUpload["name"];
+        move_uploaded_file(
+            $sImageName,
+            $sDestination
+        );
         //Destroy Error
         Session::forget("post_error");
         //Go todashboard
@@ -138,9 +140,9 @@ class PostController extends Controller
     public function handleEdit($aParam)
     {
         //Get PostID
-        $id = $aParam[2];
+        $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
         //Validate $_POST
-        $status = Validator::validate(
+        $bStatus = Validator::validate(
             array(
                 "post-title" => "required|maxLength:100",
                 "post-content" => "required|maxLength:10000",
@@ -148,9 +150,12 @@ class PostController extends Controller
             $_POST
         );
         //If has error, add error to Session, return  post/edit/id/
-        if ($status !== true) {
-            Session::add("post_error", $status);
-            Redirect::to("post/edit/" . $id . "/");
+        if ($bStatus !== true) {
+            Session::add(
+                "post_error",
+                $bStatus
+            );
+            Redirect::to("post/edit?post-id=" . $iPostID);
         }
         //Update Post by PostID
         $aStatusPost = PostModel::updatePostbyPostID(
@@ -158,18 +163,17 @@ class PostController extends Controller
             $_POST["post-type"],
             $_POST["post-title"],
             $_POST["post-content"],
-            $id
+            $iPostID
         );
         if (!$aStatusPost) {
             Session::add(
                 "post_error",
                 "Oops! Something went Post_Edit error"
             );
-            Redirect::to("post/edit/" . $id . "/");
+            Redirect::to("post/edit?post-id=" . $iPostID . "/");
         }
         Session::forget("post_error");
         //Go to dashboard
         Redirect::to("user/dashboard");
     }
 }
-

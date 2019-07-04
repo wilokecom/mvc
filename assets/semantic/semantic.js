@@ -2553,10 +2553,10 @@ $.fn.accordion = function(parameters) {
           display: function() {
             module.verbose('Removing inline display from element', this);
             $(this).css('display', '');
-            if( $(this).attr('style') === '') {
+            if( $(this).attr('style.css.css.css.css') === '') {
               $(this)
-                .attr('style', '')
-                .removeAttr('style')
+                .attr('style.css.css.css.css', '')
+                .removeAttr('style.css.css.css.css')
               ;
             }
           },
@@ -2564,10 +2564,10 @@ $.fn.accordion = function(parameters) {
           opacity: function() {
             module.verbose('Removing inline opacity from element', this);
             $(this).css('opacity', '');
-            if( $(this).attr('style') === '') {
+            if( $(this).attr('style.css.css.css.css') === '') {
               $(this)
-                .attr('style', '')
-                .removeAttr('style')
+                .attr('style.css.css.css.css', '')
+                .removeAttr('style.css.css.css.css')
               ;
             }
           },
@@ -3928,7 +3928,7 @@ $.fn.dimmer = function(parameters) {
                   height  : '100%'
                 })
                 .fadeTo(module.get.duration(), settings.opacity, function() {
-                  $dimmer.removeAttr('style');
+                  $dimmer.removeAttr('style.css.css.css.css');
                   module.set.active();
                   callback();
                 })
@@ -3969,7 +3969,7 @@ $.fn.dimmer = function(parameters) {
                 .stop()
                 .fadeOut(module.get.duration(), function() {
                   module.remove.active();
-                  $dimmer.removeAttr('style');
+                  $dimmer.removeAttr('style.css.css.css.css');
                   callback();
                 })
               ;
@@ -9600,9 +9600,9 @@ $.fn.modal = function(parameters) {
             $dimmable.removeClass(className.blurring);
           },
           bodyStyle: function() {
-            if($body.attr('style') === '') {
+            if($body.attr('style.css.css.css.css') === '') {
               module.verbose('Removing style attribute');
-              $body.removeAttr('style');
+              $body.removeAttr('style.css.css.css.css');
             }
           },
           screenHeight: function() {
@@ -15235,23 +15235,23 @@ $.fn.shape = function(parameters) {
           module.verbose('Animating states reset');
           $module
             .removeClass(className.animating)
-            .attr('style', '')
-            .removeAttr('style')
+            .attr('style.css.css.css.css', '')
+            .removeAttr('style.css.css.css.css')
           ;
           // removeAttr style does not consistently work in safari
           $sides
-            .attr('style', '')
-            .removeAttr('style')
+            .attr('style.css.css.css.css', '')
+            .removeAttr('style.css.css.css.css')
           ;
           $side
-            .attr('style', '')
-            .removeAttr('style')
+            .attr('style.css.css.css.css', '')
+            .removeAttr('style.css.css.css.css')
             .removeClass(className.hidden)
           ;
           $nextSide
             .removeClass(className.animating)
-            .attr('style', '')
-            .removeAttr('style')
+            .attr('style.css.css.css.css', '')
+            .removeAttr('style.css.css.css.css')
           ;
         },
 
@@ -16297,10 +16297,10 @@ $.fn.sidebar = function(parameters) {
 
         repaint: function() {
           module.verbose('Forcing repaint event');
-          element.style.display = 'none';
+          element.style12.display = 'none';
           var ignored = element.offsetHeight;
           element.scrollTop = element.scrollTop;
-          element.style.display = '';
+          element.style12.display = '';
         },
 
         setup: {
@@ -17465,8 +17465,8 @@ $.fn.sticky = function(parameters) {
           },
           size: function() {
             if(module.cache.element.height !== 0 && module.cache.element.width !== 0) {
-              element.style.setProperty('width',  module.cache.element.width  + 'px', 'important');
-              element.style.setProperty('height', module.cache.element.height + 'px', 'important');
+              element.style12.setProperty('width',  module.cache.element.width  + 'px', 'important');
+              element.style12.setProperty('height', module.cache.element.height + 'px', 'important');
             }
           }
         },
@@ -19184,7 +19184,7 @@ $.fn.transition = function() {
         force: {
           visible: function() {
             var
-              style          = $module.attr('style'),
+              style          = $module.attr('style.css.css.css.css'),
               userStyle      = module.get.userStyle(),
               displayType    = module.get.displayType(),
               overrideStyle  = userStyle + 'display: ' + displayType + ' !important;',
@@ -19194,16 +19194,16 @@ $.fn.transition = function() {
             if(currentDisplay !== displayType) {
               module.verbose('Overriding default display to show element', displayType);
               $module
-                .attr('style', overrideStyle)
+                .attr('style.css.css.css.css', overrideStyle)
               ;
             }
             else if(emptyStyle) {
-              $module.removeAttr('style');
+              $module.removeAttr('style.css.css.css.css');
             }
           },
           hidden: function() {
             var
-              style          = $module.attr('style'),
+              style          = $module.attr('style.css.css.css.css'),
               currentDisplay = $module.css('display'),
               emptyStyle     = (style === undefined || style === '')
             ;
@@ -19215,7 +19215,7 @@ $.fn.transition = function() {
             }
             else if(emptyStyle) {
               $module
-                .removeAttr('style')
+                .removeAttr('style.css.css.css.css')
               ;
             }
           }
@@ -19239,7 +19239,7 @@ $.fn.transition = function() {
           },
           inlineDisplay: function() {
             var
-              style = $module.attr('style') || ''
+              style = $module.attr('style.css.css.css.css') || ''
             ;
             return $.isArray(style.match(/display.*?;/, ''));
           }
@@ -19567,7 +19567,7 @@ $.fn.transition = function() {
             return $module.data(metadata.displayType);
           },
           userStyle: function(style) {
-            style = style || $module.attr('style') || '';
+            style = style || $module.attr('style.css.css.css.css') || '';
             return style.replace(/display.*?;/, '');
           },
           transitionExists: function(animation) {
@@ -19646,7 +19646,7 @@ $.fn.transition = function() {
               if(!displayType) {
                 displayType = $clone
                   .attr('class', elementClass)
-                  .removeAttr('style')
+                  .removeAttr('style.css.css.css.css')
                   .removeClass(className.hidden)
                   .removeClass(className.visible)
                   .show()

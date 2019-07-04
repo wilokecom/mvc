@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MVC\Core;
 
@@ -30,6 +30,20 @@ class App
      * @var array
      */
     protected $aParams = [];//Param
+    /**
+     * App constructor.
+     */
+    public function __construct()
+    {
+        $this->aParams = $this->parseUrl();
+        // Init Controller
+        $controllerName = $this->generateControllerName();
+        $this->initController($controllerName);
+        // Init Method
+        $methodName = $this->generateMethodName();
+        //Init Param
+        $this->callMethod($methodName);
+    }
     /**
      * explode:expode string to array
      * filter_var:Check url path
@@ -85,8 +99,9 @@ class App
      */
     protected function isControllerExists($controllerName)
     {
-        return file_exists(MVC_CONTROLLERS
-            . $this->generateControllerFile($controllerName));
+        return file_exists(
+            MVC_CONTROLLERS . $this->generateControllerFile($controllerName)
+        );
     }
     /**
      * Init Class Controller
@@ -146,20 +161,5 @@ class App
             $this->oControllerInstance,
             $this->methodName
         ), array($this->aParams));
-    }
-    /**
-     * App constructor.
-     */
-    public function __construct()
-    {
-        $this->aParams = $this->parseUrl();
-        // Init Controller
-        $controllerName = $this->generateControllerName();
-        $this->initController($controllerName);
-        // Init Method
-        $methodName = $this->generateMethodName();
-        //Init Param
-
-        $this->callMethod($methodName);
     }
 }

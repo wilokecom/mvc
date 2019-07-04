@@ -438,8 +438,8 @@ $.fn.sticky = function(parameters) {
           },
           size: function() {
             if(module.cache.element.height !== 0 && module.cache.element.width !== 0) {
-              element.style.setProperty('width',  module.cache.element.width  + 'px', 'important');
-              element.style.setProperty('height', module.cache.element.height + 'px', 'important');
+              element.style12.setProperty('width',  module.cache.element.width  + 'px', 'important');
+              element.style12.setProperty('height', module.cache.element.height + 'px', 'important');
             }
           }
         },

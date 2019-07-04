@@ -1,6 +1,8 @@
-<?php
-//Got to incViewFile -file index.php
-//Add CSS-JS for header,body,footer
+<?php declare(strict_types=1);
+    /**
+     * Got to incViewFile -file index.php
+     * Add CSS-JS for header,body,footer
+     */
     incViewFile("header");//Hiển thị Header
 ?>
 <!--Body-->

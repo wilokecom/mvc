@@ -1,32 +1,26 @@
-<?php
-/**
- * Handle enqueue scripts
- *
- * @category Scripts
- * @package  Wilblog
- * @author   Wiloke <contact.wiloke@email.com>
- */
+<?php declare(strict_types=1);
 
 namespace MVC\Support;
+
+/**
+ * Class HandleAction
+ * @package MVC\Support
+ */
 class HandleAction
 {
 
     /**
+     * array(mvcHead:Restore file CSS, mvcFooter:Restore file JS)
      * Store script files
      *
      * @var array
      */
-    protected static $aHooks;//array(mvcHead:lưu file CSS, mvcFooter:Lưu file JS)
-
+    protected static $aHooks;
     /**
      * Register hooks
-     *
-     * @param string $hook
-     * @param array|string $aInfo
-     *
-     * @return $this
+     * @param $hook
+     * @param $aInfo
      */
-    //Phương thức add Action
     public static function addAction($hook, $aInfo)
     {
         if (!isset(self::$aHooks[$hook])) {//=true
@@ -47,7 +41,7 @@ class HandleAction
                                     )
                             )
                      )
-    */
+        */
         self::$aHooks[$hook][] = $aInfo;
     }
 
@@ -59,7 +53,6 @@ class HandleAction
      *
      * @return void
      */
-    //Phương thức doAction
     public static function doAction($hook, $aParams = array())
     {
         if (isset(self::$aHooks[$hook]) && !empty(self::$aHooks)) {//=true

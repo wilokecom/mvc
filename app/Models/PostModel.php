@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MVC\Models;
 
@@ -11,17 +11,16 @@ use MVC\Database\DBFactory;
 class PostModel extends DBFactory
 {
     /**
-     * Return post by post_author limit
      * @return bool
-     * @param $start
-     * @param $limit
-     * @param $postAuthor
+     * @param $iStart
+     * @param $iLimit
+     * @param $iPostAuthor
      */
-    public static function getPostbyPostAuthor1($postAuthor,$start,$limit)
+    public static function getPostbyPostAuthor($iPostAuthor, $iStart, $iLimit)
     {
-        $aParams = array($postAuthor);
-        $query = "SELECT *  FROM posts WHERE post_author = ? LIMIT $start,$limit";
-        $aPosts = self::connect()->prepare($query, $aParams)->select();
+        $aParams = array($iPostAuthor);
+        $query   = "SELECT *  FROM posts WHERE post_author = ? LIMIT $iStart,$iLimit";
+        $aPosts  = self::connect()->prepare($query, $aParams)->select();
         if (!$aPosts) {
             return false;
         }
@@ -29,82 +28,84 @@ class PostModel extends DBFactory
     }
     /**
      * @return bool
-     * @param $PostID
+     * @param $iPostID
      */
-    public static function getPostbyPostID($PostID)
+    public static function getPostbyPostID($iPostID)
     {
-        $aParams = array($PostID);
-        $query = "SELECT * FROM posts WHERE ID = ?";
+        $aParams = array($iPostID);
+        $query   = "SELECT * FROM posts WHERE ID = ?";
         //Nhảy đến phương thức insert() file MysqlGrammar.php
-        $aPosts = self::connect()->prepare($query, $aParams)->select();
-        if (!$aPosts) {
+        $aPost = self::connect()->prepare($query, $aParams)->select();
+        if (!$aPost) {
             return false;
         }
-        return $aPosts[0];
+        return $aPost[0];
     }
     /**
-     * Lấy về số bản ghi trong bảng Post
+     * @return mixed
+     * @param $iPostAuthor
      */
-    public static function getRecordbyPostAuthor(){
-        $aParams = array();
-        $query = "SELECT count(ID) as total FROM posts ";
-        $aRecord=self::connect()->prepare($query,$aParams)->select();
+    public static function getRecordbyPostAuthor($iPostAuthor)
+    {
+        $aParams = array($iPostAuthor);
+        $query   = "SELECT count(ID) as total FROM posts WHERE post_author=?";
+        $aRecord = self::connect()->prepare($query, $aParams)->select();
         return $aRecord[0]["total"];
     }
-
     /**
      * @return mixed
-     * @param $post_status
-     * @param $post_type
-     * @param $post_title
-     * @param $post_content
-     * @param $post_mime_type
-     * @param $guid
-     * @param $userID
+     * @param $sPostStatus
+     * @param $sPostType
+     * @param $sPostTitle
+     * @param $sPostContent
+     * @param $sPostMimeType
+     * @param $sGuid
+     * @param $iUserID
      */
-    public static function insertPost(//Insert Post
-        $userID,
-        $post_status,
-        $post_type,
-        $post_title,
-        $post_content,
-        $post_mime_type,
-        $guid
+    public static function insertPost(
+        $iUserID,
+        $sPostStatus,
+        $sPostType,
+        $sPostTitle,
+        $sPostContent,
+        $sPostMimeType,
+        $sGuid
     ) {
-        $aParams = array($userID, $post_status, $post_type, $post_title, $post_content, $post_mime_type, $guid);
-        $query = "INSERT INTO posts(post_author, post_status, post_type, post_title, post_content, post_mime_type,guid)
-        VALUES (?,?,?,?,?,?,?)";
-        //Nhảy đến phương thức insert() file MysqlGrammar.php
+        $aParams = array($iUserID, $sPostStatus, $sPostType, $sPostTitle, $sPostContent, $sPostMimeType, $sGuid);
+        $query   = "INSERT INTO posts(post_author, post_status, post_type, post_title, post_content, post_mime_type,
+        guid) VALUES (?,?,?,?,?,?,?)";
+        //Go to method insert() file MysqlGrammar.php
         return self::connect()->prepare($query, $aParams)->insert();
     }
     /**
      * @return mixed
-     * @param $meta_value
-     * @param $post_id
-     * @param $meta_key
+     * @param $sMetaValue
+     * @param $iPostID
+     * @param $sMetaKey
      */
-    public static function insertPostMeta($meta_key, $meta_value, $post_id)//Insert PostMeta
+    public static function insertPostMeta($sMetaKey, $sMetaValue, $iPostID)
     {
-        $aParams = array($meta_key, $meta_value, $post_id);
-        $query = "INSERT INTO postmeta (meta_key,meta_value,post_id) VALUES(?, ?, ?)";
+        $aParams = array($sMetaKey, $sMetaValue, $iPostID);
+        $query   = "INSERT INTO postmeta (meta_key,meta_value,post_id) VALUES(?, ?, ?)";
         return self::connect()->prepare($query, $aParams)->insert();
     }
     /**
-     * @return bool
-     * @param $posst_type
-     * @param $post_title
-     * @param $post_content
+     * @return mixed
+     * @param $sPostType
+     * @param $sPostTitle
+     * @param $sPostContent
      * @param $PostID
-     * @param $post_status
+     * @param $sPostStatus
      */
-    public static function updatePostbyPostID($post_status, $posst_type, $post_title, $post_content, $PostID)
+    public static function updatePostbyPostID($sPostStatus, $sPostType, $sPostTitle, $sPostContent, $PostID)
     {
-        $aParams = array($post_status, $posst_type, $post_title, $post_content, $PostID);
-        $query = "UPDATE posts SET post_status= ?,post_type= ?, post_title = ?, post_content= ? WHERE ID = ?";
+        $aParams = array($sPostStatus, $sPostType, $sPostTitle, $sPostContent, $PostID);
+        $query   = "UPDATE posts SET post_status= ?,post_type= ?, post_title = ?, post_content= ? WHERE ID = ?";
         return self::connect()->prepare($query, $aParams)->update();
     }
     /**
      * @return mixed
+     * @param $PostID
      */
     public static function deletePostbyPostID($PostID)
     {

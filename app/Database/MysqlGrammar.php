@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Database;
 
 /**
@@ -8,38 +8,42 @@ namespace MVC\Database;
 class MysqlGrammar implements DBInterface
 {
     /**
+     * Save info DB
      * @var
      */
-    private $aDBConfiguration;//Mảng lưu thông tin DB
+    private $aDBConfiguration;
     /**
+     * Object connect to DB mysqli
      * @var null
      */
-    private $oConnect = null;//Object kết nối đến DB mysqli
+    private $oConnect = null;
     /**
+     * Create object preapared
      * @var null
      */
-    private $oSTMT = null;//Tạo đối tượng prepared
+    private $oSTMT = null;
     /**
      * MysqlGrammar constructor.
+     * Save info DB
      * @param $aDBConfiguration
      */
-    public function __construct($aDBConfiguration)//Hàm khởi tạo
+    public function __construct($aDBConfiguration)
     {
-        $this->aDBConfiguration = $aDBConfiguration;//Mảng lưu thông tin DB
+        $this->aDBConfiguration = $aDBConfiguration;
     }
     /**
      * @return $this
      * @param array $aArgs
      * @param       $query
      */
-    public function prepare($query, array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
+    public function prepare($query, array $aArgs)
     {
         $aParams = array();
-        //Tạo đối tượng preapred
+        //Create object preapred
         $this->oSTMT = $this->oConnect->prepare($query);
-        //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
-        //function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
-        //lamda và cloasure
+        //array_reduce()
+        //function ($carry, $args) use (&$aParams):Anonymous function, reference transmission
+        //lamda and cloasure
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
             switch ($args) {
@@ -58,28 +62,26 @@ class MysqlGrammar implements DBInterface
             }
             return $carry;
         }, "");
-        // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
-        //      var_dump($aParams);die;
         if($types!=""){
             $this->oSTMT->bind_param($types, ...$aParams);
         }
         return $this;
     }
     /**
-     * Get value
-     * @return mixed
+     * @return array|bool|mixed
+     * @param string $string
      */
     public function select($string = "")//Select
     {
-        //Thực thi câu truy vấn, nếu thành công trả về phương thức get_result(), nếu không trả về false
+        //Execute the query, if successful, returns the get_result () method, otherwise returns false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
-        $this->oSTMT->close();//Ngắt kết nối
-        if (!$oResult) {//Nếu kết quả câu truy vấn trả về rỗng
+        $this->oSTMT->close();
+        if (!$oResult) {//empty
             return false;
         }
         $aRows = [];
         if (isset($oResult) && $oResult instanceof \mysqli_result) {//=true
-            while (null !== ($aRow = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
+            while (null !== ($aRow = $oResult->fetch_assoc())) {//=array()
                 $aRows[] = $aRow;
             }
         }
@@ -89,12 +91,12 @@ class MysqlGrammar implements DBInterface
      * @return mixed
      * @param string $string
      */
-    public function insert($string = "")//Insert
+    public function insert($string = "")
     {
         //Thực thị câu lệnh truy vấn
         $this->oSTMT->execute();
         $id = $this->oSTMT->insert_id;
-        $this->oSTMT->close();//Ngắt kết nối
+        $this->oSTMT->close();
         return $id;
     }
     /**
@@ -119,9 +121,10 @@ class MysqlGrammar implements DBInterface
         return $status;
     }
     /**
+     * Connect DB
      * @return $this|mixed
      */
-    public function connect()//Connect DB
+    public function connect()
     {
         //Connect
         if ($this->oConnect === null) {
@@ -129,7 +132,7 @@ class MysqlGrammar implements DBInterface
                 $this->aDBConfiguration["username"],
                 $this->aDBConfiguration["password"],
                 $this->aDBConfiguration["db"]);
-            /* check connection */
+            //Check connection
             if ($this->oConnect->connect_errno) {
                 throw new \RuntimeException("Connect failed: %s\n", $this->oConnect->connect_error);
             }

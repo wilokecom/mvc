@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Support;
 
 /**
@@ -8,25 +8,27 @@ namespace MVC\Support;
 class Validator
 {
     /**
+     * Array restore key is field, value is value of field need to validate
      * @var array
      */
-    protected static $aConditionals = [];//Mảng lưu các key là các giá trị, value là các giá trị cần validate
+    protected static $aConditionals = [];
     /**
+     * Array restore value of $_POST
      * @var array
      */
-    protected static $aData = [];//Mảng lưu giá trị của biến $_POST
+    protected static $aData = [];
     /**
+     * Validate condition analysis
+     * Return arr("func"=> ,"param"=>)
      * @return array
      * @param string $rawConditionals
      */
-    //Phân tích điều kiện validate
     protected static function parseConditionals($rawConditionals)
     {
-        //Phá chuỗi và trim
+        //Destroy string and trim
         $aRawParse = explode("|", trim($rawConditionals));
-        //Khai báo mảng rỗng
+        //Declare an empty array
         $aConditionals = array();
-        //Lấy các phần tử mảng
         foreach ($aRawParse as $cond) {
             $aConditionAndParams = explode(":", trim($cond));
             $aConditionals[]     = array(
@@ -36,22 +38,21 @@ class Validator
                 ) : ""
             );
         }
-        //arr("func"=> ,"param"=>)
         return $aConditionals;
     }
     /**
+     * Return array has value "success"
      * @return array
      */
-    //Trả về mảng có giá trị success
     protected static function success()
     {
         return array("status" => "success");
     }
     /**
+     * Return array has value "error"
      * @return array
      * @param $msg
      */
-    //Trả về mảng có giá trị error
     protected static function error($msg)
     {
         return array(
@@ -64,13 +65,13 @@ class Validator
      * @param $length
      * @param $key
      */
-    protected static function maxLength($key, $length)//Max length
+    protected static function maxLength($key, $length)
     {
-        //Nếu độ dài không tồn tại hoặc bằng 0
+        //If the length not exist or equal 0
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
             return self::success();
         }
-        //Kiểm tra chiều dài của chuỗi
+        //Check the length of string
         if (strlen(self::$aData[$key]) > $length) {
             return self::error(
                 "The maximum length of " . $key . " is " . $length
@@ -79,10 +80,10 @@ class Validator
         return self::success();
     }
     /**
+     * Check if the element of $_POST is exist or not
      * @return array
      * @param $key
      */
-    //Check xem có tồn tại phần tử mảng của biến $_POST hay không
     protected static function required($key)
     {
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
@@ -105,11 +106,11 @@ class Validator
         return self::success();
     }
     /**
+     * Check the image file format
      * @return array
      * @param $key
      */
-    //Kiểm tra định dạng file image
-    protected static function checkType($key)
+    protected static function checkImageType($key)
     {
         $type = array(
             "image/jpeg",
@@ -128,27 +129,26 @@ class Validator
      * @param $size
      * @param $key
      */
-    protected static function maxSize($key, $size)//Max Size
+    protected static function maxSize($key, $size)
     {
-        //Nếu kích thước không tồn tại hoặc bằng 0
+        //If the size not exist or equal 0
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
             return self::success();
         }
-        //Kiểm tra kích thước của ảnh
+        //Check the size of image
         if (self::$aData[$key] > $size) {
             return self::error("The maximum size of " . $key . " is " . $size);
         }
         return self::success();
     }
     /**
+     * Check the conditional
      * @return bool
      * @param $key
      * @param $aConditionals
      */
-    //Kiểm tra điều kiện
     protected static function checkConditional($aConditionals, $key)
     {
-        //Duyệt các phần tử mảng
         foreach ($aConditionals as $aConditional) {
             if (!method_exists(__CLASS__, $aConditional["func"])) {
                 throw new \RuntimeException(
@@ -172,14 +172,14 @@ class Validator
      * @param $aData
      * @param $aConditionals
      */
-    public static function validate($aConditionals, $aData)//Validate
+    public static function validate($aConditionals, $aData)
     {
-        self::$aData = $aData;//Lưu giá trị biến $_POST
-        //Duyệt mảng các giá trị cần validate
+        self::$aData = $aData;//Restore the value of $_POST
+        //The array of values to be validated
         foreach ($aConditionals as $key => $rawConditionals) {
-            //Phân tích điều kiện validate
+            //Validate condition analysis
             $aConditionals = self::parseConditionals($rawConditionals);
-            //Kiểm tra điều kiện
+            //Check the condition
             $status = self::checkConditional($aConditionals, $key);
             if ($status !== true) {
                 return $status;

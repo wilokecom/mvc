@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use \MVC\Support\Route;
 use \MVC\Support\Session;
@@ -18,9 +18,10 @@ incViewFile("header");
         } else {
             $formClass = "ui form";
         }
-        //
         ?>
-        <form class="<?php echo $formClass; ?>" method="POST" action="<?php echo Route::get("post/handle-add");?>" enctype="multipart/form-data">
+        <form class="<?php echo $formClass; ?>" method="POST" action="
+        <?php echo Route::get("post/handle-add"); ?>"
+              enctype="multipart/form-data">
         <!--Display Error-->
         <?php if ($hasError) : ?>
             <div class="ui error message">

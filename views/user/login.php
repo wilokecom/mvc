@@ -1,5 +1,6 @@
 <?php
 use MVC\Support\Session;
+use MVC\Support\Route;
 
 //Go to function incViewFile -file index.php
 //Add CSS-JS cho header,body,footer
