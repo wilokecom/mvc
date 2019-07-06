@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php 
+declare(strict_types=1);
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
@@ -8,12 +9,12 @@ use MVC\Support\Session;
 use MVC\Support\Validator;
 
 /**
- * Class PostController
- * @package MVC\Controllers
+ * Class UserController
+ *
+ * @package MVC\Controller
  */
-class PostController extends Controller
+class UserController extends  Controller
 {
-    /**
      * Default method, link url:mvc/post/
      * Go to method add
      */
@@ -21,7 +22,7 @@ class PostController extends Controller
     {
         Redirect::to("post/add");
     }
-    /**
+
      * If not logined, return user/login
      * @throws \Exception
      */
@@ -176,4 +177,5 @@ class PostController extends Controller
         //Go to dashboard
         Redirect::to("user/dashboard");
     }
+
 }

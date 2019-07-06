@@ -3,6 +3,7 @@ namespace MVC\Database;
 
 /**
  * Class MysqlGrammar
+ *
  * @package MVC\Database
  */
 class MysqlGrammar implements DBInterface
@@ -17,22 +18,27 @@ class MysqlGrammar implements DBInterface
      * @var null
      */
     private $oConnect = null;
-    /**
-     * Create object preapared
-     * @var null
-     */
-    private $oSTMT = null;
+  
     /**
      * MysqlGrammar constructor.
      * Save info DB
      * @param $aDBConfiguration
      */
+    private $oSTMT = null;//create  prepared object
+
+    /**
+     * MysqlGrammar constructor.
+     *
+     * @param $aDBConfiguration : array that saves DB infomations
+     */
     public function __construct($aDBConfiguration)
     {
         $this->aDBConfiguration = $aDBConfiguration;
     }
+
     /**
      * @return $this
+     *
      * @param array $aArgs
      * @param       $query
      */
@@ -41,9 +47,10 @@ class MysqlGrammar implements DBInterface
         $aParams = array();
         //Create object preapred
         $this->oSTMT = $this->oConnect->prepare($query);
-        //array_reduce()
-        //function ($carry, $args) use (&$aParams):Anonymous function, reference transmission
-        //lamda and cloasure
+
+        //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
+        //function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
+        //lamda và cloasure
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
             switch ($args) {
@@ -61,22 +68,28 @@ class MysqlGrammar implements DBInterface
                     break;
             }
             return $carry;
-        }, "");
+        },"");
+        // all  parameters  put into array , inside function, can call this arry by  $parameters
+        //      var_dump($aParams);die;
+
         if($types!=""){
             $this->oSTMT->bind_param($types, ...$aParams);
         }
+
         return $this;
     }
+
     /**
      * @return array|bool|mixed
      * @param string $string
+     * @return mixed
      */
     public function select($string = "")//Select
     {
         //Execute the query, if successful, returns the get_result () method, otherwise returns false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
         $this->oSTMT->close();
-        if (!$oResult) {//empty
+        if (!$oResult) {
             return false;
         }
         $aRows = [];
@@ -87,31 +100,37 @@ class MysqlGrammar implements DBInterface
         }
         return $aRows;
     }
+
     /**
      * @return mixed
+     * implement querry
      * @param string $string
+     *  Insert
      */
     public function insert($string = "")
     {
-        //Thực thị câu lệnh truy vấn
         $this->oSTMT->execute();
         $id = $this->oSTMT->insert_id;
         $this->oSTMT->close();
         return $id;
     }
+
     /**
      * @return mixed
+     *
      * @param string $string
      */
-    public function update($string = "")//Insert
+    public function update($string = "")
     {
-        //Thực thị câu lệnh truy vấn
+
         $status = $this->oSTMT->execute();
         $this->oSTMT->close();
         return $status;
     }
+
     /**
      * Delete value
+     *
      * @return bool
      */
     public function delete($string = "")
@@ -120,9 +139,11 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $status;
     }
+
     /**
      * Connect DB
      * @return $this|mixed
+     * Connect DB
      */
     public function connect()
     {

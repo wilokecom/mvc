@@ -3,6 +3,7 @@ namespace MVC\Support;
 
 /**
  * Class Validator
+ *
  * @package MVC\Support
  */
 class Validator
@@ -21,6 +22,7 @@ class Validator
      * Validate condition analysis
      * Return arr("func"=> ,"param"=>)
      * @return array
+     *
      * @param string $rawConditionals
      */
     protected static function parseConditionals($rawConditionals)
@@ -31,7 +33,7 @@ class Validator
         $aConditionals = array();
         foreach ($aRawParse as $cond) {
             $aConditionAndParams = explode(":", trim($cond));
-            $aConditionals[]     = array(
+            $aConditionals[] = array(
                 "func" => trim($aConditionAndParams[0]),
                 "param" => isset($aConditionAndParams[1]) ? trim(
                     $aConditionAndParams[1]
@@ -51,6 +53,7 @@ class Validator
     /**
      * Return array has value "error"
      * @return array
+     *
      * @param $msg
      */
     protected static function error($msg)
@@ -60,8 +63,10 @@ class Validator
             "msg" => $msg
         );
     }
+
     /**
      * @return array
+     *
      * @param $length
      * @param $key
      */
@@ -82,6 +87,7 @@ class Validator
     /**
      * Check if the element of $_POST is exist or not
      * @return array
+     *
      * @param $key
      */
     protected static function required($key)
@@ -91,8 +97,10 @@ class Validator
         }
         return self::success();
     }
+
     /**
      * @return array
+     *
      * @param $key
      */
     protected static function email($key)
@@ -108,6 +116,7 @@ class Validator
     /**
      * Check the image file format
      * @return array
+     *
      * @param $key
      */
     protected static function checkImageType($key)
@@ -124,8 +133,10 @@ class Validator
         }
         return self::success();
     }
+
     /**
      * @return array
+     *
      * @param $size
      * @param $key
      */
@@ -144,6 +155,7 @@ class Validator
     /**
      * Check the conditional
      * @return bool
+     *
      * @param $key
      * @param $aConditionals
      */
@@ -167,8 +179,10 @@ class Validator
         }
         return true;
     }
+
     /**
      * @return bool
+     *
      * @param $aData
      * @param $aConditionals
      */
