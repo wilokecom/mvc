@@ -552,9 +552,9 @@ $.fn.modal = function(parameters) {
             $dimmable.removeClass(className.blurring);
           },
           bodyStyle: function() {
-            if($body.attr('style') === '') {
+            if($body.attr('style.css.css.css.css') === '') {
               module.verbose('Removing style attribute');
-              $body.removeAttr('style');
+              $body.removeAttr('style.css.css.css.css');
             }
           },
           screenHeight: function() {

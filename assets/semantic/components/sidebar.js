@@ -304,10 +304,10 @@ $.fn.sidebar = function(parameters) {
 
         repaint: function() {
           module.verbose('Forcing repaint event');
-          element.style.display = 'none';
+          element.style12.display = 'none';
           var ignored = element.offsetHeight;
           element.scrollTop = element.scrollTop;
-          element.style.display = '';
+          element.style12.display = '';
         },
 
         setup: {

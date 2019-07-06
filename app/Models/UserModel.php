@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace MVC\Models;
 
 use MVC\Database\DBFactory;
@@ -12,19 +11,14 @@ use MVC\Database\DBFactory;
 class UserModel extends DBFactory
 {
     /**
-     * Lấy thông số bảng user thông qua user name
-     *
-     * @return bool
-     *
-     * @param $username
-     * Done.Thực thi câu lệnh query, trả về kết quả dưới dạng mảng
+     * @return bool or array
+     * @param $sUsername
      */
-    public static function getUserByUsername($username)
+    public static function getUserByUsername($sUsername)
     {
-        $query = "SELECT * FROM users WHERE username=? ORDER BY ID LIMIT 1";
-        $aParam = array($username);
-        $aStatus = self::connect()->prepare($query, $aParam)
-            ->select();//Thực thi câu lệnh query và trả về kết quả
+        $query   = "SELECT * FROM users WHERE username=? ORDER BY ID LIMIT 1";
+        $aParam  = array($sUsername);
+        $aStatus = self::connect()->prepare($query, $aParam)->select();
         if (!$aStatus) {
             return false;
         }
@@ -32,8 +26,9 @@ class UserModel extends DBFactory
     }
 
     /**
-     * @param $username
-     *
+     * @return bool ỏ array
+     * @param $sPassword
+     * @param $sUsername
      * @return bool
      */
     public static function getUserID($username)
@@ -85,19 +80,21 @@ class UserModel extends DBFactory
      *
      * @return bool
      */
-    public static function checkUserLogin($username, $password)//checkUser
+    public static function checkUserLogin($sUsername, $sPassword)
     {
-        $query = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
-        $aParam = array($username, md5($password));
-        $aStatus = self::connect()->prepare($query, $aParam)
-            ->select();//Thực thi câu lệnh query và trả về kết quả
+        $query   = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
+        $aParam  = array($sUsername, md5($sPassword));
+        $aStatus = self::connect()->prepare($query, $aParam)->select();
         if (!$aStatus) {
             return false;
         }
-        return $aStatus[0];//Trả về kết qủa dưới dạng mảng
+        return $aStatus[0];
     }
 
     /**
+     * @return mixed
+     * @param $sUsername
+     */
      * check  username existtance
      * Check whether username exists or not
      *
@@ -108,8 +105,7 @@ class UserModel extends DBFactory
 
     public static function usernameExists($username)
     {
-        return
-            self::connect()->prepare("SELECT username FROM users WHERE username=?", array($username))->select();
+        return self::connect()->prepare("SELECT username FROM users WHERE username=?", array($username))->select();
     }
 
     /**
@@ -125,24 +121,20 @@ class UserModel extends DBFactory
     public static function emailExists($username)
     {
         return self::connect()
-            ->prepare("SELECT email FROM users WHERE email=?", array($username))
-            ->select();
+            ->prepare("SELECT email FROM users WHERE email=?", array($sUsername))->select();
     }
 
     /**
-     * Insert new user
-     *
      * @return mixed
-     *
-     * @param $email
-     * @param $password
-     * @param $username
-     * Nhảy đến phương thức insert() file MysqlGrammar.php
+     * @param $sEmail
+     * @param $sPassword
+     * @param $sUsername
      */
-    public static function insertNewUser($username, $email, $password)
+    public static function insertNewUser($sUsername, $sEmail, $sPassword)
     {
-        $aParams = array($username, $email, md5($password));
-        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $aParams = array($sUsername, $sEmail, md5($sPassword));
+        $query   = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare($query, $aParams)->insert();
     }
     /**

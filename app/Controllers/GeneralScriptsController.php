@@ -1,14 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Controllers;
+
 /**
  * Class GeneralScriptsController
- *
  * @package MVC\Controllers
  */
 class GeneralScriptsController
 {
     /**
-     * Hàm khởi tạo
      * GeneralScriptsController constructor.
      * Nhảy sang hàm addAction
      */
@@ -17,30 +16,29 @@ class GeneralScriptsController
         addAction("mvcHead", array($this, "semanticUiCSS"));
         addAction("mvcFooter", array($this, "sematicUiJS"));
     }
-
     /**
-     * Lấy đường dẫn css
-     * Chạy đến hàm mvcEnqueueStyle-file index.php
+     * Get url CSS
+     * Go to function mvcEnqueueStyle-file index.php
      */
-    public function semanticUiCSS() //Done.Lấy đường dẫn css
+    public function semanticUiCSS()
     {
         mvcEnqueueStyle(MVC_SOURCES_URL ."css/style.css");
         mvcEnqueueStyle(MVC_ASSETS_URL . "semantic/semantic.min.css");
         mvcEnqueueStyle(MVC_ASSETS_URL . "jqueryUI/jquery-ui.css");
     }
-
     /**
-     * Lấy đường dẫn JS
-     * Chạy đến hàm mvcEnqueueScript-file index.php
+     * Get url JS
+     * Go to function mvcEnqueueScript-file index.php
      */
-    public function sematicUiJS()  //Done:Lấy đường dẫn JS
+    public function sematicUiJS()
     {
-        mvcEnqueueScript(MVC_ASSETS_URL."jquery/jquery-3.4.1.min.js");
-        mvcEnqueueScript(MVC_ASSETS_URL."jqueryUI/jquery-ui.js");
+        mvcEnqueueScript(MVC_ASSETS_URL . "jquery/jquery-3.4.1.min.js");
+        mvcEnqueueScript(MVC_ASSETS_URL . "jqueryUI/jquery-ui.js");
         mvcEnqueueScript(MVC_ASSETS_URL . "semantic/semantic.min.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showContent_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showPassword_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/focusInput_jquery.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/pagination.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/alertDeleteDialog_jquery.js");
     }
 }

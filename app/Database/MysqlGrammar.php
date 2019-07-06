@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace MVC\Database;
 
 /**
@@ -10,15 +9,20 @@ namespace MVC\Database;
 class MysqlGrammar implements DBInterface
 {
     /**
+     * Save info DB
      * @var
      */
-    private $aDBConfiguration;//Saves DB infomation
+    private $aDBConfiguration;
     /**
+     * Object connect to DB mysqli
      * @var null
      */
-    private $oConnect = null;//Object connect to DB mysqli
+    private $oConnect = null;
+  
     /**
-     * @var null
+     * MysqlGrammar constructor.
+     * Save info DB
+     * @param $aDBConfiguration
      */
     private $oSTMT = null;//create  prepared object
 
@@ -38,15 +42,15 @@ class MysqlGrammar implements DBInterface
      * @param array $aArgs
      * @param       $query
      */
-    public function prepare($query, array $aArgs)//Chuẩn bị 1 câu lệnh sql để thực thi, tránh lỗi SQl Injection
+    public function prepare($query, array $aArgs)
     {
         $aParams = array();
-        //Tạo đối tượng preapred
+        //Create object preapred
         $this->oSTMT = $this->oConnect->prepare($query);
+
         //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
         //function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
         //lamda và cloasure
-
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
             switch ($args) {
@@ -76,13 +80,13 @@ class MysqlGrammar implements DBInterface
     }
 
     /**
-     * Get value
-     *
+     * @return array|bool|mixed
+     * @param string $string
      * @return mixed
      */
     public function select($string = "")//Select
     {
-        //Thực thi câu truy vấn, nếu thành công trả về phương thức get_result(), nếu không trả về false
+        //Execute the query, if successful, returns the get_result () method, otherwise returns false
         $oResult = $this->oSTMT->execute() ? $this->oSTMT->get_result() : false;
         $this->oSTMT->close();
         if (!$oResult) {
@@ -90,7 +94,7 @@ class MysqlGrammar implements DBInterface
         }
         $aRows = [];
         if (isset($oResult) && $oResult instanceof \mysqli_result) {//=true
-            while (null !== ($aRow = $oResult->fetch_assoc())) {//Trả về kết quả câu truy vấn dưới dạng mảng
+            while (null !== ($aRow = $oResult->fetch_assoc())) {//=array()
                 $aRows[] = $aRow;
             }
         }
@@ -137,10 +141,11 @@ class MysqlGrammar implements DBInterface
     }
 
     /**
+     * Connect DB
      * @return $this|mixed
      * Connect DB
      */
-    public function connect()//
+    public function connect()
     {
         //Connect
         if ($this->oConnect === null) {
@@ -148,7 +153,7 @@ class MysqlGrammar implements DBInterface
                 $this->aDBConfiguration["username"],
                 $this->aDBConfiguration["password"],
                 $this->aDBConfiguration["db"]);
-            /* check connection */
+            //Check connection
             if ($this->oConnect->connect_errno) {
                 throw new \RuntimeException("Connect failed: %s\n", $this->oConnect->connect_error);
             }

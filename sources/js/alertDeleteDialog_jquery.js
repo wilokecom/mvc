@@ -1,13 +1,8 @@
-$(".deleteItem").click(function (event) {
+$("#container").on("click", ".deleteItem","", function (event) {
+    "use strict";
+    let post_id = $(this).attr("href");
+    let $self = $(this);
     event.preventDefault();
-     var post_id = $(this).attr("href");
-    // console.log(post_id);
-
-    // $(".deleteItem").each(function () {
-    //
-    // })
-
-    var $self = $(this);
     $("#dialog-confirm").dialog({
         resizable: false,
         height: 150,
@@ -18,23 +13,24 @@ $(".deleteItem").click(function (event) {
                 $.ajax({
                     url: "http://localhost/mvc/post/delete",
                     type: "POST",
-                    //dataType: "html",
+                    dataType: "html",
                     data: {post_id: post_id},
-                    success: function (data, status) {
+                    success: function (data) {
                         $("#delete-result").html(data);
                         if (data === "Delete Success") {
                             $self.parent().parent().remove();
                         }
                     }
                 })
-                //Đóng hộp thoại
+                //Close dialog
                 $(this).dialog("close");
             },
             Cancel: function () {
-                //Đóng hộp thoại
+                //Close dialog
                 $(this).dialog("close");
             }
         }
     });
 })
+
 

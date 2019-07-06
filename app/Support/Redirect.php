@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MVC\Support;
 
@@ -8,10 +8,11 @@ namespace MVC\Support;
  */
 class Redirect
 {
-    //Điều hướng trang
+    /**
+     * @param $route
+     */
     public static function to($route)
     {
-        //Điều hướng trang
         header("Location: " . Route::get($route));//include fileapp/Support/Route.php
         exit();
     }

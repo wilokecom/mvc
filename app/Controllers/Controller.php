@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace MVC\Controllers;
 
 use Jenssegers\Blade\Blade;
@@ -33,7 +32,7 @@ class Controller
      *
      * @return \Jenssegers\Blade\Blade
      */
-    protected function initPlace() //Tạm thời không dùng
+    protected function initPlace()
     {
         if (empty($this->oBlade)) {
             $this->oBlade = new Blade(MVC_VIEWS, MVC_CACHE);
@@ -43,13 +42,13 @@ class Controller
 
     /**
      * Go to views folder
-     * @param $viewFile
+     * @param       $viewFile
      * @param array $aData
      *
      * @throws \Exception
      * //Nhảy đến thư mục views
      */
-    public function loadView($viewFile, ... $aData)
+    public function loadView($viewFile, ...$aData)
     {
         try {
             extract($aData);
