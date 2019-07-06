@@ -16,6 +16,7 @@ use MVC\Support\Route;
  */
 class UserController extends Controller
 {
+    /*
      * Save Session
      * @var string
      */
@@ -78,26 +79,6 @@ class UserController extends Controller
     }
 
     /**
-     * If not logined, returned to user/login
-     */
-    public static function redirectToUserLogin()
-    {
-        if (!self::isLoggedIn()) {
-            Redirect::to("user/login");
-        }
-    }
-
-    /**
-     * Return to dashboard
-     */
-    public static function redirectToDashboard()
-    {
-        if (self::isLoggedIn()) {
-            Redirect::to("user/dashboard");
-        }
-    }
-  
-    /**
      * @throws \Exception
      */
     public function dashboard()
@@ -148,15 +129,6 @@ class UserController extends Controller
     }
 
     /**
-     * Check logined or not
-     * @return bool
-     */
-    public static function isLoggedIn()
-    {
-        return Session::has(self::$loginSessionKey);
-    }
-
-    /**
      * Handle when press logout$iTotalPage
      * Destroy Session Login
      * Return to user/login
@@ -171,7 +143,6 @@ class UserController extends Controller
      * Solving handleRegister when submit
      * Run into ClassLoader.php , required file Validator , solving method validate
      * Check and display error
-     */
      */
     public function handleRegister()
     {
