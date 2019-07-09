@@ -41,6 +41,27 @@ class Controller
     }
 
     /**
+     * @param array $aMiddleware What middleware will be used in this methods
+     * @param array $aData The data that maybe used in the middleware
+     *
+     * @throws \Exception
+     */
+    protected function middleware($aMiddleware, $aData = [])
+    {
+        foreach ($aMiddleware as $middleware) {
+            $sMiddlewareClass = getConfig('middleware')->getParam($middleware, false);
+
+            if (!empty($sMiddlewareClass) && class_exists($sMiddlewareClass)) {
+                new $sMiddlewareClass($aData);
+            } else {
+                if (MVC_DEBUG) {
+                    throw new \Exception('This class ' . $middleware . ' does not exist');
+                }
+            }
+        }
+    }
+
+    /**
      * Go to views folder
      * @param       $viewFile
      * @param array $aData

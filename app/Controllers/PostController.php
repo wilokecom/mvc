@@ -1,4 +1,4 @@
-<?php 
+<?php
 declare(strict_types=1);
 namespace MVC\Controllers;
 
@@ -13,8 +13,9 @@ use MVC\Support\Validator;
  *
  * @package MVC\Controller
  */
-class UserController extends  Controller
+class PostController extends  Controller
 {
+    /**
      * Default method, link url:mvc/post/
      * Go to method add
      */
@@ -23,14 +24,16 @@ class UserController extends  Controller
         Redirect::to("post/add");
     }
 
+    /*
      * If not logined, return user/login
      * @throws \Exception
      */
     public function add()
     {
-        UserController::redirectToUserLogin();
+        $this->middleware(['auth']);
         $this->loadView("post/add");
     }
+
     /**
      * @throws \Exception
      */
@@ -177,5 +180,4 @@ class UserController extends  Controller
         //Go to dashboard
         Redirect::to("user/dashboard");
     }
-
 }

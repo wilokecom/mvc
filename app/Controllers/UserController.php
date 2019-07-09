@@ -40,6 +40,7 @@ class UserController extends Controller
             Redirect::to("user/login");
         }
     }
+
     /**
      * Check logined or not
      * @return bool
@@ -48,6 +49,7 @@ class UserController extends Controller
     {
         return Session::has(self::$sLoginSessionKey);
     }
+
     /**
      * Return to dashboard
      */
@@ -87,6 +89,7 @@ class UserController extends Controller
         $abUserInfo = UserModel::getUserByUsername(
             $_SESSION[self::$sLoginSessionKey]
         );
+
         $iPostAuthor=$abUserInfo["ID"];
         $iTotalRecords = PostModel::getRecordbyPostAuthor($iPostAuthor);
         $aConfig       = array(
@@ -125,7 +128,7 @@ class UserController extends Controller
             $abUserInfo,
             $abPostInfo
         );
-        $this->loadView("user/dashboard", $aUserInfo, $aPostInfo, $current_page, $total_page);
+        $this->loadView("user/dashboard", $abUserInfo, $iPostStart, $aConfig['current_page'], $iTotalRecords);
     }
 
     /**
