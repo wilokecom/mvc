@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MVC_HOME_URL
  */
-define("MVC_HOME_URL", "http://localhost/mvc/");
+define("MVC_HOME_URL", "http://localhost:8088/mvc/");
 /**
  *MVC_DIR
  */

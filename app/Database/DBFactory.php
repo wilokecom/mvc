@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Database;
 
 /**
@@ -8,20 +8,22 @@ namespace MVC\Database;
 abstract class DBFactory
 {
     /**
+     * Object database:Init library mysqli(MysqlGrammar.php)
      * @var
      */
-    private static $oDB;//Object database:Khởi tạo thư viện mysqli(MysqlGrammar.php)
-
+    private static $oDB;
     /**
+     * connect database
+     * $grammar = getConfig("database")->getParam("default"):
+     * Go to function getConfig-file index.php
+     * Include file \Support\Config(database)
+     * Go to function construct of file \Support\Config(database)
+     * Go to method getParam("default")
+     * Return library mysqli
      * @return \MVC\Database\DBInterface
      */
-    protected static function connect(): DBInterface//connect database
+    protected static function connect():DBInterface
     {
-        //Nhảy đến hàm getConfig-file index.php
-        //Include file \Support\Config(database)
-        //Nhảy đến hàm construct của file \Support\Config(database)
-        //Nhảy đến phương thức getParam("default")
-        //Trả về thư viện mysqli
         $grammar = getConfig("database")->getParam("default");
         switch ($grammar) {
             case "sqlite":
@@ -30,11 +32,13 @@ abstract class DBFactory
                 return self::$oDB->connect();
                 break;
             case "mysqli":
-                //Include app/Database/MysqlGrammar.php implement DBInterface.php-->Include DBInterface.php
-                //Nhảy đến hàm construct của file \Support\Config(database)
-                //Nhảy đến phương thức getParam(connections", true))
-                //Nhảy đến phương thức getParam(mysqli)
-                //Chú ý ở đây hàm construc bị ghi đè
+                /**
+                 * nclude app/Database/MysqlGrammar.php implement DBInterface.php-->Include DBInterface.php
+                 * Go to function construct of file \Support\Config(database)
+                 * Go to method getParam(connections", true))
+                 * Go to method getParam(mysqli)
+                 * Note that the construc function is overwritten
+                 */
                 self::$oDB = new MysqlGrammar(getConfig("database")
                     ->getParam("connections", true)->getParam($grammar));
                 return self::$oDB->connect();

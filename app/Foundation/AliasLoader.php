@@ -1,6 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Foundation;
 
+/**
+ * Class AliasLoader
+ * @package MVC\Foundation
+ */
 class AliasLoader
 {
     /**

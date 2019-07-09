@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use \MVC\Support\Route;
 use \MVC\Support\Session;
@@ -9,12 +9,14 @@ incViewFile("header");
         <!--Top-menu-->
         <?php
         incViewFile("top-menu");
-        $aPostInfo = $aData[0];
-        $id=$aData[1];
+        if (isset($aData)) {
+            $aPostInfo = $aData[0];
+            $iPostID   = $aData[0]["ID"];
+        }
         ?>
         <!--Error-->
         <?php
-        //Lấy lỗi Session
+        //Get Session Error
         $hasError = Session::has("post_error");
         if ($hasError) {
             $formClass = "ui form error";
@@ -23,7 +25,9 @@ incViewFile("header");
         }
         ?>
         <form class="<?php echo $formClass; ?>" method="POST"
-              action="<?php echo Route::get("post/handle-edit/".$id."/");?>" enctype="multipart/form-data">
+              action="<?php echo Route::get(
+                  "post/handle-edit?post-id=" . $iPostID
+              ); ?>" enctype="multipart/form-data">
             <!--Display Error-->
             <?php if ($hasError) : ?>
                 <div class="ui error message">
@@ -88,12 +92,14 @@ incViewFile("header");
             <!--Title-->
             <div class="field">
                 <label for="post-title">title</label>
-                <input id="post-title" type="text" name="post-title" placeholder="Title" value="<?php echo $aPostInfo["post_title"];?>">
+                <input id="post-title" type="text" name="post-title" placeholder="Title"
+                       value="<?php echo $aPostInfo["post_title"]; ?>">
             </div>
             <!--Content-->
             <div class="field">
                 <label for="post-content">Content</label>
-                <textarea id="post-content" rows="2" name="post-content" placeholder="Content" value=""><?php echo $aPostInfo["post_content"];?></textarea>
+                <textarea id="post-content" rows="2" name="post-content" placeholder="Content"
+                          value=""><?php echo $aPostInfo["post_content"]; ?></textarea>
             </div>
             <!--Submit-->
             <div class="field" style="margin-top: 20px">

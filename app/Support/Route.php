@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Support;
 
 /**
@@ -8,10 +8,10 @@ namespace MVC\Support;
 class Route
 {
     /**
+     * Get url link
      * @return string
      * @param $route
      */
-    //Trả về đường dẫn url
     public static function get($route)
     {
         return MVC_HOME_URL . $route;

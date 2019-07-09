@@ -1,8 +1,9 @@
-$(document).ready(function(){
-    $("input").focus(function(){
+$(document).ready(function () {
+    "use strict";
+    $("input").focus(function () {
         $(this).css("background-color", "#cccccc");
     });
-    $("input").blur(function(){
+    $("input").blur(function () {
         $(this).css("background-color", "#ffffff");
     });
 });

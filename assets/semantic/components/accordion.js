@@ -348,10 +348,10 @@ $.fn.accordion = function(parameters) {
           display: function() {
             module.verbose('Removing inline display from element', this);
             $(this).css('display', '');
-            if( $(this).attr('style') === '') {
+            if( $(this).attr('style.css.css.css.css') === '') {
               $(this)
-                .attr('style', '')
-                .removeAttr('style')
+                .attr('style.css.css.css.css', '')
+                .removeAttr('style.css.css.css.css')
               ;
             }
           },
@@ -359,10 +359,10 @@ $.fn.accordion = function(parameters) {
           opacity: function() {
             module.verbose('Removing inline opacity from element', this);
             $(this).css('opacity', '');
-            if( $(this).attr('style') === '') {
+            if( $(this).attr('style.css.css.css.css') === '') {
               $(this)
-                .attr('style', '')
-                .removeAttr('style')
+                .attr('style.css.css.css.css', '')
+                .removeAttr('style.css.css.css.css')
               ;
             }
           },

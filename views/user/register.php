@@ -3,6 +3,7 @@
 use \MVC\Support\Route;
 use \MVC\Support\Session;
 
+
 /* Go to function incViewFile -file index.php
  * Add CSS-JS for header,body,footer
  */
@@ -10,11 +11,9 @@ incViewFile("header");//Diplay Header
 ?>
 <!--Body-->
 <div id="container">
-    <!--Top-menu-->
     <?php incViewFile("top-menu"); ?>
-    <!--Content-->
-    <!--Error-->
     <?php
+
     $hasError = Session::has("register_error");//Get Error
     if ($hasError) {//If has error
         $formClass = "ui form error";
@@ -38,7 +37,7 @@ incViewFile("header");//Diplay Header
         <div class="field">
             <label for="password">Password</label>
             <input id="password" type="password" name="password" placeholder="Password">
-            <input type="checkbox" onclick="myFunction()">Show Password
+            <input type="checkbox" onclick="showPassword()">Show Password
         </div>
         <!--Email-->
         <div class="field">

@@ -1,84 +1,188 @@
-<?php
+<?php declare(strict_types=1);
 namespace MVC\Models;
 
 use MVC\Database\DBFactory;
 
 /**
  * Class UserModel
+ *
  * @package MVC\Models
  */
 class UserModel extends DBFactory
 {
     /**
-     * Lấy thông số bảng user thông qua user name
-     * @return bool
-     * @param $username
+     * @return bool or array
+     * @param $sUsername
      */
-    public static function getUserByUsername($username)//Done.Thực thi câu lệnh query, trả về kết quả dưới dạng mảng
+    public static function getUserByUsername($sUsername)
     {
-        $query = "SELECT * FROM users WHERE username=? ORDER BY ID LIMIT 1";
-        $aParam = array($username);
-        $aStatus = self::connect()->prepare($query, $aParam)
-            ->select();//Thực thi câu lệnh query và trả về kết quả
+        $query   = "SELECT * FROM users WHERE username=? ORDER BY ID LIMIT 1";
+        $aParam  = array($sUsername);
+        $aStatus = self::connect()->prepare($query, $aParam)->select();
         if (!$aStatus) {
             return false;
         }
-        return $aStatus[0];//Trả về kết qủa dưới dạng mảng
+        return $aStatus[0];
     }
+
     /**
-     * Lấy thông số bảng user thông qua username và passwword
+     * @return bool ỏ array
+     * @param $sPassword
+     * @param $sUsername
      * @return bool
+     */
+    public static function getUserID($username)
+    {
+        $aParams = array($username);
+        $query = "SELECT * FROM users WHERE username= ? ORDER BY ID LIMIT 1 ";
+        $aStatus = self::connect()->prepare($query, $aParams)->select();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0]["ID"];
+    }
+
+    /**
+     * @param $ID
+     *
+     * @return bool
+     */
+    public static function getUserbyID($ID)
+    {
+        $aParams = array($ID);
+        $query = "SELECT * FROM users WHERE ID = ?";
+        $aStatus = self::connect()->prepare($query, $aParams)->select();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0];
+    }
+
+    /**
+     * @param $userID
+     *
+     * @return bool
+     */
+    public static function getUser_metaID($userID)
+    {
+        $aParams = array($userID);
+        $query = "SELECT * FROM user_meta WHERE user_id=? ORDER BY umeta_id LIMIT  1";
+        $aStatus = self::connect()->prepare($query, $aParams)->select();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0];
+    }
+
+    /**
+     * @param $username
      * @param $password
-     * @param $username
+     *
+     * @return bool
      */
-    public static function checkUserLogin($username, $password)//checkUser
+    public static function checkUserLogin($sUsername, $sPassword)
     {
-        $query = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
-        $aParam = array($username, md5($password));
-        $aStatus = self::connect()->prepare($query, $aParam)
-            ->select();//Thực thi câu lệnh query và trả về kết quả
+        $query   = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
+        $aParam  = array($sUsername, md5($sPassword));
+        $aStatus = self::connect()->prepare($query, $aParam)->select();
         if (!$aStatus) {
             return false;
         }
-        return $aStatus[0];//Trả về kết qủa dưới dạng mảng
+        return $aStatus[0];
     }
+
     /**
-     * Kiểm tra username có tồn tại hay không
-     * Check whether username exists or not
-     * @return bool
-     * @param string $username
+     * @return mixed
+     * @param $sUsername
      */
-    //Kiểm tra username có tồn tại hay không
-    //Trả về mảng
+     * check  username existtance
+     * Check whether username exists or not
+     *
+     * @return bool
+     *
+     * @param  $username
+     */
+
     public static function usernameExists($username)
     {
         return self::connect()->prepare("SELECT username FROM users WHERE username=?", array($username))->select();
     }
+
     /**
-     * Kiểm tra email có tồn tại hay không
-     * Trả về mảng
+     * check  email existtance
+     * return array()
      * Check whether username exists or not
+     *
      * @return bool
+     *
      * @param string $username
+     *
      */
-    public static function emailExists($username)//Kiểm tra email có tồn tại hay không
+    public static function emailExists($username)
     {
         return self::connect()
-            ->prepare("SELECT email FROM users WHERE email=?", array($username))
-            ->select();
+            ->prepare("SELECT email FROM users WHERE email=?", array($sUsername))->select();
     }
+
     /**
-     * Insert new user
      * @return mixed
-     * @param $email
-     * @param $password
-     * @param $username
+     * @param $sEmail
+     * @param $sPassword
+     * @param $sUsername
      */
-    public static function insertNewUser($username, $email, $password)//Insert new user
+    public static function insertNewUser($sUsername, $sEmail, $sPassword)
     {
-        $aParams = array($username, $email, md5($password));
-        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $aParams = array($sUsername, $sEmail, md5($sPassword));
+        $query   = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare($query, $aParams)->insert();
+    }
+    /**
+     * @param $fullname
+     * @param $fileUpload
+     * @param $userID
+     *
+     * @return mixed
+     */
+    public static function insertUserMeta($fullname, $fileUpload, $userID)
+    {
+        $query = "INSERT INTO user_meta (meta_key, meta_value,user_id) VALUES (?,?,$userID) ";
+        $aParams = array($fullname, $fileUpload);
+        return self::connect()->prepare($query, $aParams)->insert();
+    }
+    /**
+     * @param $meta_key
+     * @param $meta_value
+     * @param $userID
+     *
+     * @return bool
+     */
+    public static function updateUser_meta($meta_key, $meta_value, $userID)
+    {
+        $aParams = array($meta_key, $meta_value, $userID);
+        $query = "UPDATE user_meta SET meta_key = ? , meta_value = ? WHERE user_id = ?";
+        $aStatus = self::connect()->prepare($query, $aParams)->update();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0];
+    }
+    /**
+     * @param $username
+     * @param $password
+     * @param $email
+     * @param $ID
+     *
+     * @return bool
+     */
+    public static function updateUser($username,$email,$password,$ID)
+    {
+        $aParams = array($username, $email, md5($password),$ID);
+        $query = "UPDATE users SET username = ?, email=?, password=? WHERE ID= ?";
+        $aStatus = self::connect()->prepare($query,$aParams)->update();
+        if (!$aStatus) {
+            return false;
+        }
+        return $aStatus[0];
     }
 }
