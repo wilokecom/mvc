@@ -79,14 +79,12 @@ class UserController extends Controller
     {
         self::redirectToUserLogin();
         $iID = Session::get(self::$loginSessionKey);
-        var_dump($iID);
         $aUserInfo = UserModel::getUserbyID($iID);
         $aPostInfo = PostModel::getPostbyPostAuthor($iID);
         $aPostRecord = PostModel::getRecordbyPostAuthor($iID);
-        var_dump($aPostRecord);
         if (!$aPostInfo) {
             $aPostInfo = array();
-            $this->loadView('')
+            $this->loadView('');
         }
         $this->loadView(
             "user/dashboard",
@@ -315,7 +313,8 @@ class UserController extends Controller
         Redirect::to('user/profile');
     }
     /**
-     * If the name of file-upload not null
+     * If the name of file-upload not
+     *
      */
     public function upload()
     {

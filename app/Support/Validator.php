@@ -28,7 +28,7 @@ class Validator
         $aRawParse = explode("|", trim($rawConditionals));
         //Khai báo mảng rỗng
         $aConditionals = array();
-        //Lấy các phần tử mảng
+        //Getting the elements of array()
         foreach ($aRawParse as $cond) {
             $aConditionAndParams = explode(":", trim($cond));
             $aConditionals[] = array(
@@ -140,11 +140,11 @@ class Validator
      */
     protected static function maxSize($key, $size)//Max Size
     {
-        //Nếu kích thước không tồn tại hoặc bằng 0
+        //If size not exist or 0
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
             return self::success();
         }
-        //Kiểm tra kích thước của ảnh
+        //Checking the size of Images
         if (self::$aData[$key] > $size) {
             return self::error("The maximum size of " . $key . " is " . $size);
         }
@@ -156,7 +156,7 @@ class Validator
      * @param $key
      * @param $aConditionals
      */
-    //Kiểm tra điều kiện
+    //Checking the conditionals
     protected static function checkConditional($aConditionals, $key)
     {
         //Duyệt các phần tử mảng
@@ -190,9 +190,9 @@ class Validator
         self::$aData = $aData;
         //Duyệt mảng các giá trị cần validate
         foreach ($aConditionals as $key => $rawConditionals) {
-            //Phân tích điều kiện validate
+            //Analyze the condition validate
             $aConditionals = self::parseConditionals($rawConditionals);
-            //Kiểm tra điều kiện
+            //Check the conditions
             $status = self::checkConditional($aConditionals, $key);
             if ($status !== true) {
                 return $status;
