@@ -24,6 +24,7 @@ class GeneralScriptsController
     {
         mvcEnqueueStyle(MVC_SOURCES_URL ."css/style.css");
         mvcEnqueueStyle(MVC_ASSETS_URL . "semantic/semantic.min.css");
+        mvcEnqueueStyle(MVC_ASSETS_URL . "semantic/components/sidebar.css");
         mvcEnqueueStyle(MVC_ASSETS_URL . "jqueryUI/jquery-ui.css");
     }
     /**
@@ -38,7 +39,10 @@ class GeneralScriptsController
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showContent_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showPassword_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/focusInput_jquery.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/pagination.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/Pagination.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/alertDeleteDialog_jquery.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/Sidebar.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/addNewCategory.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/addNewTag.js");
     }
 }

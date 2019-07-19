@@ -73,12 +73,10 @@ class UserModel extends DBFactory
         }
         return $aStatus[0];
     }
-
     /**
-     * @param $username
-     * @param $password
-     *
      * @return bool
+     * @param $sPassword
+     * @param $sUsername
      */
     public static function checkUserLogin($sUsername, $sPassword)
     {
@@ -118,7 +116,7 @@ class UserModel extends DBFactory
     public static function emailExists($username)
     {
         return self::connect()
-            ->prepare("SELECT email FROM users WHERE email=?", array($sUsername))->select();
+            ->prepare("SELECT email FROM users WHERE email=?", array($username))->select();
     }
 
     /**

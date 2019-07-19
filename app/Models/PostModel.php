@@ -28,6 +28,20 @@ class PostModel extends DBFactory
     }
     /**
      * @return bool
+     * @param $iPostAuthor
+     */
+    public static function getPostIDbyPostAuthor($iPostAuthor)
+    {
+        $aParams = array($iPostAuthor);
+        $query   = "SELECT ID FROM posts WHERE post_author = ?";
+        $aPosts  = self::connect()->prepare($query, $aParams)->select();
+        if (!$aPosts) {
+            return false;
+        }
+        return $aPosts;
+    }
+    /**
+     * @return bool
      * @param $iPostID
      */
     public static function getPostbyPostID($iPostID)
@@ -50,6 +64,9 @@ class PostModel extends DBFactory
         $aParams = array($iPostAuthor);
         $query   = "SELECT count(ID) as total FROM posts WHERE post_author=?";
         $aRecord = self::connect()->prepare($query, $aParams)->select();
+        if (!$aRecord) {
+            return false;
+        }
         return $aRecord[0]["total"];
     }
     /**

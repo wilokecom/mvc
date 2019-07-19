@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 use \MVC\Support\Route;
 use \MVC\Support\Session;
-
 
 /* Go to function incViewFile -file index.php
  * Add CSS-JS for header,body,footer

@@ -2,12 +2,15 @@
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
+use MVC\Models\TermsModel;
 use MVC\Models\UserModel;
+use MVC\Models\TaxonomyModel;
 use MVC\Support\Pagination;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
 use MVC\Support\Route;
+use MVC\Support\Auth;
 
 /**
  * Class UserController
@@ -16,38 +19,21 @@ use MVC\Support\Route;
  */
 class UserController extends Controller
 {
-    /*
-     * Save Session
-     * @var string
-     */
-    public static $sLoginSessionKey = "user_logged_in";
     /**
+     * Check if not loggined, go to user/login
      * Default method, url:/mvc/user/
      */
     public function index()
     {
-        //If not logined
-        self::redirectToUserLogin();
-        //If logined
+        $this->middleware(["auth"]);
     }
-
-    /**
-     * If not logined, returned to user/login
-     */
-    public static function redirectToUserLogin()
-    {
-        if (!self::isLoggedIn()) {
-            Redirect::to("user/login");
-        }
-    }
-
     /**
      * Check logined or not
      * @return bool
      */
     public static function isLoggedIn()
     {
-        return Session::has(self::$sLoginSessionKey);
+        return Session::has(Auth::$sLoginSessionKey);
     }
 
     /**
@@ -85,12 +71,11 @@ class UserController extends Controller
      */
     public function dashboard()
     {
-        self::redirectToUserLogin();
-        $abUserInfo = UserModel::getUserByUsername(
-            $_SESSION[self::$sLoginSessionKey]
+        $this->middleware(["auth"]);
+        $abUserInfo    = UserModel::getUserByUsername(
+            $_SESSION[Auth::$sLoginSessionKey]
         );
-
-        $iPostAuthor=$abUserInfo["ID"];
+        $iPostAuthor   = $abUserInfo["ID"];
         $iTotalRecords = PostModel::getRecordbyPostAuthor($iPostAuthor);
         $aConfig       = array(
             'current_page' => isset($_GET['page']) ? $_GET['page'] : 1,
@@ -113,13 +98,99 @@ class UserController extends Controller
         if (!$abPostInfo) {
             $abPostInfo = array();
         }
+        //Get category and tag for display posts table
+        $aPostID = PostModel::getPostIDbyPostAuthor($iPostAuthor);
+        $aCategoryName=array();
+        $aTagName=array();
+        if ($aPostID != false) {
+            for ($i = 0; $i < count($aPostID); $i++) {
+                $aTermTaxonomyID[$i] = TaxonomyModel::getTaxonomyID($aPostID[$i]["ID"]);
+                if ($aTermTaxonomyID[$i] == false) {
+                    unset($aTermTaxonomyID[$i]);
+                } else {
+                    for ($j = 0; $j < count($aTermTaxonomyID[$i]); $j++) {
+                        //Get category
+                        $aCategoryID[$i][$j] = TaxonomyModel::getTermID(
+                            $aTermTaxonomyID[$i][$j]["term_taxonomy_id"],
+                            "category"
+                        );
+                        if ($aCategoryID[$i][$j] != false) {
+                            for ($k = 0; $k < count($aCategoryID[$i]); $k++) {
+                                $aCategoryName[$i][$k] = TermsModel::getTermNameByTermID(
+                                    $aCategoryID[$i][$k]["term_id"]
+                                );
+                            }
+                        }
+                        //Get Tag
+                        $aTagID[$i][$j] = TaxonomyModel::getTermID(
+                            $aTermTaxonomyID[$i][$j]["term_taxonomy_id"],
+                            "tag"
+                        );
+                        if ($aTagID[$i][$j] != false) {
+                            for ($k = 0; $k < count($aTagID[$i]); $k++) {
+                                $aTagName[$i][$k] = TermsModel::getTermNameByTermID($aTagID[$i][$k]["term_id"]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        foreach ($abPostInfo as $key => $value) {
+            $abPostInfo[$key]["category"] = "";
+            $abPostInfo[$key]["tag"]      = "";
+        }
+        //Category
+        foreach ($aCategoryName as $key => $value) {
+            //Make $value into string
+            for ($i = 0; $i < count($value); $i++) {
+                if ($value[$i]) {
+                    $aCategoryList[$i] = $value[$i]["term_name"];
+                }
+            }
+            $sCategoryList = implode(",", $aCategoryList);
+            //Get ID of aPostID
+            if (array_key_exists($key, $aPostID)) {
+                $iID = $aPostID[$key]["ID"];
+            }
+            //Insert element category into abPost
+            for ($i = 0; $i < count($abPostInfo); $i++) {
+                if ($abPostInfo[$i]["ID"] == $iID) {
+                    $abPostInfo[$i]["category"] = $sCategoryList;
+                }
+            }
+        }
+        //Tag
+        foreach ($aTagName as $key => $value) {
+            $aTagList = array();
+            //Make $value into string
+            for ($i = 0; $i < count($value); $i++) {
+                if ($value[$i]) {
+                    $aTagList[$i] = $value[$i]["term_name"];
+                }
+            }
+            $sTagList = implode(",", $aTagList);
+            //Get ID of abPostID
+            if (array_key_exists($key, $aPostID)) {
+                $iID = $aPostID[$key]["ID"];
+            }
+            //Insert element tag into array abPost
+            for ($i = 0; $i < count($abPostInfo); $i++) {
+                if ($abPostInfo[$i]["ID"] == $iID) {
+                    $abPostInfo[$i]["tag"] = $sTagList;
+                }
+            }
+        }
         //Handle Ajax
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
         ) {
             die(
                 json_encode(
-                    array("abUserInfo" => $abUserInfo, "abPostInfo" => $abPostInfo, "paging" => Pagination::display())
+                    array(
+                        "abUserInfo" => $abUserInfo,
+                        "abPostInfo" => $abPostInfo,
+                        "paging" => Pagination::display()
+                    )
                 )
             );
         }
@@ -128,9 +199,7 @@ class UserController extends Controller
             $abUserInfo,
             $abPostInfo
         );
-        $this->loadView("user/dashboard", $abUserInfo, $iPostStart, $aConfig['current_page'], $iTotalRecords);
     }
-
     /**
      * Handle when press logout$iTotalPage
      * Destroy Session Login
@@ -138,7 +207,7 @@ class UserController extends Controller
      */
     public function handleLogout()
     {
-        Session::forget(self::$sLoginSessionKey);
+        Session::forget(Auth::$sLoginSessionKey);
         Redirect::to("user/login");
     }
 
@@ -163,8 +232,16 @@ class UserController extends Controller
             Session::add("register_error", $bStatus);
             Redirect::to("user/register");
         }
-
-
+        //Check email exist
+        if (UserModel::emailExists($_POST["email"])) {
+            Session::add("register_error", "Oops! This email is already exist");
+            Redirect::to("user/register");
+        }
+        //Check username exist
+        if (UserModel::usernameExists($_POST["username"])) {
+            Session::add("register_error", "Oops! This username is already exist");
+            Redirect::to("user/register");
+        }
         $aStatus = UserModel::insertNewUser($_POST["username"], $_POST["email"], $_POST["password"]);
         if (!$aStatus) {
             Session::add("register_error", "Oops! Something went error");
@@ -172,7 +249,7 @@ class UserController extends Controller
         }
         //Save username to Session["user_logged_in"]
         Session::add(
-            self::$sLoginSessionKey,
+            Auth::$sLoginSessionKey,
             $_POST["username"]
         );
         Session::forget("register_error");//delete Session
@@ -206,7 +283,7 @@ class UserController extends Controller
         }
         //Add Session[$sLoginSessionKey]=$_POST["username"]
         Session::add(
-            self::$sLoginSessionKey,
+            Auth::$sLoginSessionKey,
             $_POST["username"]
         );
         //Destroy error
@@ -222,9 +299,9 @@ class UserController extends Controller
         if (!self::isLoggedIn()) {
             Redirect::to('user/login');
         }
-        $ID = Session::get(self::$loginSessionKey);
+        $ID        = Session::get(Auth::$loginSessionKey);
         $aUserInfo = UserModel::getUserByID($ID);
-        $aName = UserModel::getUser_metaID($ID);
+        $aName     = UserModel::getUser_metaID($ID);
 
         if (!$aName) {
             $aName = array();
@@ -244,10 +321,8 @@ class UserController extends Controller
         if (!self::isLoggedIn()) {
             Redirect::to('user/login');
         }
-
-        $aName = UserModel::getUser_metaID(Session::get(self::$loginSessionKey));
-
-        $aUserInfo = UserModel::getUserByID(Session::get(self::$loginSessionKey));
+        $aName     = UserModel::getUser_metaID(Session::get(Auth::$loginSessionKey));
+        $aUserInfo = UserModel::getUserByID(Session::get(Auth::$loginSessionKey));
         if (!$aName) {
             $aName = array();
             $this->loadView('user/edit-profile', $aUserInfo);
@@ -264,7 +339,7 @@ class UserController extends Controller
      */
     public function handleEditProfile()
     {
-        $ID = Session::get(self::$loginSessionKey);
+        $ID    = Session::get(Auth::$loginSessionKey);
         $aName = UserModel::getUser_metaID($ID);
         if (!$aName) {
             $this->upload();
@@ -307,7 +382,6 @@ class UserController extends Controller
         Session::forget('login_error');
         Redirect::to('user/profile');
     }
-
     /**
      *
      */
@@ -338,8 +412,7 @@ class UserController extends Controller
             Session::add('edit-profile_error', $status);
             Redirect::to('user/edit-profile');
         }
-
-        $ID = Session::get(self::$loginSessionKey);
+        $ID          = Session::get(Auth::$loginSessionKey);
         $astatusUser = UserModel::insertUserMeta($aData['fullname'], $aData['name'], $ID);
         if (!$astatusUser) {
             Session::add('edit-profile_error', 'Oops! Something went error');
@@ -347,6 +420,5 @@ class UserController extends Controller
         }
         Redirect::to('user/profile');
     }
-
 }
 

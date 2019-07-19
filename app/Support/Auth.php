@@ -2,9 +2,16 @@
 
 namespace MVC\Support;
 
+/**
+ * Class Auth
+ * @package MVC\Support
+ */
 class Auth
 {
-    private static $sLoginSessionKey = 'user_logged_in';
+    /**
+     * @var string
+     */
+    public static $sLoginSessionKey = 'user_logged_in';
 
     /**
      * Check logined or not

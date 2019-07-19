@@ -277,7 +277,7 @@ $.fn.dimmer = function(parameters) {
                   height  : '100%'
                 })
                 .fadeTo(module.get.duration(), settings.opacity, function() {
-                  $dimmer.removeAttr('style.css.css.css.css');
+                  $dimmer.removeAttr('style');
                   module.set.active();
                   callback();
                 })
@@ -318,7 +318,7 @@ $.fn.dimmer = function(parameters) {
                 .stop()
                 .fadeOut(module.get.duration(), function() {
                   module.remove.active();
-                  $dimmer.removeAttr('style.css.css.css.css');
+                  $dimmer.removeAttr('style');
                   callback();
                 })
               ;

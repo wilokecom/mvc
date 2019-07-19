@@ -35,10 +35,8 @@ class MysqlGrammar implements DBInterface
     {
         $this->aDBConfiguration = $aDBConfiguration;
     }
-
     /**
      * @return $this
-     *
      * @param array $aArgs
      * @param       $query
      */
@@ -47,38 +45,36 @@ class MysqlGrammar implements DBInterface
         $aParams = array();
         //Create object preapred
         $this->oSTMT = $this->oConnect->prepare($query);
-
-        //Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do người dùng định nghĩa.
-        //function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
-        //lamda và cloasure
+        /**Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do
+         *người dùn định nghĩa.
+         *function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
+         * lamda và cloasure
+         */
         $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
             $aParams[] = $args;
-            switch ($args) {
+            switch (getType($args)) {
+                case is_string($args):
+                    $carry .= "s";
+                    break;
                 case is_float($args):
                     $carry .= "d";
                     break;
                 case is_integer($args):
                     $carry .= "i";
                     break;
-                case is_string($args):
-                    $carry .= "s";
-                    break;
                 default:
                     $carry .= "b";
                     break;
             }
             return $carry;
-        },"");
-        // all  parameters  put into array , inside function, can call this arry by  $parameters
-        //      var_dump($aParams);die;
-
-        if($types!=""){
+        },
+                              ""
+        );
+        if ($types != "") {
             $this->oSTMT->bind_param($types, ...$aParams);
         }
-
         return $this;
     }
-
     /**
      * @return array|bool|mixed
      * @param string $string
@@ -100,7 +96,6 @@ class MysqlGrammar implements DBInterface
         }
         return $aRows;
     }
-
     /**
      * @return mixed
      * implement querry
@@ -114,7 +109,6 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $id;
     }
-
     /**
      * @return mixed
      *

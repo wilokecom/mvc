@@ -67,7 +67,7 @@ class AliasLoader
     }
     /**
      * Register the loader on the auto-loader stack.
-     * @return void
+     * @throws \Exception
      */
     public function register()
     {
@@ -78,7 +78,7 @@ class AliasLoader
     }
     /**
      * Prepend the load method to the auto-loader stack.
-     * @return void
+     * @throws \Exception
      */
     protected function prependToLoaderStack()
     {

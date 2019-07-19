@@ -3,17 +3,19 @@ declare(strict_types=1);
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
+use MVC\Models\TaxonomyModel;
+use MVC\Models\TermsModel;
 use MVC\Models\UserModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
+use MVC\Support\Auth;
 
 /**
- * Class UserController
- *
- * @package MVC\Controller
+ * Class PostController
+ * @package MVC\Controllers
  */
-class PostController extends  Controller
+class PostController extends Controller
 {
     /**
      * Default method, link url:mvc/post/
@@ -23,23 +25,24 @@ class PostController extends  Controller
     {
         Redirect::to("post/add");
     }
-
-    /*
-     * If not logined, return user/login
+    /**
      * @throws \Exception
      */
     public function add()
     {
         $this->middleware(['auth']);
-        $this->loadView("post/add");
+        //Get CategoryName
+        $aCategoryName = TermsModel::getTermName("category");
+        //Get TagName
+        $aTagName = TermsModel::getTermName("tag");
+        $this->loadView("post/add", $aCategoryName, $aTagName);
     }
-
     /**
      * @throws \Exception
      */
     public function edit()
     {
-        UserController::redirectToUserLogin();
+        $this->middleware(['auth']);
         //Get PostID
         $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
         //Get PostInfo
@@ -91,7 +94,7 @@ class PostController extends  Controller
             Redirect::to("post/add");
         }
         //Get username login
-        $sUserName = Session::get(UserController::$sLoginSessionKey);
+        $sUserName = Session::get(Auth::$sLoginSessionKey);
         //Get userID
         $iUserID = UserModel::getUserByUsername($sUserName)["ID"];
         //Get guid
@@ -126,6 +129,26 @@ class PostController extends  Controller
             );
             Redirect::to("post/add");
         }
+        //Category
+        if(isset($_POST["category"])){
+            $aCategoryName=$_POST["category"];
+            for($i=0;$i<count($aCategoryName);$i++){
+                $aTermCategoryID[$i]=TaxonomyModel::getTermTaxonomyID($aCategoryName[$i],"category");
+                //Insert to TermRelationShip Table
+                TaxonomyModel::insertTermRelationShip($aStatusPost,$aTermCategoryID[$i]["term_taxonomy_id"]);
+                //Update to Term_taxonomy Table
+                TaxonomyModel::updateCount($aTermCategoryID[$i]["term_taxonomy_id"]);
+            }
+        }
+        //Tag
+        if(isset($_POST["tag"])){
+            $aTagName=$_POST["tag"];
+            for($i=0;$i<count($aTagName);$i++){
+                $aTermTagID[$i]=TaxonomyModel::getTermTaxonomyID($aTagName[$i],"tag");
+                TaxonomyModel::insertTermRelationShip($aStatusPost,$aTermTagID[$i]["term_taxonomy_id"]);
+                TaxonomyModel::updateCount($aTermTagID[$i]["term_taxonomy_id"]);
+            }
+        }
         $sImageName = $aImageUpload["tmp_name"];//Temporary file upload file
         //Link contains file upload(assets/image)
         $sDestination = MVC_ASSETS_DIR . "image" . "/" . $aImageUpload["name"];
@@ -135,13 +158,12 @@ class PostController extends  Controller
         );
         //Destroy Error
         Session::forget("post_error");
-        //Go todashboard
         Redirect::to("user/dashboard");
     }
     /**
-     * @param $aParam
+     * Handle Edit:After press change
      */
-    public function handleEdit($aParam)
+    public function handleEdit()
     {
         //Get PostID
         $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
@@ -177,7 +199,6 @@ class PostController extends  Controller
             Redirect::to("post/edit?post-id=" . $iPostID . "/");
         }
         Session::forget("post_error");
-        //Go to dashboard
         Redirect::to("user/dashboard");
     }
 }
