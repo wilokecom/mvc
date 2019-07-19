@@ -1,4 +1,5 @@
-function deleteItem(post_id) {
+function deleteItem($post_id)
+{
     $(".deleteItem").each(function () {
         var $self = $(this);
         $("#dialog-confirm").dialog({
@@ -11,8 +12,7 @@ function deleteItem(post_id) {
                     $.ajax({
                         url: "http://localhost/mvc/post/delete",
                         type: "POST",
-                        //dataType: "html",
-                        data: {post_id: post_id},
+                        data: {post_id: $post_id},
                         success: function (data, status) {
                             $("#delete-result").html(data);
                             if (data === "Delete Success") {
@@ -20,16 +20,13 @@ function deleteItem(post_id) {
                             }
                         }
                     })
-                    //Đóng hộp thoại
                     $(this).dialog("close");
                 },
                 Cancel: function () {
-                    //Đóng hộp thoại
                     $(this).dialog("close");
                 }
             }
         });
-
     })
 }
 

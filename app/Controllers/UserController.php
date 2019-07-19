@@ -1,5 +1,4 @@
 <?php
-
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
@@ -7,21 +6,19 @@ use MVC\Models\UserModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
+use MVC\Support\Upload;
 
 /**
  * Class UserController
- *
  * @package MVC\Controllers
  */
 class UserController extends Controller
 {
     /**
      * variable saves Session user login
-     *
      * @var string
      */
     public static $loginSessionKey = "user_logged_in";
-
     /**
      * default method, url:/mvc/user/
      * if loged in !
@@ -29,27 +26,21 @@ class UserController extends Controller
      */
     public function index()
     {
-
         self::redirectToUserLogin();
         self::redirectToDashboard();
     }
-
     /**
      * method login-display
      * load view if logged in
-     *
      * @throws \Exception
      */
-    public function login()//Login
+    public function login()
     {
         self::redirectToDashboard();
-
         $this->loadView("user/login");
     }
-
     /**
      * method register-display
-     *
      * @throws \Exception
      */
     public function register()
@@ -57,7 +48,6 @@ class UserController extends Controller
         self::redirectToDashboard();
         $this->loadView("user/register");
     }
-
     /**
      * redirect user/login
      */
@@ -67,7 +57,6 @@ class UserController extends Controller
             Redirect::to("user/login");
         }
     }
-
     /**
      * redirect dashboard
      */
@@ -77,42 +66,42 @@ class UserController extends Controller
             Redirect::to("user/dashboard");
         }
     }
-
     /**
      * if wasn't log in then redirect login page
      *  //get info from user table
      * url:user/dashboard
      * get info from post table
      * Method dashboard()-after login success- displays
-     *        //$aData = array_merge($aUserInfo, $aPostInfo);
-     *
+     * $aData = array_merge($aUserInfo, $aPostInfo);
      * @throws \Exception
      */
     public function dashboard()
     {
-
         self::redirectToUserLogin();
-
-        $aUserInfo = UserModel::getUserByUsername(
-            $_SESSION[self::$loginSessionKey]
-        );
-        $aPostInfo = PostModel::getPostbyPostAuthor($aUserInfo["ID"]);
+        $iID = Session::get(self::$loginSessionKey);
+        var_dump($iID);
+        $aUserInfo = UserModel::getUserbyID($iID);
+        $aPostInfo = PostModel::getPostbyPostAuthor($iID);
+        $aPostRecord = PostModel::getRecordbyPostAuthor($iID);
+        var_dump($aPostRecord);
         if (!$aPostInfo) {
             $aPostInfo = array();
+            $this->loadView('')
         }
-        $this->loadView("user/dashboard", $aUserInfo, $aPostInfo);
+        $this->loadView(
+            "user/dashboard",
+            $aUserInfo,
+            $aPostInfo
+        );
     }
-
     /**
      * Checked Logged in
-     *
      * @return bool
      */
     public static function isLoggedIn()
     {
         return Session::has(self::$loginSessionKey);
     }
-
     /**
      * Solving logout
      * Destroy  Login Session
@@ -123,13 +112,11 @@ class UserController extends Controller
         Session::forget(self::$loginSessionKey);
         Redirect::to("user/login");
     }
-
     /**
      * Solving handleRegister when submit
-     * Run into ClassLoader.php , required file Validator , solving method validate
-     * Check and display error
+     * Run into ClassLoader.php , required file Validator , solving method
+     * validate Check and display error
      */
-
     public function handleRegister()
     {
         $status = Validator::validate(
@@ -141,34 +128,46 @@ class UserController extends Controller
             ),
             $_POST
         );
-
         if ($status !== true) {
-            Session::add("register_error", $status);
+            Session::add(
+                "register_error",
+                $status
+            );
             Redirect::to("user/register");
         }
-
-
         if (UserModel::emailExists($_POST["email"])) {
-            Session::add("register_error", "Oops! This email is already exist");
+            Session::add(
+                "register_error",
+                "Oops! This email is already exist"
+            );
             Redirect::to("user/register");
         }
-
         if (UserModel::usernameExists($_POST["username"])) {
-            Session::add("register_error", "Oops! This username is already exist");
+            Session::add(
+                "register_error",
+                "Oops! This username is already exist"
+            );
             Redirect::to("user/register");
         }
-
-        $aStatus = UserModel::insertNewUser($_POST["username"], $_POST["email"], $_POST["password"]);
+        $aStatus = UserModel::insertNewUser(
+            $_POST["username"],
+            $_POST["email"],
+            $_POST["password"]
+        );
         if (!$aStatus) {
-            Session::add("register_error", "Oops! Something went error");
+            Session::add(
+                "register_error",
+                "Oops! Something went error"
+            );
             Redirect::to("user/register");
         }
-
-        Session::add(self::$loginSessionKey, UserModel::getUserID($_POST['username']));
+        Session::add(
+            self::$loginSessionKey,
+            UserModel::getUserID($_POST['username'])
+        );
         Session::forget("register_error");
         Redirect::to("user/dashboard");
     }
-
     /**
      * Solving method handleLogin
      * Adding Session[$loginSessionKey]=$_POST["username"]
@@ -184,20 +183,30 @@ class UserController extends Controller
             $_POST
         );
         if ($status !== true) {
-            Session::add("login_error", $status);
+            Session::add(
+                "login_error",
+                $status
+            );
             Redirect::to("user/login");
         }
-        $aStatus = UserModel::checkUser($_POST["username"], $_POST["password"]);
+        $aStatus = UserModel::checkUser(
+            $_POST["username"],
+            $_POST["password"]
+        );
         if ($aStatus != true) {
-            Session::add("login_error", "invalid username or password");
+            Session::add(
+                "login_error",
+                "invalid username or password"
+            );
             Redirect::to("user/login");
         }
-
-        Session::add(self::$loginSessionKey, UserModel::getUserID($_POST['username']));//include file app/Support/Session.php, lưu username biến $Session
+        Session::add(
+            self::$loginSessionKey,
+            UserModel::getUserID($_POST['username'])
+        );
         Session::forget('register_error');
         Redirect::to('user/dashboard');
     }
-
     /**
      * @throws \Exception
      */
@@ -206,18 +215,22 @@ class UserController extends Controller
         if (!self::isLoggedIn()) {
             Redirect::to('user/login');
         }
-        $ID = Session::get(self::$loginSessionKey);
-        $aUserInfo = UserModel::getUserByID($ID);
-        $aName = UserModel::getUser_metaID($ID);
-
+        $iID       = Session::get(self::$loginSessionKey);
+        $aUserInfo = UserModel::getUserByID($iID);
+        $aName     = UserModel::getUserMetaID($iID);
         if (!$aName) {
             $aName = array();
-            $this->loadView('user/profile', $aUserInfo);
+            $this->loadView(
+                'user/profile',
+                $aUserInfo
+            );
         }
-        $aData = array_merge($aUserInfo, $aName);
-        $this->loadView('user/profile', $aData);
+        $this->loadView(
+            'user/profile',
+            $aUserInfo,
+            $aName
+        );
     }
-
     /**
      * @throws \Exception
      * Check the editProfile URL ,
@@ -228,48 +241,49 @@ class UserController extends Controller
         if (!self::isLoggedIn()) {
             Redirect::to('user/login');
         }
-
-        $aName = UserModel::getUser_metaID(Session::get(self::$loginSessionKey));
-
-        $aUserInfo = UserModel::getUserByID(Session::get(self::$loginSessionKey));
+        $aName     = UserModel::getUserMetaID(
+            Session::get(self::$loginSessionKey)
+        );
+        $aUserInfo = UserModel::getUserByID(
+            Session::get(self::$loginSessionKey)
+        );
         if (!$aName) {
             $aName = array();
-            $this->loadView('user/edit-profile', $aUserInfo);
-            var_dump($aUserInfo);
+            $this->loadView(
+                'user/edit-profile',
+                $aUserInfo
+            );
         } else {
-            $aData = array_merge($aUserInfo, $aName);
-            $this->loadView('user/edit-profile', $aData);
+            $this->loadView(
+                'user/edit-profile',
+                $aUserInfo,
+                $aName
+            );
         }
-        $aData = array_merge($aUserInfo, $aName);
     }
-
     /**
      *
      */
     public function handleEditProfile()
     {
-        $ID = Session::get(self::$loginSessionKey);
-        $aName = UserModel::getUser_metaID($ID);
+        $iID   = Session::get(self::$loginSessionKey);
+        $aName = UserModel::getUserMetaID($iID);
         if (!$aName) {
             $this->upload();
         }
-
-        $fileUpload = $_FILES['file-upload'];
+        $fileUpload = Upload::upload('file-upload');
         /**
          * if the name of  file upload not null
          */
-        if ($fileUpload['name'] != null) {
-            $filename = $fileUpload['tmp_name'];
-            $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
-            move_uploaded_file($filename, $destination);
-        } elseif ($fileUpload['name'] == null) {
+        if ($fileUpload['name'] == null) {
             $fileUpload['name'] = $aName['meta_value'];
         }
-        $aUserInfo = UserModel::getUserByID($ID);
-        var_dump($aUserInfo);
-        $aData = array_merge($_POST, $fileUpload);
-        var_dump($_POST);
-        $status = Validator::validate(
+        $aUserInfo = UserModel::getUserByID($iID);
+        $aData     = array_merge(
+            $_POST,
+            $fileUpload
+        );
+        $status    = Validator::validate(
             array(
                 'fullname' => 'required|maxLength:50',
                 'name' => 'maxLength:50',
@@ -279,36 +293,38 @@ class UserController extends Controller
             ),
             $aData
         );
-
         if ($status !== true) {
-            Session::add('edit-profile_error', $status);
+            Session::add(
+                'edit-profile_error',
+                $status
+            );
             Redirect::to('user/edit-profile');
         }
-
-        $aStatus = UserModel::updateUser_meta($aData['fullname'], $aData['name'], $ID);
-        $aStatus2 = UserModel::updateUser($aData['username'], $aData['email'], $aData['password'], $ID);
-
+        $aStatus  = UserModel::updateUsermeta(
+            $aData['fullname'],
+            $aData['name'],
+            $iID
+        );
+        $aStatus2 = UserModel::updateUser(
+            $aData['username'],
+            $aData['email'],
+            $aData['password'],
+            $iID
+        );
         Session::forget('login_error');
         Redirect::to('user/profile');
     }
-
     /**
-     *
+     * If the name of file-upload not null
      */
     public function upload()
     {
-        $fileUpload = $_FILES['file-upload'];
-        /**
-         * if the name of file-upload not null
-         */
-        if ($fileUpload['name'] != null) {
-            $filename = $fileUpload['tmp_name'];
-            $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
-            move_uploaded_file($filename, $destination);
-        }
-        $aData = array_merge($_POST, $fileUpload);
-
-        $status = Validator::validate(
+        $fileUpload = Upload::upload('file-upload');
+        $aData      = array_merge(
+            $_POST,
+            $fileUpload
+        );
+        $status     = Validator::validate(
             array(
                 'fullname' => 'required|maxLength:50',
                 'name' => 'required|maxLength:50',
@@ -317,19 +333,26 @@ class UserController extends Controller
             ),
             $aData
         );
-
         if ($status !== true) {
-            Session::add('edit-profile_error', $status);
+            Session::add(
+                'edit-profile_error',
+                $status
+            );
             Redirect::to('user/edit-profile');
         }
-
-        $ID = Session::get(self::$loginSessionKey);
-        $astatusUser = UserModel::insertUserMeta($aData['fullname'], $aData['name'], $ID);
+        $iID         = Session::get(self::$loginSessionKey);
+        $astatusUser = UserModel::insertUserMeta(
+            $aData['fullname'],
+            $aData['name'],
+            $iID
+        );
         if (!$astatusUser) {
-            Session::add('edit-profile_error', 'Oops! Something went error');
+            Session::add(
+                'edit-profile_error',
+                'Oops! Something went error'
+            );
             Redirect::to('user/edit-profile');
         }
         Redirect::to('user/profile');
     }
-
 }

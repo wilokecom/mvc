@@ -10,8 +10,8 @@ class Route
     /**
      * @return string
      * @param $route
+     * return url
      */
-    //Trả về đường dẫn url
     public static function get($route)
     {
         return MVC_HOME_URL . $route;

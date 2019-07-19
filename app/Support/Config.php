@@ -26,6 +26,8 @@ class Config
      * Config constructor.
      * @param      $fileName
      * @param bool $hasChain
+     * self::$aValue = self::$aConfiguration[$fileName];
+     * -> Saved file by array
      */
     public function __construct($fileName, $hasChain = false)//Lấy nội dung file config
     {
@@ -42,7 +44,6 @@ class Config
                 self::$aConfiguration[$fileName] = array();
             }
         }
-        //Lưu nội dung file dưới dạng mảng
         self::$aValue = self::$aConfiguration[$fileName];
     }
     /**

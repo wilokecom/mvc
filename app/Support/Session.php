@@ -2,10 +2,15 @@
 
 namespace MVC\Support;
 
+/**
+ * Class Session
+ * @package MVC\Support
+ */
 class Session
 {
-    // Session initialize
-    //Start Session
+    /**
+     *Init Session
+     */
     public static function init()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -51,13 +56,10 @@ class Session
         self::init();
         return isset($_SESSION[$key]);
     }
-
     /**
-     * @param string $key
-     *
+     * @param $key
      * @return string
      */
-    //Nếu Sesion tồn tại, trả về Session
     public static function get($key)
     {
         self::init();
@@ -69,7 +71,6 @@ class Session
      *
      * @return void
      */
-    //Hủy Session
     public static function destroy()
     {
         session_destroy();

@@ -65,10 +65,9 @@ class UserModel extends DBFactory
 
     /**
      * @param $userID
-     *
      * @return bool
      */
-    public static function getUser_metaID($userID)
+    public static function getUserMetaID($userID)
     {
         $aParams = array($userID);
         $query = "SELECT * FROM user_meta WHERE user_id=? ORDER BY umeta_id LIMIT  1";
@@ -82,14 +81,14 @@ class UserModel extends DBFactory
     /**
      * @param $username
      * @param $password
-     *
+     * md5
      * @return bool
      */
 
     public static function checkUser($username, $password)
     {
         $query = "SELECT * FROM users WHERE username=? AND password=? ORDER BY ID LIMIT 1";
-        $aParam = array($username, md5($password));
+        $aParam = array($username, $password);
         $aStatus = self::connect()->prepare($query, $aParam)
             ->select();//Thực thi câu lệnh query và trả về kết quả
         if (!$aStatus) {
@@ -137,12 +136,13 @@ class UserModel extends DBFactory
      *
      * @param $email
      * @param $password
+     * md5
      * @param $username
      * Nhảy đến phương thức insert() file MysqlGrammar.php
      */
     public static function insertNewUser($username, $email, $password)
     {
-        $aParams = array($username, $email, md5($password));
+        $aParams = array($username, $email, $password);
         $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
         return self::connect()->prepare($query, $aParams)->insert();
     }
@@ -163,13 +163,12 @@ class UserModel extends DBFactory
      * @param $meta_key
      * @param $meta_value
      * @param $userID
-     *
      * @return bool
      */
-    public static function updateUser_meta($meta_key, $meta_value, $userID)
+    public static function updateUsermeta($meta_key, $meta_value, $userID)
     {
         $aParams = array($meta_key, $meta_value, $userID);
-        $query = "UPDATE user_meta SET meta_key = ? , meta_value = ? WHERE user_id = ?";
+        $query   = "UPDATE user_meta SET meta_key = ? , meta_value = ? WHERE user_id = ?" ;
         $aStatus = self::connect()->prepare($query, $aParams)->update();
         if (!$aStatus) {
             return false;
@@ -181,17 +180,17 @@ class UserModel extends DBFactory
      * @param $password
      * @param $email
      * @param $ID
-     *
      * @return bool
      */
     public static function updateUser($username,$email,$password,$ID)
     {
-        $aParams = array($username, $email, md5($password),$ID);
+        $aParams = array($username, $email, $password,$ID);
         $query = "UPDATE users SET username = ?, email=?, password=? WHERE ID= ?";
         $aStatus = self::connect()->prepare($query,$aParams)->update();
         if (!$aStatus) {
             return false;
         }
         return $aStatus[0];
+        var_dump($aStatus[0]);
     }
 }

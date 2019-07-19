@@ -16,13 +16,12 @@ class Validator
     /**
      * @var array
      */
-    protected static $aData = [];//Mảng lưu giá trị của biến $_POST
+    protected static $aData = [];
     /**
      * @return array
-     *
      * @param string $rawConditionals
+     * analyze validate conditional
      */
-    //Phân tích điều kiện validate
     protected static function parseConditionals($rawConditionals)
     {
         //Phá chuỗi và trim
@@ -70,7 +69,7 @@ class Validator
      * @param $length
      * @param $key
      */
-    protected static function maxLength($key, $length)//Max length
+    protected static function maxLength($key, $length)
     {
         //Nếu độ dài không tồn tại hoặc bằng 0
         if (!isset(self::$aData[$key]) || empty(self::$aData[$key])) {
@@ -115,11 +114,10 @@ class Validator
     }
     /**
      * @return array
-     *
+     * Checking theimage files formating
      * @param $key
      */
-    //Kiểm tra định dạng file image
-    protected static function checkType($key)
+    protected static function checkImageType($key)
     {
         $type = array(
             "image/jpeg",
@@ -187,9 +185,9 @@ class Validator
      * @param $aData
      * @param $aConditionals
      */
-    public static function validate($aConditionals, $aData)//Validate
+    public static function validate($aConditionals, $aData)
     {
-        self::$aData = $aData;//Lưu giá trị biến $_POST
+        self::$aData = $aData;
         //Duyệt mảng các giá trị cần validate
         foreach ($aConditionals as $key => $rawConditionals) {
             //Phân tích điều kiện validate

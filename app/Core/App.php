@@ -14,22 +14,22 @@ class App
      * Controller
      * @var string
      */
-    protected $controllerName = "HomeController";//Controller
+    protected $controllerName = "HomeController";
     /**
      * Action
      * @var string
      */
-    protected $methodName = "index";//Action
+    protected $methodName = "index";
     /**
-     * Đối tượng của Class Controller
+     * Object of Class Controller
      * @var
      */
-    protected $oControllerInstance;//Đối tượng của Class Controller
+    protected $oControllerInstance;
     /**
      * Param
      * @var array
      */
-    protected $aParams = [];//Param
+    protected $aParams = [];
     /**
      * explode:Phá chuỗi thành mảng
      * filter_var:Kiểm tra đường dẫn url
@@ -141,7 +141,7 @@ class App
         call_user_func_array(array(
             $this->oControllerInstance,
             $this->methodName
-        ), array($this->aParams));//loginAdminHome
+        ), array($this->aParams));
     }
     /**
      * App constructor.

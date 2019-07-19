@@ -15,13 +15,13 @@ abstract class DBFactory
     /**
      * @return \MVC\Database\DBInterface
      */
-    protected static function connect(): DBInterface//connect database
+    protected static function connect():DBInterface //connect database
     {
-        //Nhảy đến hàm getConfig-file index.php
+        //jump into function getConfig-file index.php
         //Include file \Support\Config(database)
         //Nhảy đến hàm construct của file \Support\Config(database)
         //Nhảy đến phương thức getParam("default")
-        //Trả về thư viện mysqli
+        //returnt mysqli library
         $grammar = getConfig("database")->getParam("default");
         switch ($grammar) {
             case "sqlite":

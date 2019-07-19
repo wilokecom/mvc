@@ -41,6 +41,6 @@ class GeneralScriptsController
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showContent_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showPassword_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/focusInput_jquery.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/alertDeleteDialog_jquery.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/deleteItem.js");
     }
 }
