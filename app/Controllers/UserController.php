@@ -16,6 +16,7 @@ use MVC\Support\Route;
  */
 class UserController extends Controller
 {
+    /*
      * Save Session
      * @var string
      */
@@ -39,6 +40,7 @@ class UserController extends Controller
             Redirect::to("user/login");
         }
     }
+
     /**
      * Check logined or not
      * @return bool
@@ -47,6 +49,7 @@ class UserController extends Controller
     {
         return Session::has(self::$sLoginSessionKey);
     }
+
     /**
      * Return to dashboard
      */
@@ -78,26 +81,6 @@ class UserController extends Controller
     }
 
     /**
-     * If not logined, returned to user/login
-     */
-    public static function redirectToUserLogin()
-    {
-        if (!self::isLoggedIn()) {
-            Redirect::to("user/login");
-        }
-    }
-
-    /**
-     * Return to dashboard
-     */
-    public static function redirectToDashboard()
-    {
-        if (self::isLoggedIn()) {
-            Redirect::to("user/dashboard");
-        }
-    }
-  
-    /**
      * @throws \Exception
      */
     public function dashboard()
@@ -106,6 +89,7 @@ class UserController extends Controller
         $abUserInfo = UserModel::getUserByUsername(
             $_SESSION[self::$sLoginSessionKey]
         );
+
         $iPostAuthor=$abUserInfo["ID"];
         $iTotalRecords = PostModel::getRecordbyPostAuthor($iPostAuthor);
         $aConfig       = array(
@@ -144,16 +128,7 @@ class UserController extends Controller
             $abUserInfo,
             $abPostInfo
         );
-        $this->loadView("user/dashboard", $aUserInfo, $aPostInfo, $current_page, $total_page);
-    }
-
-    /**
-     * Check logined or not
-     * @return bool
-     */
-    public static function isLoggedIn()
-    {
-        return Session::has(self::$loginSessionKey);
+        $this->loadView("user/dashboard", $abUserInfo, $iPostStart, $aConfig['current_page'], $iTotalRecords);
     }
 
     /**
@@ -171,7 +146,6 @@ class UserController extends Controller
      * Solving handleRegister when submit
      * Run into ClassLoader.php , required file Validator , solving method validate
      * Check and display error
-     */
      */
     public function handleRegister()
     {

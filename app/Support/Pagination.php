@@ -33,6 +33,7 @@ class Pagination
                 self::$aConfig[$key] = $val;
             }
         }
+
         if (self::$aConfig["limit"] < 0) {
             self::$aConfig["limit"] = 0;
         }

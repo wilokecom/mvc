@@ -94,13 +94,10 @@ class UserModel extends DBFactory
     /**
      * @return mixed
      * @param $sUsername
-     */
      * check  username existtance
      * Check whether username exists or not
      *
      * @return bool
-     *
-     * @param  $username
      */
 
     public static function usernameExists($username)
