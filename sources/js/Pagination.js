@@ -1,6 +1,7 @@
 $(".pagination").on("click", "a", "", function () {
     "use strict";
     let url = $(this).attr("href");
+    console.log("pagination");
     $.ajax({
         url: url,
         type: "get",
@@ -32,7 +33,7 @@ $(".pagination").on("click", "a", "", function () {
                         +"</a>"
                         +"</td>";
                     dashboard += " <td>" +
-                        "<a class=\"deleteItem\" href=\""+abPostInfo["ID"]+"\">"+
+                        "<a class=\"deletePost\" href=\""+abPostInfo["ID"]+"\">"+
                         "<img width=\"16\" src=\"http://localhost/mvc/sources/icon/icon_delete.png\">"
                         +"</a>"
                         +"</td>";
@@ -57,7 +58,7 @@ $(".pagination").on("click", "a", "", function () {
                         + "</a>"
                         + "</td>";
                     category += " <td>" +
-                        "<a class=\"deleteItem\" href=\"" + abCategoryInfo["term_id"] + "\">" +
+                        "<a class=\"deleteCategory\" href=\"" + abCategoryInfo["term_id"] + "\">" +
                         "<img width=\"16\" src=\"http://localhost/mvc/sources/icon/icon_delete.png\">"
                         + "</a>"
                         + "</td>";
@@ -83,7 +84,7 @@ $(".pagination").on("click", "a", "", function () {
                         + "</a>"
                         + "</td>";
                     tag += " <td>" +
-                        "<a class=\"deleteItem\" href=\"" + abTagInfo["term_id"] + "\">" +
+                        "<a class=\"deleteTag\" href=\"" + abTagInfo["term_id"] + "\">" +
                         "<img width=\"16\" src=\"http://localhost/mvc/sources/icon/icon_delete.png\">"
                         + "</a>"
                         + "</td>";

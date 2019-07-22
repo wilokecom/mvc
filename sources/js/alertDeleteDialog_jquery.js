@@ -3,6 +3,7 @@ $("#container").on("click", ".deletePost","", function (event) {
     "use strict";
     let post_id = $(this).attr("href");
     let $self = $(this);
+    console.log("phuc");
     event.preventDefault();
     $("#dialog-confirm").dialog({
         resizable: false,
@@ -33,7 +34,6 @@ $("#container").on("click", ".deletePost","", function (event) {
         }
     });
 })
-
 //Category/dashboard
 $("#container").on("click", ".deleteCategory","", function (event) {
     "use strict";
@@ -70,7 +70,6 @@ $("#container").on("click", ".deleteCategory","", function (event) {
         }
     });
 })
-
 //Tag/dashboard
 $("#container").on("click", ".deleteTag","", function (event) {
     "use strict";
@@ -106,6 +105,4 @@ $("#container").on("click", ".deleteTag","", function (event) {
         }
     });
 })
-
-
 

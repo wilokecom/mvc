@@ -2,10 +2,10 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 14, 2019 at 10:57 AM
--- Server version: 10.3.15-MariaDB
--- PHP Version: 7.3.6
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th7 22, 2019 lúc 10:48 AM
+-- Phiên bản máy phục vụ: 10.3.15-MariaDB
+-- Phiên bản PHP: 7.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `fantom`
+-- Cơ sở dữ liệu: `fantom`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `postmeta`
+-- Cấu trúc bảng cho bảng `postmeta`
 --
 
 CREATE TABLE `postmeta` (
@@ -36,35 +36,25 @@ CREATE TABLE `postmeta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `postmeta`
+-- Đang đổ dữ liệu cho bảng `postmeta`
 --
 
 INSERT INTO `postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUES
-(19, 42, 'phone number', '0377082583'),
-(20, 43, 'phone number', '0377082583'),
-(21, 46, 'phone number', '0377082583'),
-(22, 47, 'phone number', '0377082583'),
-(23, 48, 'phone number', '0377082583'),
-(24, 49, 'phone number', '0377082583'),
-(25, 50, 'phone number', '0377082583'),
-(26, 51, 'phone number', '0377082583'),
-(27, 52, 'phone number', '0377082583'),
-(28, 53, 'phone number', '0'),
-(29, 54, 'phone number', '0377082583'),
-(30, 57, 'phone number', '0377082583'),
-(31, 58, 'phone number', '0377082583'),
-(32, 59, 'phone number', '0377082583'),
-(33, 60, 'phone number', '0377082583'),
-(34, 61, 'phone number', '0377082583'),
-(35, 62, 'phone number', '0377082583'),
-(36, 63, 'phone number', '0377082583'),
-(37, 64, 'phone number', '0377082583'),
-(38, 65, 'phone number', '0377082583');
+(333, 367, 'phone number', '0'),
+(334, 368, 'phone number', '0377082583'),
+(335, 369, 'phone number', '0'),
+(336, 370, 'phone number', '0377082583'),
+(337, 371, 'phone number', '0377082583'),
+(351, 385, 'phone number', '222'),
+(352, 386, 'phone number', 'hjhj'),
+(353, 387, 'phone number', '321'),
+(354, 388, 'phone number', '222'),
+(355, 389, 'phone number', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `posts`
+-- Cấu trúc bảng cho bảng `posts`
 --
 
 CREATE TABLE `posts` (
@@ -80,38 +70,140 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 --
--- Dumping data for table `posts`
+-- Đang đổ dữ liệu cho bảng `posts`
 --
 
 INSERT INTO `posts` (`ID`, `post_author`, `post_date`, `post_content`, `post_title`, `post_status`, `post_mime_type`, `post_type`, `guid`) VALUES
-(42, 21, '2019-06-14 05:19:25', 'aaaaaaaaaaa', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(43, 21, '2019-06-14 07:03:10', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(44, 21, '2019-06-14 07:11:24', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(45, 21, '2019-06-14 07:11:30', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(46, 21, '2019-06-14 07:22:41', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(47, 21, '2019-06-14 07:24:26', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(48, 21, '2019-06-14 07:24:34', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(49, 21, '2019-06-14 07:30:06', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/png', 'post', ''),
-(50, 21, '2019-06-14 07:32:42', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'none-publish', 'image/png', 'page', ''),
-(51, 21, '2019-06-14 07:33:14', 'Äá»— Ngá»c PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'none-publish', 'image/png', 'post', ''),
-(52, 21, '2019-06-14 07:33:58', 'PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'post', ''),
-(53, 21, '2019-06-14 07:35:35', 'PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/gif', 'page', ''),
-(54, 21, '2019-06-14 07:39:41', 'PhÃºc', 'NgÃ y khai trÆ°á»ng ', 'none-publish', 'image/gif', 'attachment', ''),
-(56, 21, '2019-06-14 07:45:15', 'Hà Nội', 'Hà Nội', 'publish', '', 'post', ''),
-(57, 21, '2019-06-14 07:48:04', 'NgÃ y khai trÆ°á»ng ', 'NgÃ y khai trÆ°á»ng ', 'none-publish', 'image/gif', 'page', ''),
-(58, 21, '2019-06-14 07:49:19', 'NgÃ y khai trÆ°á»ng ', 'NgÃ y khai trÆ°á»ng ', 'none-publish', 'image/gif', 'post', ''),
-(59, 21, '2019-06-14 07:52:31', 'NgÃ y khai trÆ°á»ng ', 'NgÃ y khai trÆ°á»ng ', 'none-publish', 'image/gif', 'page', ''),
-(60, 20, '2019-06-14 08:22:03', 'NgÃ y khai trÆ°á»ng ', 'NgÃ y khai trÆ°á»ng ', 'publish', 'image/png', 'page', ''),
-(61, 20, '2019-06-14 08:26:49', 'NgÃ y khai trÆ°á»ng', 'NgÃ y khai trÆ°á»ng', 'publish', 'image/png', 'post', ''),
-(62, 20, '2019-06-14 08:29:39', 'NgÃ y khai trÆ°á»ng', 'NgÃ y khai trÆ°á»ng', 'publish', 'image/png', 'post', ''),
-(63, 20, '2019-06-14 08:32:17', 'NgÃ y khai trÆ°á»ng', 'NgÃ y khai trÆ°á»ng', 'publish', 'image/png', 'post', ''),
-(64, 20, '2019-06-14 08:49:16', 'NgÃ y khai trÆ°á»ng', 'NgÃ y khai trÆ°á»ng', 'publish', 'image/gif', 'post', ''),
-(65, 20, '2019-06-14 08:49:36', 'NgÃ y khai trÆ°á»ng', 'hÃ  ná»™i', 'publish', 'image/gif', 'post', '');
+(367, 24, '2019-07-16 09:26:05', 'ss', 'Ngày khai trường', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=24'),
+(368, 24, '2019-07-16 09:26:19', 'ssss', 'Ngày khai trường', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=24'),
+(369, 24, '2019-07-16 09:26:33', 's', 'aaaaaaaaaaaaaaaaaaaaaaaaaa', 'publish', 'image/png', 'page', 'http://localhost/mvc/post/add/page_id=24'),
+(370, 24, '2019-07-16 09:26:50', 'fffffff', 'vvvvv', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=24'),
+(371, 24, '2019-07-16 09:34:11', 'bbbbbbbbb', 'Ngày khai trường', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=24'),
+(385, 23, '2019-07-22 08:44:42', 'fffffffff', 'fgfgfg', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=23'),
+(386, 23, '2019-07-22 08:45:07', 'fgfgf', 'hhh', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=23'),
+(387, 23, '2019-07-22 08:45:23', 'ssdsd', 'jhjhj', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=23'),
+(388, 23, '2019-07-22 08:45:40', 'fg', 'abc', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=23'),
+(389, 23, '2019-07-22 08:45:58', 'fffffffffff', 'hà nội', 'publish', 'image/png', 'post', 'http://localhost/mvc/post/add/post_id=23');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `terms`
+--
+
+CREATE TABLE `terms` (
+  `term_id` bigint(20) UNSIGNED NOT NULL,
+  `term_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `slug` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `term_group` bigint(10) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `terms`
+--
+
+INSERT INTO `terms` (`term_id`, `term_name`, `slug`, `term_group`) VALUES
+(193, 'abchhfg', 'abchhfg', 0),
+(198, 'z123', 'z123', 0),
+(199, 'z123', 'z123', 0),
+(200, 'z123', 'z123', 0),
+(201, 'z123', 'z123', 0),
+(202, 'z123', 'z123', 0),
+(203, 'z123', 'z123', 0),
+(204, 'z123', 'z123', 0),
+(205, 'z123', 'z123', 0),
+(206, 'z123', 'z123', 0),
+(207, 'z123', 'z123', 0),
+(208, 'z123', 'z123', 0),
+(209, 'z123', 'z123', 0),
+(210, 'z123', 'z123', 0),
+(211, 'z123', 'z123', 0),
+(212, 'z123', 'z123', 0),
+(213, 'z123', 'z123', 0),
+(214, 'z123', 'z123', 0),
+(215, 'z123', 'z123', 0),
+(216, 'z123', 'z123', 0),
+(217, 'z123', 'z123', 0),
+(218, 'z123', 'z123', 0),
+(219, 'z123', 'z123', 0),
+(220, 'z123', 'z123', 0),
+(221, 'z123', 'z123', 0),
+(222, 'zzzddadad', 'zzzddadad', 0),
+(223, 'zzzddadad', 'zzzddadad', 0),
+(224, 'zzzddadad', 'zzzddadad', 0),
+(225, 'zzzddadad', 'zzzddadad', 0),
+(226, 'zzzddadad', 'zzzddadad', 0),
+(227, 'zzzddadad', 'zzzddadad', 0),
+(228, 'zzzddadad', 'zzzddadad', 0),
+(229, 'zzzddadad', 'zzzddadad', 0),
+(230, 'zzzddadad', 'zzzddadad', 0),
+(239, 'vbnbvnb', 'zc', 0),
+(240, 'cvvvv', 'bb', 0),
+(241, 'vvv', 'czz', 0),
+(242, 'nmmn,m', 'zxxx', 0),
+(243, 'bvnb', 's', 0),
+(244, ',gvdff', 'ccv', 0),
+(245, 'mm,mn', 'vbmvb', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `term_relationships`
+--
+
+CREATE TABLE `term_relationships` (
+  `object_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `term_taxonomy_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `term_order` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `term_relationships`
+--
+
+INSERT INTO `term_relationships` (`object_id`, `term_taxonomy_id`, `term_order`) VALUES
+(385, 162, 0),
+(386, 158, 0),
+(386, 159, 0),
+(387, 156, 0),
+(388, 156, 0),
+(388, 157, 0),
+(389, 156, 0),
+(389, 159, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `term_taxonomy`
+--
+
+CREATE TABLE `term_taxonomy` (
+  `term_taxonomy_id` bigint(20) UNSIGNED NOT NULL,
+  `term_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `taxonomy` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `count_taxonomy` bigint(20) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `term_taxonomy`
+--
+
+INSERT INTO `term_taxonomy` (`term_taxonomy_id`, `term_id`, `taxonomy`, `description`, `parent`, `count_taxonomy`) VALUES
+(142, 193, '0', '0', 0, 0),
+(156, 239, 'tag', 'xcxcx', 0, 3),
+(157, 240, 'tag', 'mm,', 0, 1),
+(158, 241, 'tag', '', 0, 1),
+(159, 242, 'tag', 'dđ', 0, 2),
+(160, 243, 'tag', 'bvb', 0, 0),
+(161, 244, 'tag', 'ss', 0, 0),
+(162, 245, 'tag', 'ddd', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -122,19 +214,21 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`ID`, `username`, `password`, `email`) VALUES
-(20, 'phuc', '74b87337454200d4d33f80c4663dc5e5', 'phucngocdo@gmail.com'),
-(21, 'phucaa', '74b87337454200d4d33f80c4663dc5e5', 'chienthan75@gmail.com');
+(23, 'phuc', '74b87337454200d4d33f80c4663dc5e5', 'chienthan75@gmail.com'),
+(24, 'aaaa', '74b87337454200d4d33f80c4663dc5e5', 'phucngocdo@gmail.com'),
+(25, 'aaaaaaaaaaaaaaaa', '47bce5c74f589f4867dbd57e9ca9f808', 'chienthan75gggggg@gmail.com'),
+(26, 'dongocphuc', '74b87337454200d4d33f80c4663dc5e5', 'phuccuong1@gmail.com');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `postmeta`
+-- Chỉ mục cho bảng `postmeta`
 --
 ALTER TABLE `postmeta`
   ADD PRIMARY KEY (`meta_id`),
@@ -142,7 +236,7 @@ ALTER TABLE `postmeta`
   ADD KEY `post_id` (`post_id`);
 
 --
--- Indexes for table `posts`
+-- Chỉ mục cho bảng `posts`
 --
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`ID`),
@@ -153,48 +247,96 @@ ALTER TABLE `posts`
   ADD KEY `post_author` (`post_author`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `terms`
+--
+ALTER TABLE `terms`
+  ADD PRIMARY KEY (`term_id`),
+  ADD KEY `slug` (`slug`(191)),
+  ADD KEY `name` (`term_name`(191));
+
+--
+-- Chỉ mục cho bảng `term_relationships`
+--
+ALTER TABLE `term_relationships`
+  ADD KEY `term_taxonomy_id` (`term_taxonomy_id`),
+  ADD KEY `object_id` (`object_id`);
+
+--
+-- Chỉ mục cho bảng `term_taxonomy`
+--
+ALTER TABLE `term_taxonomy`
+  ADD PRIMARY KEY (`term_taxonomy_id`),
+  ADD UNIQUE KEY `term_id_taxonomy` (`term_id`,`taxonomy`),
+  ADD KEY `taxonomy` (`taxonomy`);
+
+--
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`ID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `postmeta`
+-- AUTO_INCREMENT cho bảng `postmeta`
 --
 ALTER TABLE `postmeta`
-  MODIFY `meta_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `meta_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=356;
 
 --
--- AUTO_INCREMENT for table `posts`
+-- AUTO_INCREMENT cho bảng `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=390;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `terms`
+--
+ALTER TABLE `terms`
+  MODIFY `term_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
+
+--
+-- AUTO_INCREMENT cho bảng `term_taxonomy`
+--
+ALTER TABLE `term_taxonomy`
+  MODIFY `term_taxonomy_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
+
+--
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `postmeta`
+-- Các ràng buộc cho bảng `postmeta`
 --
 ALTER TABLE `postmeta`
-  ADD CONSTRAINT `postmeta_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`ID`);
+  ADD CONSTRAINT `postmeta_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `posts`
+-- Các ràng buộc cho bảng `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`post_author`) REFERENCES `users` (`ID`);
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`post_author`) REFERENCES `users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `term_relationships`
+--
+ALTER TABLE `term_relationships`
+  ADD CONSTRAINT `term_relationships_ibfk_1` FOREIGN KEY (`object_id`) REFERENCES `posts` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `term_relationships_ibfk_2` FOREIGN KEY (`term_taxonomy_id`) REFERENCES `term_taxonomy` (`term_taxonomy_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `term_taxonomy`
+--
+ALTER TABLE `term_taxonomy`
+  ADD CONSTRAINT `term_taxonomy_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

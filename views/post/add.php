@@ -6,8 +6,8 @@ use \MVC\Support\Session;
 incViewFile("header");
 ?>
 <?php
-$aCategoryName = isset($aData[0]) ? $aData[0] : null;
-$aTagName      = isset($aData[1]) ? $aData[1] : null;
+$aCategoryName = isset($aData[0]) ? $aData[0] : array();
+$aTagName      = isset($aData[1]) ? $aData[1] : array();
 ?>
     <!--Sidebar-->
     <div class="ui sidebar vertical left inverted menu" id="sidebar">
@@ -19,10 +19,12 @@ $aTagName      = isset($aData[1]) ? $aData[1] : null;
                 <?php
                 echo "<p id=\"category_warning\"></p>";
                 $category = "";
-                for ($i = 0; $i < count($aCategoryName); $i++) {
-                    $category .= "<input id=\"\" type=\"checkbox\"
+                if ($aCategoryName) {
+                    for ($i = 0; $i < count($aCategoryName); $i++) {
+                        $category .= "<input id=\"\" type=\"checkbox\"
                     name=\"category[]\" value=\"" . $aCategoryName[$i]["term_name"] . "\">" .
-                                 $aCategoryName[$i]["term_name"] . "<br>";
+                                     $aCategoryName[$i]["term_name"] . "<br>";
+                    }
                 }
                 echo $category;
                 ?>
@@ -44,9 +46,11 @@ $aTagName      = isset($aData[1]) ? $aData[1] : null;
                 <?php
                 echo "<p id=\"tag_warning\"></p>";
                 $tag = "";
-                for ($i = 0; $i < count($aTagName); $i++) {
-                    $tag .= "<input id=\"" . $aTagName[$i]["term_name"] . "\" type=\"checkbox\"
+                if ($aTagName) {
+                    for ($i = 0; $i < count($aTagName); $i++) {
+                        $tag .= "<input id=\"" . $aTagName[$i]["term_name"] . "\" type=\"checkbox\"
                     name=\"tag[]\">" . $aTagName[$i]["term_name"] . "<br>";
+                    }
                 }
                 echo $tag;
                 ?>
@@ -167,11 +171,13 @@ $aTagName      = isset($aData[1]) ? $aData[1] : null;
                 <div class="category_checkbox field">
                     <label>Categories</label>
                     <?php
-                    $category = "<br>";
-                    for ($i = 0; $i < count($aCategoryName); $i++) {
-                        $category .= "<input id=\"\" type=\"checkbox\"
+                    if ($aCategoryName) {
+                        $category = "<br>";
+                        for ($i = 0; $i < count($aCategoryName); $i++) {
+                            $category .= "<input id=\"\" type=\"checkbox\"
                     name=\"category[]\" value=\"" . $aCategoryName[$i]["term_name"] . "\">" .
-                                     $aCategoryName[$i]["term_name"] . "<br>";
+                                         $aCategoryName[$i]["term_name"] . "<br>";
+                        }
                     }
                     echo $category;
                     ?>
@@ -181,10 +187,12 @@ $aTagName      = isset($aData[1]) ? $aData[1] : null;
                     <label>Tags</label>
                     <?php
                     $tag = "<br>";
-                    for ($i = 0; $i < count($aTagName); $i++) {
-                        $tag .= "<input id=\"\" type=\"checkbox\"
+                    if ($aTagName) {
+                        for ($i = 0; $i < count($aTagName); $i++) {
+                            $tag .= "<input id=\"\" type=\"checkbox\"
                     name=\"tag[]\" value=\"" . $aTagName[$i]["term_name"] . "\">" .
-                                $aTagName[$i]["term_name"] . "<br>";
+                                    $aTagName[$i]["term_name"] . "<br>";
+                        }
                     }
                     echo $tag;
                     ?>
