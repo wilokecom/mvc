@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MVC\Middleware;
 
@@ -6,14 +6,18 @@ use MVC\Support\Auth;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 
+/**
+ * Class AuthMiddleware
+ * @package MVC\Middleware
+ */
 class AuthMiddleware implements InterfaceMiddleware
 {
+    /**
+     * @var array
+     */
     public $aData;
-
-
     /**
      * AuthMiddleware constructor.
-     *
      * @param array $aData
      */
     public function __construct($aData = [])
@@ -21,7 +25,9 @@ class AuthMiddleware implements InterfaceMiddleware
         $this->aData = $aData;
         $this->handle();
     }
-
+    /**
+     * @return bool
+     */
     public function handle()
     {
         if (!Auth::isLoggedIn()) {

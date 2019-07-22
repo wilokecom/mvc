@@ -8,11 +8,9 @@ namespace MVC\Support;
  */
 class HandleAction
 {
-
     /**
      * array(mvcHead:Restore file CSS, mvcFooter:Restore file JS)
      * Store script files
-     *
      * @var array
      */
     protected static $aHooks;

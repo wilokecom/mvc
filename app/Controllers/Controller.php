@@ -5,7 +5,6 @@ use Jenssegers\Blade\Blade;
 
 /**
  * Class Controller
- *
  * @package MVC\Controllers
  */
 class Controller
@@ -29,7 +28,6 @@ class Controller
 
     /**
      * Tạm thời không dùng
-     *
      * @return \Jenssegers\Blade\Blade
      */
     protected function initPlace()
@@ -43,14 +41,13 @@ class Controller
     /**
      * @param array $aMiddleware What middleware will be used in this methods
      * @param array $aData The data that maybe used in the middleware
-     *
      * @throws \Exception
      */
     protected function middleware($aMiddleware, $aData = [])
     {
         foreach ($aMiddleware as $middleware) {
+            //Return MVC\Middleware\AuthMiddleware
             $sMiddlewareClass = getConfig('middleware')->getParam($middleware, false);
-
             if (!empty($sMiddlewareClass) && class_exists($sMiddlewareClass)) {
                 new $sMiddlewareClass($aData);
             } else {
@@ -60,19 +57,17 @@ class Controller
             }
         }
     }
-
     /**
      * Go to views folder
      * @param       $viewFile
      * @param array $aData
      *
      * @throws \Exception
-     * //Nhảy đến thư mục views
      */
     public function loadView($viewFile, ...$aData)
     {
         try {
-            extract($aData);
+            //extract($aData);
             require_once MVC_VIEWS . $viewFile . ".php";
             //$this->oBlade->make($viewFile, $aData);
         } catch (\Exception $oException) {

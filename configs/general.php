@@ -2,7 +2,7 @@
 /**
  * MVC_HOME_URL
  */
-define("MVC_HOME_URL", "http://127.0.0.1:8888/dev.php.com/mvc/");
+define("MVC_HOME_URL", "http://localhost/mvc/");
 /**
  *MVC_DIR
  */
@@ -47,5 +47,7 @@ define("MVC_MODELS", MVC_DIR . "app/Models/");
  * MVC_CONFIG
  */
 define("MVC_CONFIG", MVC_DIR . "configs/");
-
+/**
+ * MVC_DEBUG
+ */
 define("MVC_DEBUG", true);

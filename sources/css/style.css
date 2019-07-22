@@ -1,6 +1,6 @@
 #container {
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 50px auto;
 }
 
 /*Show more content*/
@@ -11,21 +11,6 @@
 .morelink {
     display: block;
 }
-
-/*.pagination a {*/
-/*    color: black;*/
-/*    float: left;*/
-/*    padding: 8px 16px;*/
-/*    text-decoration: none;*/
-/*}*/
-
-/*li {*/
-/*    float: left;*/
-/*    margin: 3px;*/
-/*    border: solid 1px gray;*/
-/*    list-style: none*/
-/*}*/
-
 li {
     float: left;
     margin: 6px;
@@ -39,7 +24,6 @@ li a {
     color:black;
     font-size:20px;
 }
-
 li span {
     display: inline-block;
     padding: 4px 8px;
@@ -47,4 +31,60 @@ li span {
     color: red;
     font-weight:bold;
     font-size:20px;
+}
+
+/*Slide bar*/
+.term {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.active, .term:hover {
+    background-color: #555;
+}
+.active{
+    color:red;
+}
+.term:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.term_content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow-y: scroll;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+}
+
+/*Add new Category, new Tag*/
+#add_new_category, #add_new_tag {
+    margin: 20px auto;
+    background: none;
+    color: green;
+    border: none;
+    padding: 0 !important;
+    font: inherit;
+    /*border is optional*/
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+}
+
+.add_new_category, .add_new_tag, #category-name, #tag-name {
+    margin: 20px auto;
 }

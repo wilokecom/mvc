@@ -23,7 +23,7 @@ incViewFile("header"); //Header
             <p>Đây là trang Dashboard.</p>
         </div>
     </div>
-    <table class="ui celled table">
+    <table class="ui celled table" style="display:<?php echo ($aPostInfo == null) ? "none" : "" ?>">
         <thead>
         <tr>
             <th>User Name</th>
@@ -33,29 +33,36 @@ incViewFile("header"); //Header
             <th>Content</th>
             <th>Status</th>
             <th>Type</th>
+            <th>Comment</th>
+            <th>Categories</th>
+            <th>Tags</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody id="content">
         <?php
+        //foreach ($aPostInfo as $aPostInfo)
         foreach ($aPostInfo as $aPostInfo) {
             echo "<tr>";
             echo "<td>" . $aUserInfo["username"] . "</td>";
             echo "<td >" . $aPostInfo["post_author"] . "</td>";
             echo "<td>" . $aPostInfo["ID"] . "</td>";
             echo "<td>" . $aPostInfo["post_title"] . "</td>";
-            echo "<td class=\"read-more\">" . $aPostInfo["post_content"]."</td>";
+            echo "<td class=\"read-more\">" . $aPostInfo["post_content"] . "</td>";
             echo "<td>" . $aPostInfo["post_status"] . "</td>";
             echo "<td>" . $aPostInfo["post_type"] . "</td>";
+            echo "<td>" . "</td>";
+            echo "<td>" . $aPostInfo["category"] . "</td>";
+            echo "<td>" . $aPostInfo["tag"] . "</td>";
             ?>
             <td>
-                <a href="<?php echo Route::get("post/edit?post-id=" .$aPostInfo["ID"]) ;?>">
+                <a href="<?php echo Route::get("post/edit?post-id=" . $aPostInfo["ID"]); ?>">
                     <img width="16"  src="<?php echo MVC_SOURCES_URL . "icon/icon_edit.png"; ?>">
                 </a>
             </td>
             <td>
-                <a class="deleteItem" href="<?php echo $aPostInfo["ID"]?>">
+                <a class="deletePost" href="<?php echo $aPostInfo["ID"] ?>">
                     <img width="16" src="<?php echo MVC_SOURCES_URL . "icon/icon_delete.png"; ?>">
                 </a>
             </td>

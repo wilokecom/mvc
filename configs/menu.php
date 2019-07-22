@@ -41,5 +41,15 @@ return [
             'route' => 'user/Profile',
             'isLoggedIn' => true
         ),
+        array(
+            'name' => 'Categories',
+            'route' => 'category/dashboard',
+            'isLoggedIn' => true
+        ),
+        array(
+            'name' => 'Tags',
+            'route' => 'tag/dashboard',
+            'isLoggedIn' => true
+        )
     )
 ];
