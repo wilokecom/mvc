@@ -164,23 +164,23 @@ $.fn.shape = function(parameters) {
           module.verbose('Animating states reset');
           $module
             .removeClass(className.animating)
-            .attr('style.css.css.css.css', '')
-            .removeAttr('style.css.css.css.css')
+            .attr('style', '')
+            .removeAttr('style')
           ;
           // removeAttr style does not consistently work in safari
           $sides
-            .attr('style.css.css.css.css', '')
-            .removeAttr('style.css.css.css.css')
+            .attr('style', '')
+            .removeAttr('style')
           ;
           $side
-            .attr('style.css.css.css.css', '')
-            .removeAttr('style.css.css.css.css')
+            .attr('style', '')
+            .removeAttr('style')
             .removeClass(className.hidden)
           ;
           $nextSide
             .removeClass(className.animating)
-            .attr('style.css.css.css.css', '')
-            .removeAttr('style.css.css.css.css')
+            .attr('style', '')
+            .removeAttr('style')
           ;
         },
 

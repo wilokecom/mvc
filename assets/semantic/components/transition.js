@@ -244,7 +244,7 @@ $.fn.transition = function() {
         force: {
           visible: function() {
             var
-              style          = $module.attr('style.css.css.css.css'),
+              style          = $module.attr('style'),
               userStyle      = module.get.userStyle(),
               displayType    = module.get.displayType(),
               overrideStyle  = userStyle + 'display: ' + displayType + ' !important;',
@@ -254,16 +254,16 @@ $.fn.transition = function() {
             if(currentDisplay !== displayType) {
               module.verbose('Overriding default display to show element', displayType);
               $module
-                .attr('style.css.css.css.css', overrideStyle)
+                .attr('style', overrideStyle)
               ;
             }
             else if(emptyStyle) {
-              $module.removeAttr('style.css.css.css.css');
+              $module.removeAttr('style');
             }
           },
           hidden: function() {
             var
-              style          = $module.attr('style.css.css.css.css'),
+              style          = $module.attr('style'),
               currentDisplay = $module.css('display'),
               emptyStyle     = (style === undefined || style === '')
             ;
@@ -275,7 +275,7 @@ $.fn.transition = function() {
             }
             else if(emptyStyle) {
               $module
-                .removeAttr('style.css.css.css.css')
+                .removeAttr('style')
               ;
             }
           }
@@ -299,7 +299,7 @@ $.fn.transition = function() {
           },
           inlineDisplay: function() {
             var
-              style = $module.attr('style.css.css.css.css') || ''
+              style = $module.attr('style') || ''
             ;
             return $.isArray(style.match(/display.*?;/, ''));
           }
@@ -627,7 +627,7 @@ $.fn.transition = function() {
             return $module.data(metadata.displayType);
           },
           userStyle: function(style) {
-            style = style || $module.attr('style.css.css.css.css') || '';
+            style = style || $module.attr('style') || '';
             return style.replace(/display.*?;/, '');
           },
           transitionExists: function(animation) {
@@ -706,7 +706,7 @@ $.fn.transition = function() {
               if(!displayType) {
                 displayType = $clone
                   .attr('class', elementClass)
-                  .removeAttr('style.css.css.css.css')
+                  .removeAttr('style')
                   .removeClass(className.hidden)
                   .removeClass(className.visible)
                   .show()

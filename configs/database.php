@@ -5,7 +5,7 @@ return [
         "mysqli" => array(
             "host" => "localhost",
             "username" => "root",
-            "password" => "root",
+            "password" => "",
             "db" => "fantom"
         )
     ]

@@ -55,7 +55,7 @@ $.fn.search = function(parameters) {
         $searchButton    = $module.find(selector.searchButton),
         $results         = $module.find(selector.results),
         $result          = $module.find(selector.result),
-        $category        = $module.find(selector.category),
+        $category        = $module.find(selector.dashboard),
 
         element          = this,
         instance         = $module.data(moduleNamespace),
@@ -96,7 +96,7 @@ $.fn.search = function(parameters) {
           module.debug('Refreshing selector cache');
           $prompt         = $module.find(selector.prompt);
           $searchButton   = $module.find(selector.searchButton);
-          $category       = $module.find(selector.category);
+          $category       = $module.find(selector.dashboard);
           $results        = $module.find(selector.results);
           $result         = $module.find(selector.result);
         },
@@ -252,7 +252,7 @@ $.fn.search = function(parameters) {
           var
             // force selector refresh
             $result         = $module.find(selector.result),
-            $category       = $module.find(selector.category),
+            $category       = $module.find(selector.dashboard),
             $activeResult   = $result.filter('.' + className.active),
             currentIndex    = $result.index( $activeResult ),
             resultSize      = $result.length,
@@ -771,18 +771,18 @@ $.fn.search = function(parameters) {
               categoryResults = {}
             ;
             $.each(results, function(index, result) {
-              if(!result.category) {
+              if(!result.dashboard) {
                 return;
               }
-              if(categoryResults[result.category] === undefined) {
-                module.verbose('Creating new category of results', result.category);
-                categoryResults[result.category] = {
-                  name    : result.category,
+              if(categoryResults[result.dashboard] === undefined) {
+                module.verbose('Creating new category of results', result.dashboard);
+                categoryResults[result.dashboard] = {
+                  name    : result.dashboard,
                   results : [result]
                 }
               }
               else {
-                categoryResults[result.category].results.push(result);
+                categoryResults[result.dashboard].results.push(result);
               }
             });
             return categoryResults;
