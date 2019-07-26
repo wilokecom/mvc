@@ -1,12 +1,13 @@
 $(".pagination").on("click", "a", "", function () {
     "use strict";
     let url = $(this).attr("href");
-    console.log("pagination");
     $.ajax({
         url: url,
         type: "get",
         dataType: "json",
         success: function (result) {
+            let a=["hoc sinh","co giao","nha trương"];
+            console.log(a);
             let dashboard = "";
             let username = "";
             let category = "";

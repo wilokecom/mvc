@@ -27,21 +27,13 @@ class UserController extends Controller
     {
         $this->middleware(["auth"]);
     }
-    /**
-     * Check logined or not
-     * @return bool
-     */
-    public static function isLoggedIn()
-    {
-        return Session::has(Auth::$sLoginSessionKey);
-    }
 
     /**
      * Return to dashboard
      */
-    public static function redirectToDashboard()
+    public function redirectToDashboard()
     {
-        if (self::isLoggedIn()) {
+        if (Auth::isLoggedIn()) {
             Redirect::to("user/dashboard");
         }
     }
@@ -53,7 +45,7 @@ class UserController extends Controller
      */
     public function login()
     {
-        self::redirectToDashboard();
+        $this->redirectToDashboard();
         $this->loadView("user/login");
     }
     /*
@@ -62,7 +54,7 @@ class UserController extends Controller
      */
     public function register()
     {
-        self::redirectToDashboard();
+        $this->redirectToDashboard();
         $this->loadView("user/register");
     }
 
@@ -296,7 +288,7 @@ class UserController extends Controller
      */
     public function profile()
     {
-        if (!self::isLoggedIn()) {
+        if (!Auth::isLoggedIn()) {
             Redirect::to('user/login');
         }
         $ID        = Session::get(Auth::$loginSessionKey);
@@ -318,7 +310,7 @@ class UserController extends Controller
      */
     public function editProfile()
     {
-        if (!self::isLoggedIn()) {
+        if (!Auth::isLoggedIn()) {
             Redirect::to('user/login');
         }
         $aName     = UserModel::getUser_metaID(Session::get(Auth::$loginSessionKey));

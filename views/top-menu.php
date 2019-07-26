@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 use MVC\Support\Route as Route;
-use \MVC\Controllers\UserController;
+use \MVC\Support\Auth;
 ?>
 <div class="ui pointing menu">
     <?php
@@ -14,8 +14,8 @@ use \MVC\Controllers\UserController;
              * If logined, display Logout, Post
              * If not logined Home, Login, Register
              */
-            if ((UserController::isLoggedIn() && !$aMenuName["isLoggedIn"])
-                || (!UserController::isLoggedIn() && $aMenuName["isLoggedIn"])
+            if ((Auth::isLoggedIn() && !$aMenuName["isLoggedIn"])
+                || (!Auth::isLoggedIn() && $aMenuName["isLoggedIn"])
             ) {
                 continue;
             }
