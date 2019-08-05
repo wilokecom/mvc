@@ -6,11 +6,12 @@ use \MVC\Support\Session;
 incViewFile("header");
 ?>
 <?php
+
 $aCategoryName = isset($aData[0]) ? $aData[0] : array();
 $aTagName      = isset($aData[1]) ? $aData[1] : array();
 ?>
     <!--Sidebar-->
-    <div class="ui sidebar vertical left inverted menu" id="sidebar">
+    <div class="ui sidebar vertical left inverted menu push visible">
         <!--Category-->
         <button class="term">Categories</button>
         <div class="term_content">
@@ -77,7 +78,7 @@ $aTagName      = isset($aData[1]) ? $aData[1] : array();
     </div>
     <!--Menu icon-->
     <div class="ui basic icon top fixed menu">
-        <a id="toggle" class="item">
+        <a class="toggle item">
             <i class="sidebar icon"></i>
             Menu
         </a>
@@ -178,6 +179,12 @@ $aTagName      = isset($aData[1]) ? $aData[1] : array();
                     name=\"category[]\" value=\"" . $aCategoryName[$i]["term_name"] . "\">" .
                                          $aCategoryName[$i]["term_name"] . "<br>";
                         }
+                    } else {
+                        $category = "<p>You haven't have any category!Please click
+                                    <a class=\"toggle\" href=\"#\">
+                                        here
+                                    </a>to add new category
+                                 </p>";
                     }
                     echo $category;
                     ?>
@@ -193,10 +200,17 @@ $aTagName      = isset($aData[1]) ? $aData[1] : array();
                     name=\"tag[]\" value=\"" . $aTagName[$i]["term_name"] . "\">" .
                                     $aTagName[$i]["term_name"] . "<br>";
                         }
+                    } else {
+                        $tag = "<p>You haven't have any tag!Please click
+                                    <a class=\"toggle\" href=\"#\">
+                                        here
+                                    </a>to add new tag
+                                 </p>";
                     }
                     echo $tag;
                     ?>
                 </div>
+
                 <!--Submit-->
                 <div class="field" style="margin-top: 20px">
                     <button class="ui red basic button" type="submit">Submit</button>

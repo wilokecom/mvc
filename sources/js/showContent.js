@@ -1,5 +1,6 @@
-$(document).ready(function () {
-    "use strict";
+"use strict";
+function showMore()
+{
     $(".read-more").each(function () {
         let $self = $(this);
         let readMoreHtml = $self.html();
@@ -14,10 +15,13 @@ $(document).ready(function () {
             event.preventDefault();
             $self.html(readMoreHtml).append(" <a href='#' class='show-less-link'>Show Less</a>");
         }
+
         $self.on("click", ".read-more-link", handleReadMore);
         $self.on("click", ".show-less-link", function (event) {
             event.preventDefault();
-            $self.html(readMoreHtml.substr(0,100)).append(" <a href='#' class='read-more-link'>Show More</a>");
+            $self.html(readMoreHtml.substr(0, 100)).append(" <a href='#' class='read-more-link'>Show More</a>");
         });
     });
-});
+}
+showMore();
+

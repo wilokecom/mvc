@@ -39,8 +39,9 @@ class Controller
     }
 
     /**
-     * @param array $aMiddleware What middleware will be used in this methods
+     * @return mixed
      * @param array $aData The data that maybe used in the middleware
+     * @param       $aMiddleware $aMiddleware What middleware will be used in this methods
      * @throws \Exception
      */
     protected function middleware($aMiddleware, $aData = [])
@@ -49,7 +50,8 @@ class Controller
             //Return MVC\Middleware\AuthMiddleware
             $sMiddlewareClass = getConfig('middleware')->getParam($middleware, false);
             if (!empty($sMiddlewareClass) && class_exists($sMiddlewareClass)) {
-                new $sMiddlewareClass($aData);
+                $result =new $sMiddlewareClass($aData);
+                return $result->handle();
             } else {
                 if (MVC_DEBUG) {
                     throw new \Exception('This class ' . $middleware . ' does not exist');

@@ -12,8 +12,9 @@ incViewFile("header"); //Header
     <?php
     incViewFile("top-menu");
     if (isset($aData)) {
-        $aUserInfo=$aData[0];
-        $aPostInfo=$aData[1];
+        $aUserInfo   = $aData[0];
+        $aPostInfo   = $aData[1];
+        $bcheckAdmin = $aData[2];
     }
     ?>
     <!--Content-->
@@ -23,7 +24,17 @@ incViewFile("header"); //Header
             <p>Đây là trang Dashboard.</p>
         </div>
     </div>
+
     <table class="ui celled table" style="display:<?php echo ($aPostInfo == null) ? "none" : "" ?>">
+        <?php
+        if ($bcheckAdmin) { ?>
+            <div class="ui pointing menu">
+                <a id="mine"class="active item" href="#">Mine</a>
+                <a id="all" class="item" href="#">All</a>
+            </div>
+            <?php
+        }
+        ?>
         <thead>
         <tr>
             <th>User Name</th>

@@ -36,13 +36,13 @@ class GeneralScriptsController
         mvcEnqueueScript(MVC_ASSETS_URL . "jquery/jquery-3.4.1.min.js");
         mvcEnqueueScript(MVC_ASSETS_URL . "jqueryUI/jquery-ui.js");
         mvcEnqueueScript(MVC_ASSETS_URL . "semantic/semantic.min.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/showContent_jquery.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/showPassword_jquery.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/focusInput_jquery.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/Pagination.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/alertDeleteDialog_jquery.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/Sidebar.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/addNewCategory.js");
-        mvcEnqueueScript(MVC_SOURCES_URL . "js/addNewTag.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/showContent.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/showPassword.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/focusInput.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/showPagination.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/alertDeleteDialog.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/toggleSidebar.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/addNewTaxonomy.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/showPost.js");
     }
 }

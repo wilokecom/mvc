@@ -111,6 +111,9 @@ class App
     {
         if ($this->isControllerExists($controllerName)) {
             $this->controllerName = $controllerName;
+        } else {
+            header("HTTP/1.0 404 Not Found");
+            die();
         }
         //Ex:\MVC\Controllers\HomeController
         require_once MVC_CONTROLLERS . $this->generateControllerFile($this->controllerName);
@@ -155,6 +158,9 @@ class App
     {
         if (!empty($methodName) && $this->isMethodExist($methodName)) {
             $this->methodName = $methodName;
+        } else {
+            header("HTTP/1.0 404 Not Found");
+            die();
         }
         //Go to method of Controller
         call_user_func_array(array(

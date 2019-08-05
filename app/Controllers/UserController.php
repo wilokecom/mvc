@@ -11,6 +11,7 @@ use MVC\Support\Session;
 use MVC\Support\Validator;
 use MVC\Support\Route;
 use MVC\Support\Auth;
+use MVC\Support\Helper;
 
 /**
  * Class UserController
@@ -20,23 +21,20 @@ use MVC\Support\Auth;
 class UserController extends Controller
 {
     /**
+     * @var string
+     */
+    public static $sClick = "admin";
+    /**
      * Check if not loggined, go to user/login
+     * If logined, go to user/dashboard
      * Default method, url:/mvc/user/
      */
     public function index()
     {
         $this->middleware(["auth"]);
+        Helper::redirectToDashboard();
     }
 
-    /**
-     * Return to dashboard
-     */
-    public function redirectToDashboard()
-    {
-        if (Auth::isLoggedIn()) {
-            Redirect::to("user/dashboard");
-        }
-    }
     /**
      *  Login method-Show Interface
      *  If logined, ruturn user/dashboard
@@ -45,7 +43,7 @@ class UserController extends Controller
      */
     public function login()
     {
-        $this->redirectToDashboard();
+        Helper::redirectToDashboard();
         $this->loadView("user/login");
     }
     /*
@@ -54,7 +52,7 @@ class UserController extends Controller
      */
     public function register()
     {
-        $this->redirectToDashboard();
+        Helper::redirectToDashboard();
         $this->loadView("user/register");
     }
 
@@ -64,34 +62,61 @@ class UserController extends Controller
     public function dashboard()
     {
         $this->middleware(["auth"]);
+        //Check Admin
+        $bIsAdmin      = $this->middleware(["isAdmin"], ["isAdmin" => $_SESSION[Auth::$sLoginSessionKey]]);
         $abUserInfo    = UserModel::getUserByUsername(
             $_SESSION[Auth::$sLoginSessionKey]
         );
         $iPostAuthor   = $abUserInfo["ID"];
-        $iTotalRecords = PostModel::getRecordbyPostAuthor($iPostAuthor);
-        $aConfig       = array(
-            'current_page' => isset($_GET['page']) ? $_GET['page'] : 1,
-            'total_record' => $iTotalRecords,
-            'limit' => 3,
-            'link_full' => Route::get('user/dashboard?page={page}'),
-            'link_first' => Route::get('user/dashboard'),
-            'range' => 5
-        );
+        if (isset($_GET["display"]) && $_GET["display"] == "all") {
+            $iTotalRecords = PostModel::getRecordbyPostAuthor(null);
+            $aConfig       = array(
+                'current_page' => isset($_GET['page']) ? $_GET['page'] : 1,
+                'total_record' => $iTotalRecords,
+                'limit' => 3,
+                'link_full' => Route::get('user/dashboard?display=all&page={page}'),
+                'link_first' => Route::get('user/dashboard?display=all'),
+                'range' => 5
+            );
+        } else {
+            $iTotalRecords = PostModel::getRecordbyPostAuthor($iPostAuthor);
+            $aConfig       = array(
+                'current_page' => isset($_GET['page']) ? $_GET['page'] : 1,
+                'total_record' => $iTotalRecords,
+                'limit' => 3,
+                'link_full' => Route::get('user/dashboard?page={page}'),
+                'link_first' => Route::get('user/dashboard'),
+                'range' => 5
+            );
+        }
         //Init pagination
         Pagination::init($aConfig);
         $iPostStart = Pagination::$aConfig["start"];
         $iPostLimit = Pagination::$aConfig["limit"];
-        $abPostInfo = PostModel::getPostbyPostAuthor(
-            $abUserInfo["ID"],
-            $iPostStart,
-            $iPostLimit
-        );
+        //Handle Ajax :display all
+        if (isset($_GET["display"]) && $_GET["display"] == "all") {
+            $abPostInfo = PostModel::getPostbyPostAuthor(
+                "",
+                $iPostStart,
+                $iPostLimit
+            );
+        } else {
+            $abPostInfo = PostModel::getPostbyPostAuthor(
+                $abUserInfo["ID"],
+                $iPostStart,
+                $iPostLimit
+            );
+        }
         //If $aPosts=false, return empty array
         if (!$abPostInfo) {
             $abPostInfo = array();
         }
         //Get category and tag for display posts table
-        $aPostID = PostModel::getPostIDbyPostAuthor($iPostAuthor);
+        if (isset($_GET["display"]) && $_GET["display"] == "all") {
+            $aPostID = PostModel::getPostIDbyPostAuthor(null);
+        } else {
+            $aPostID = PostModel::getPostIDbyPostAuthor($iPostAuthor);
+        }
         $aCategoryName=array();
         $aTagName=array();
         if ($aPostID != false) {
@@ -172,14 +197,13 @@ class UserController extends Controller
                 }
             }
         }
-        //Handle Ajax
+        //Handle Ajax:Pagination
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
         ) {
             die(
                 json_encode(
                     array(
-                        "abUserInfo" => $abUserInfo,
                         "abPostInfo" => $abPostInfo,
                         "paging" => Pagination::display()
                     )
@@ -189,10 +213,12 @@ class UserController extends Controller
         $this->loadView(
             "user/dashboard",
             $abUserInfo,
-            $abPostInfo
+            $abPostInfo,
+            $bIsAdmin
         );
     }
     /**
+     * Have an error:Can logout by write URL,should use Ajax
      * Handle when press logout$iTotalPage
      * Destroy Session Login
      * Return to user/login
@@ -202,7 +228,6 @@ class UserController extends Controller
         Session::forget(Auth::$sLoginSessionKey);
         Redirect::to("user/login");
     }
-
     /**
      * Solving handleRegister when submit
      * Run into ClassLoader.php , required file Validator , solving method validate
@@ -210,43 +235,46 @@ class UserController extends Controller
      */
     public function handleRegister()
     {
-        $bStatus = Validator::validate(
-            array(
-                "username" => "required|maxLength:50",
-                "email" => "required|maxLength:100",
-                "password" => "required",
-                "agree_term" => "required"
-            ),
-            $_POST
-        );
-        //If has error, add error to Session, return to user/register
-        if ($bStatus !== true) {
-            Session::add("register_error", $bStatus);
-            Redirect::to("user/register");
+        if ($_POST) {
+            $bStatus = Validator::validate(
+                array(
+                    "username" => "required|maxLength:50",
+                    "email" => "required|maxLength:100",
+                    "password" => "required",
+                    "agree_term" => "required"
+                ),
+                $_POST
+            );
+            //If has error, add error to Session, return to user/register
+            if ($bStatus !== true) {
+                Session::add("register_error", $bStatus);
+                Redirect::to("user/register");
+            }
+            //Check email exist
+            if (UserModel::emailExists($_POST["email"])) {
+                Session::add("register_error", "Oops! This email is already exist");
+                Redirect::to("user/register");
+            }
+            //Check username exist
+            if (UserModel::usernameExists($_POST["username"])) {
+                Session::add("register_error", "Oops! This username is already exist");
+                Redirect::to("user/register");
+            }
+            $aStatus = UserModel::insertNewUser($_POST["username"], $_POST["email"], $_POST["password"]);
+            if (!$aStatus) {
+                Session::add("register_error", "Oops! Something went error");
+                Redirect::to("user/register");
+            }
+            //Save username to Session["user_logged_in"]
+            Session::add(
+                Auth::$sLoginSessionKey,
+                $_POST["username"]
+            );
+            Session::forget("register_error");//delete Session
+            Redirect::to("user/dashboard");
+        } else {
+            header("HTTP/1.0 404 Not Found");
         }
-        //Check email exist
-        if (UserModel::emailExists($_POST["email"])) {
-            Session::add("register_error", "Oops! This email is already exist");
-            Redirect::to("user/register");
-        }
-        //Check username exist
-        if (UserModel::usernameExists($_POST["username"])) {
-            Session::add("register_error", "Oops! This username is already exist");
-            Redirect::to("user/register");
-        }
-        $aStatus = UserModel::insertNewUser($_POST["username"], $_POST["email"], $_POST["password"]);
-        if (!$aStatus) {
-            Session::add("register_error", "Oops! Something went error");
-            Redirect::to("user/register");
-        }
-        //Save username to Session["user_logged_in"]
-        Session::add(
-            Auth::$sLoginSessionKey,
-            $_POST["username"]
-        );
-        Session::forget("register_error");//delete Session
-
-        Redirect::to("user/dashboard");
     }
 
     /**
@@ -256,33 +284,36 @@ class UserController extends Controller
      */
     public function handleLogin()
     {
-        //Validate
-        $bStatus = Validator::validate(
-            array(
-                "username" => "required|maxLength:50",
-                "password" => "required"
-            ),
-            $_POST
-        );
-        if ($bStatus !== true) {
-            Session::add("login_error", $bStatus);
-            Redirect::to("user/login");
+        if ($_POST) {
+            //Validate
+            $bStatus = Validator::validate(
+                array(
+                    "username" => "required|maxLength:50",
+                    "password" => "required"
+                ),
+                $_POST
+            );
+            if ($bStatus !== true) {
+                Session::add("login_error", $bStatus);
+                Redirect::to("user/login");
+            }
+            $abStatus = UserModel::checkUserLogin($_POST["username"], $_POST["password"]);
+            if ($abStatus != true) {
+                Session::add("login_error", "invalid username or password");
+                Redirect::to("user/login");
+            }
+            //Add Session[$sLoginSessionKey]=$_POST["username"]
+            Session::add(
+                Auth::$sLoginSessionKey,
+                $_POST["username"]
+            );
+            //Destroy error
+            Session::forget("login_error");
+            Redirect::to("user/dashboard");
+        } else {
+            header("HTTP/1.0 404 Not Found");
         }
-        $abStatus = UserModel::checkUserLogin($_POST["username"], $_POST["password"]);
-        if ($abStatus != true) {
-            Session::add("login_error", "invalid username or password");
-            Redirect::to("user/login");
-        }
-        //Add Session[$sLoginSessionKey]=$_POST["username"]
-        Session::add(
-            Auth::$sLoginSessionKey,
-            $_POST["username"]
-        );
-        //Destroy error
-        Session::forget("login_error");
-        Redirect::to("user/dashboard");
     }
-
     /**
      * @throws \Exception
      */
@@ -318,14 +349,12 @@ class UserController extends Controller
         if (!$aName) {
             $aName = array();
             $this->loadView('user/edit-profile', $aUserInfo);
-            var_dump($aUserInfo);
         } else {
             $aData = array_merge($aUserInfo, $aName);
             $this->loadView('user/edit-profile', $aData);
         }
         $aData = array_merge($aUserInfo, $aName);
     }
-
     /**
      *
      */
@@ -349,9 +378,7 @@ class UserController extends Controller
             $fileUpload['name'] = $aName['meta_value'];
         }
         $aUserInfo = UserModel::getUserByID($ID);
-        var_dump($aUserInfo);
         $aData = array_merge($_POST, $fileUpload);
-        var_dump($_POST);
         $status = Validator::validate(
             array(
                 'fullname' => 'required|maxLength:50',

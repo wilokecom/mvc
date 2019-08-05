@@ -15,7 +15,6 @@ incViewFile('header');
         incViewFile('top-menu');
         ?>
         <form class="ui form" action="<?php echo \MVC\Support\Route::get('user/handleEditProfile')?>" enctype="multipart/form-data" method="post">
-
             <div class="field" >
                 <label>Ảnh đại diện : </label>
                 <img id="img" src= "<?php if(isset($meta_value)) echo MVC_ASSETS_URL.'Images'.'/'.$meta_value;?>" width="150" height="150">
