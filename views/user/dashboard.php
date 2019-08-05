@@ -1,6 +1,7 @@
 <?php
 use \MVC\Support\Route;
 use \MVC\Support\Pagination;
+
 //Nhảy đến function incViewFile -file index.php
 //Thêm file định dạnh CSS-JS cho header,body,footer
 incViewFile("header"); //Header
@@ -10,18 +11,20 @@ incViewFile("header"); //Header
     <!--Top-menu-->
     <?php
     incViewFile("top-menu");
-    $aUserInfo = $aData[0];
-    $aPostInfo = $aData[1];
+    if (isset($aData)) {
+        $aUserInfo = $aData[0];
+        $aPostInfo = $aData[1];
+    }
     ?>
     <!--Content-->
-    <div class="ui success message">
+    <div class="ui success message" >
         <div class="header">Hello <span
                     style="color:red;"><?php echo $aUserInfo["username"]; ?></span>!
-            <!--Hello username-->
             <p>Đây là trang Dashboard.</p>
         </div>
     </div>
-    <table class="ui celled table">
+    <table class="ui celled table" style = "display: <?php echo ($aPostInfo
+                                                                 == false)? "none":""; ?>">
         <thead>
         <tr>
             <th>User ID</th>
@@ -31,32 +34,42 @@ incViewFile("header"); //Header
             <th>Content</th>
             <th>Status</th>
             <th>Type</th>
+            <th>Tags</th>
+            <th>Categories</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
         </thead>
-        <tbody id="content">
+        <tbody id="content" >
         <?php
-        $id=0;//Chỉ số mảng bài viết
+        $id = 0;//Chỉ số mảng bài viết
         foreach ($aPostInfo as $aPostInfo) {
             echo "<tr>";
             echo "<td>" . $aPostInfo["post_author"] . "</td>";
             echo "<td>" . $aPostInfo["ID"] . "</td>";
             echo "<td>" . $aUserInfo["username"] . "</td>";
             echo "<td>" . $aPostInfo["post_tittle"] . "</td>";
-            echo "<td class=\"read-more\">" . $aPostInfo["post_content"]."</td>";
+            echo "<td class='read-more'>" . $aPostInfo["post_content"]
+                 . "</td>";
             echo "<td>" . $aPostInfo["post_status"] . "</td>";
             echo "<td>" . $aPostInfo["post_type"] . "</td>";
+            echo "<td></td>";
+            echo "<td></td>";
             ?>
             <td>
-                <a href="<?php echo Route::get("post/edit/".$aPostInfo["ID"]."/") ;?>">
+                <a href="<?php echo Route::get(
+                    "post/edit/" . $aPostInfo["ID"] . "/"
+                ); ?>">
                     <img width="16"
-                         src="<?php echo MVC_SOURCES_URL . "icon/icon_edit.png"; ?>">
+                         src="<?php echo MVC_SOURCES_URL
+                                         . "icon/icon_edit.png"; ?>">
                 </a>
             </td>
             <td>
-                <a class="deleteItem" href="javascript:deleteItem(<?php echo $aPostInfo["ID"]?>)">
-                    <img width="16" src="<?php echo MVC_SOURCES_URL . "icon/icon_delete.png"; ?>">
+                <a class="deleteItem"
+                   href="javascript:deleteItem(<?php echo $aPostInfo["ID"] ?>)">
+                    <img width="16" src="<?php echo MVC_SOURCES_URL
+                                                    . "icon/icon_delete.png"; ?>">
                 </a>
             </td>
             <?php
@@ -72,14 +85,15 @@ incViewFile("header"); //Header
     </div>
 
     <!--Pagination Href-->
-    <div class="pagination" >
+    <div class="pagination">
         <?php echo Pagination::display(); ?>
     </div>
 
     <!-- Delete alert Dialog-->
-    <div id="dialog-confirm" title="Xác nhận!!!!!!!" style= "display:none;">
-        <p >
-            <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+    <div id="dialog-confirm" title="Xác nhận!!!!!!!" style="display:none;">
+        <p>
+            <span class="ui-icon ui-icon-alert"
+                  style="float:left; margin:12px 12px 20px 0;"></span>
             <br>Bạn có chắc muốn xóa bài viết này?
         </p>
     </div>

@@ -20,7 +20,7 @@ $aName = $aData[1];
 
             <div class="field" >
                 <label>Ảnh đại diện : </label>
-                <img id="img" src= "<?php if(isset($meta_value)) echo MVC_ASSETS_URL.'Images'.'/'.$aName['meta_value'];?>" width="150" height="150">
+                <img id="img" src= "<?php if(isset($aName['meta_value'])) echo MVC_ASSETS_URL.'Images'.'/'.$aName['meta_value'];?>" width="150" height="150">
                 <input type="file" name="file-upload" multiple="true">
             </div>
             <div class="field">

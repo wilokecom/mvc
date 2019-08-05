@@ -10,7 +10,7 @@ function deleteItem($post_id)
             buttons: {
                 "Yes": function () {
                     $.ajax({
-                        url: "http://localhost/mvc/post/delete",
+                        url: "http://localhost:8088/mvc/post/delete",
                         type: "POST",
                         data: {post_id: $post_id},
                         success: function (data, status) {
