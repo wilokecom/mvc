@@ -1,8 +1,11 @@
 <?php
 //use MVC\Support\Session;
 incViewFile('header');
-  $aUserInfo = $aData[0];
-  $aName = $aData[1];
+if (isset($aData))
+{
+    $aUserInfo = $aData[0];
+    $aName = $aData[1];
+}
 ?>
 
     <div id="container">

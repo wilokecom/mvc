@@ -2,7 +2,6 @@
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
-use MVC\Models\UserModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
@@ -80,13 +79,12 @@ class PostController extends Controller
             $_POST,
             $aImageUpload
         );
-        var_dump($aData);
         $bStatus = Validator::validate(
             array(
-                "post-title" => "required|maxLength:100",
+//                "post-title" => "required|maxLength:100",
                 "post-content" => "required|maxLength:10000",
                 "name" => "required|maxLength:200",
-                "type" => "checkType",
+                "type" => "checkImageType",
                 "size" => "maxSize:5000000"
             ),
             $aData
@@ -141,7 +139,7 @@ class PostController extends Controller
         $id = $aParam[2];
         $status = Validator::validate(
             array(
-                "post-tittle" => "required|maxLength:100",
+                "post-tittle" => "required|maxLength:1000",
                 "post-content" => "required|maxLength:10000",
             ),
             $_POST
