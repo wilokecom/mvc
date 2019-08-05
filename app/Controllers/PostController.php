@@ -43,13 +43,24 @@ class PostController extends Controller
     public function edit()
     {
         $this->middleware(['auth']);
+        $bIsAdmin = $this->middleware(["isAdmin"], ["isAdmin" => $_SESSION[Auth::$sLoginSessionKey]]);
         //Get PostID
         $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
-        //Get PostInfo
-        $aPostInfo = PostModel::getPostbyPostID($iPostID);
-        //If $aPostInfo is false, return empty array
-        if (!$aPostInfo) {
-            $aPostInfo = array();
+        if($bIsAdmin){
+            $aPostInfo = PostModel::getPost($iPostID,null);
+        }
+        else{
+            $abUserInfo  = UserModel::getUserByUsername(
+                $_SESSION[Auth::$sLoginSessionKey]
+            );
+            $iPostAuthor = $abUserInfo["ID"];
+            //Get PostInfo
+            $aPostInfo = PostModel::getPost($iPostID, $iPostAuthor);
+        }
+        //If $aPostInfo is false, return Page Not Found
+        if (!$aPostInfo&&!$bIsAdmin) {
+            header("HTTP/1.0 404 Not Found");
+            die();
         }
         $this->loadView("post/edit", $aPostInfo);
     }
@@ -58,14 +69,20 @@ class PostController extends Controller
      */
     public function delete()
     {
-        //Get PostID
-        $iPostID = isset($_POST["post_id"]) ? $_POST["post_id"] : null;
-        //Get data post table
-        $aPostInfo = PostModel::deletePostbyPostID($iPostID);
-        if ($aPostInfo) {
-            echo "Delete Success";
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
+        ) {
+            $this->middleware(["auth"]);
+            //Get PostID
+            $iPostID     = isset($_POST["post_id"]) ? $_POST["post_id"] : null;
+            $aPostInfo = PostModel::deletePostByPostID($iPostID);
+            if ($aPostInfo) {
+                die ("Delete Success");
+            } else {
+                die("Delete Error");
+            }
         } else {
-            echo "Delete Error";
+            header("HTTP/1.0 404 Not Found");
         }
     }
     /**
@@ -73,132 +90,142 @@ class PostController extends Controller
      */
     public function handleAdd()
     {
-        $aImageUpload = $_FILES["image-upload"];
-        $aData        = array_merge(//merge array to validate
-            $_POST,
-            $aImageUpload
-        );
-        $bStatus      = Validator::validate(
-            array(
-                "post-title" => "required|maxLength:100",
-                "post-content" => "required|maxLength:10000",
-                "name" => "required|maxLength:20",
-                "type" => "checkImageType",
-                "size" => "maxSize:500000"
-            ),
-            $aData
-        );
-        //If has error, add error to Session, return post/add
-        if ($bStatus !== true) {
-            Session::add("post_error", $bStatus);
-            Redirect::to("post/add");
-        }
-        //Get username login
-        $sUserName = Session::get(Auth::$sLoginSessionKey);
-        //Get userID
-        $iUserID = UserModel::getUserByUsername($sUserName)["ID"];
-        //Get guid
-        $sGuid = MVC_HOME_URL . "post/add/" . $aData["post-type"] . "_id=" . $iUserID;
-        //Insert to Post table
-        $aStatusPost = PostModel::insertPost(
-            $iUserID,
-            $aData["post-status"],
-            $aData["post-type"],
-            $aData["post-title"],
-            $aData["post-content"],
-            $aData["type"],
-            $sGuid
-        );
-        if (!$aStatusPost) {
-            Session::add(
-                "post_error",
-                "Oops! Something went Post_Add error"
+        if($_POST){
+            $aImageUpload = isset($_FILES["image-upload"]) ? $_FILES["image-upload"] : null;
+            $aData        = array_merge(//merge array to validate
+                $_POST,
+                $aImageUpload
             );
-            Redirect::to("post/add");
-        }
-        // Insert to PostMeta table
-        $aStatusMeta = PostModel::insertPostMeta(
-            "phone number",
-            $aData["phone-number"],
-            $aStatusPost
-        );
-        if (!$aStatusMeta) {
-            Session::add(
-                "post_error",
-                "Oops! Something went Post_Meta error"
+            $bStatus      = Validator::validate(
+                array(
+                    "post-title" => "required|maxLength:100",
+                    "post-content" => "required|maxLength:10000",
+                    "name" => "required|maxLength:20",
+                    "type" => "checkImageType",
+                    "size" => "maxSize:500000"
+                ),
+                $aData
             );
-            Redirect::to("post/add");
-        }
-        //Category
-        if(isset($_POST["category"])){
-            $aCategoryName=$_POST["category"];
-            for($i=0;$i<count($aCategoryName);$i++){
-                $aTermCategoryID[$i]=TaxonomyModel::getTermTaxonomyID($aCategoryName[$i],"category");
-                //Insert to TermRelationShip Table
-                TaxonomyModel::insertTermRelationShip($aStatusPost,$aTermCategoryID[$i]["term_taxonomy_id"]);
-                //Update to Term_taxonomy Table
-                TaxonomyModel::updateCount($aTermCategoryID[$i]["term_taxonomy_id"]);
+            //If has error, add error to Session, return post/add
+            if ($bStatus !== true) {
+                Session::add("post_error", $bStatus);
+                Redirect::to("post/add");
             }
-        }
-        //Tag
-        if(isset($_POST["tag"])){
-            $aTagName=$_POST["tag"];
-            for($i=0;$i<count($aTagName);$i++){
-                $aTermTagID[$i]=TaxonomyModel::getTermTaxonomyID($aTagName[$i],"tag");
-                TaxonomyModel::insertTermRelationShip($aStatusPost,$aTermTagID[$i]["term_taxonomy_id"]);
-                TaxonomyModel::updateCount($aTermTagID[$i]["term_taxonomy_id"]);
+            //Get username login
+            $sUserName = Session::get(Auth::$sLoginSessionKey);
+            //Get userID
+            $iUserID = UserModel::getUserByUsername($sUserName)["ID"];
+            //Get guid
+            $sGuid = MVC_HOME_URL . "post/add/" . $aData["post-type"] . "_id=" . $iUserID;
+            //Insert to Post table
+            $aStatusPost = PostModel::insertPost(
+                $iUserID,
+                $aData["post-status"],
+                $aData["post-type"],
+                $aData["post-title"],
+                $aData["post-content"],
+                $aData["type"],
+                $sGuid
+            );
+            if (!$aStatusPost) {
+                Session::add(
+                    "post_error",
+                    "Oops! Something went Post_Add error"
+                );
+                Redirect::to("post/add");
             }
+            // Insert to PostMeta table
+            $aStatusMeta = PostModel::insertPostMeta(
+                "phone number",
+                $aData["phone-number"],
+                $aStatusPost
+            );
+            if (!$aStatusMeta) {
+                Session::add(
+                    "post_error",
+                    "Oops! Something went Post_Meta error"
+                );
+                Redirect::to("post/add");
+            }
+            //Category
+            if(isset($_POST["category"])){
+                $aCategoryName=$_POST["category"];
+                for($i=0;$i<count($aCategoryName);$i++){
+                    $aTermCategoryID[$i]=TaxonomyModel::getTermTaxonomyID($aCategoryName[$i],"category");
+                    //Insert to TermRelationShip Table
+                    TaxonomyModel::insertTermRelationShip($aStatusPost,$aTermCategoryID[$i]["term_taxonomy_id"]);
+                    //Update to Term_taxonomy Table
+                    TaxonomyModel::updateCount($aTermCategoryID[$i]["term_taxonomy_id"]);
+                }
+            }
+            //Tag
+            if(isset($_POST["tag"])){
+                $aTagName=$_POST["tag"];
+                for($i=0;$i<count($aTagName);$i++){
+                    $aTermTagID[$i]=TaxonomyModel::getTermTaxonomyID($aTagName[$i],"tag");
+                    TaxonomyModel::insertTermRelationShip($aStatusPost,$aTermTagID[$i]["term_taxonomy_id"]);
+                    TaxonomyModel::updateCount($aTermTagID[$i]["term_taxonomy_id"]);
+                }
+            }
+            $sImageName = $aImageUpload["tmp_name"];//Temporary file upload file
+            //Link contains file upload(assets/image)
+            $sDestination = MVC_ASSETS_DIR . "image" . "/" . $aImageUpload["name"];
+            move_uploaded_file(
+                $sImageName,
+                $sDestination
+            );
+            //Destroy Error
+            Session::forget("post_error");
+            Redirect::to("user/dashboard");
         }
-        $sImageName = $aImageUpload["tmp_name"];//Temporary file upload file
-        //Link contains file upload(assets/image)
-        $sDestination = MVC_ASSETS_DIR . "image" . "/" . $aImageUpload["name"];
-        move_uploaded_file(
-            $sImageName,
-            $sDestination
-        );
-        //Destroy Error
-        Session::forget("post_error");
-        Redirect::to("user/dashboard");
+        else{
+            header("HTTP/1.0 404 Not Found");
+        }
     }
     /**
      * Handle Edit:After press change
      */
     public function handleEdit()
     {
-        //Get PostID
-        $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
-        //Validate $_POST
-        $bStatus = Validator::validate(
-            array(
-                "post-title" => "required|maxLength:100",
-                "post-content" => "required|maxLength:10000",
-            ),
-            $_POST
-        );
-        //If has error, add error to Session, return  post/edit/id/
-        if ($bStatus !== true) {
-            Session::add(
-                "post_error",
-                $bStatus
+        if($_POST){
+            //Get PostID
+            $iPostID = isset($_GET["post-id"]) ? $_GET["post-id"] : null;
+            //Validate $_POST
+            $bStatus = Validator::validate(
+                array(
+                    "post-title" => "required|maxLength:100",
+                    "post-content" => "required|maxLength:10000",
+                ),
+                $_POST
             );
-            Redirect::to("post/edit?post-id=" . $iPostID);
-        }
-        //Update Post by PostID
-        $aStatusPost = PostModel::updatePostbyPostID(
-            $_POST["post-status"],
-            $_POST["post-type"],
-            $_POST["post-title"],
-            $_POST["post-content"],
-            $iPostID
-        );
-        if (!$aStatusPost) {
-            Session::add(
-                "post_error",
-                "Oops! Something went Post_Edit error"
+            //If has error, add error to Session, return  post/edit/id/
+            if ($bStatus !== true) {
+                Session::add(
+                    "post_error",
+                    $bStatus
+                );
+                Redirect::to("post/edit?post-id=" . $iPostID);
+            }
+            //Update Post by PostID
+            $aStatusPost = PostModel::updatePostbyPostID(
+                $_POST["post-status"],
+                $_POST["post-type"],
+                $_POST["post-title"],
+                $_POST["post-content"],
+                $iPostID
             );
-            Redirect::to("post/edit?post-id=" . $iPostID . "/");
+            if (!$aStatusPost) {
+                Session::add(
+                    "post_error",
+                    "Oops! Something went Post_Edit error"
+                );
+                Redirect::to("post/edit?post-id=" . $iPostID . "/");
+            }
+            Session::forget("post_error");
+            Redirect::to("user/dashboard");
         }
-        Session::forget("post_error");
-        Redirect::to("user/dashboard");
+        else{
+            header("HTTP/1.0 404 Not Found");
+        }
     }
 }

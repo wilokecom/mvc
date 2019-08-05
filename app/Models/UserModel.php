@@ -24,12 +24,9 @@ class UserModel extends DBFactory
         }
         return $aStatus[0];
     }
-
     /**
-     * @return bool ỏ array
-     * @param $sPassword
-     * @param $sUsername
      * @return bool
+     * @param $username
      */
     public static function getUserID($username)
     {
@@ -57,11 +54,9 @@ class UserModel extends DBFactory
         }
         return $aStatus[0];
     }
-
     /**
-     * @param $userID
-     *
      * @return bool
+     * @param $userID
      */
     public static function getUser_metaID($userID)
     {

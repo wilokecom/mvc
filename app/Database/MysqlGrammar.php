@@ -45,30 +45,36 @@ class MysqlGrammar implements DBInterface
         $aParams = array();
         //Create object preapred
         $this->oSTMT = $this->oConnect->prepare($query);
+        if (empty($this->oSTMT)) {
+            echo $this->oConnect->error;
+            die;
+        }
         /**Hàm array_reduce() sẽ tính toán các phần tử của mảng dựa vào hàm chức năng được truyền vào do
          *người dùn định nghĩa.
          *function ($carry, $args) use (&$aParams):Hàm ẩn danh, truyền tham chiếu
          * lamda và cloasure
          */
-        $types = array_reduce($aArgs, function ($carry, $args) use (&$aParams) {
-            $aParams[] = $args;
-            switch (getType($args)) {
-                case is_string($args):
-                    $carry .= "s";
-                    break;
-                case is_float($args):
-                    $carry .= "d";
-                    break;
-                case is_integer($args):
-                    $carry .= "i";
-                    break;
-                default:
-                    $carry .= "b";
-                    break;
-            }
-            return $carry;
-        },
-                              ""
+        $types = array_reduce(
+            $aArgs,
+            function ($carry, $args) use (&$aParams) {
+                $aParams[] = $args;
+                switch (getType($args)) {
+                    case is_string($args):
+                        $carry .= "s";
+                        break;
+                    case is_float($args):
+                        $carry .= "d";
+                        break;
+                    case is_integer($args):
+                        $carry .= "i";
+                        break;
+                    default:
+                        $carry .= "b";
+                        break;
+                }
+                return $carry;
+            },
+            ""
         );
         if ($types != "") {
             $this->oSTMT->bind_param($types, ...$aParams);
@@ -116,10 +122,10 @@ class MysqlGrammar implements DBInterface
      */
     public function update($string = "")
     {
-
-        $status = $this->oSTMT->execute();
+        $this->oSTMT->execute();
+        $number_rows = $this->oSTMT->affected_rows;
         $this->oSTMT->close();
-        return $status;
+        return $number_rows;
     }
 
     /**
@@ -129,9 +135,10 @@ class MysqlGrammar implements DBInterface
      */
     public function delete($string = "")
     {
-        $status = $this->oSTMT->execute();
+        $this->oSTMT->execute();
+        $number_rows = $this->oSTMT->affected_rows;
         $this->oSTMT->close();
-        return $status;
+        return $number_rows;
     }
 
     /**
@@ -143,10 +150,12 @@ class MysqlGrammar implements DBInterface
     {
         //Connect
         if ($this->oConnect === null) {
-            $this->oConnect = new \mysqli($this->aDBConfiguration["host"],
+            $this->oConnect = new \mysqli(
+                $this->aDBConfiguration["host"],
                 $this->aDBConfiguration["username"],
                 $this->aDBConfiguration["password"],
-                $this->aDBConfiguration["db"]);
+                $this->aDBConfiguration["db"]
+            );
             //Check connection
             if ($this->oConnect->connect_errno) {
                 throw new \RuntimeException("Connect failed: %s\n", $this->oConnect->connect_error);

@@ -3,7 +3,7 @@ $("#container").on("click", ".deletePost","", function (event) {
     "use strict";
     let post_id = $(this).attr("href");
     let $self = $(this);
-    console.log("phuc");
+    let url=HomeURL+"post/delete"
     event.preventDefault();
     $("#dialog-confirm").dialog({
         resizable: false,
@@ -13,7 +13,7 @@ $("#container").on("click", ".deletePost","", function (event) {
         buttons: {
             "Yes": function () {
                 $.ajax({
-                    url: "http://localhost/mvc/post/delete",
+                    url: url,
                     type: "POST",
                     dataType: "html",
                     data: {post_id: post_id},
@@ -39,7 +39,7 @@ $("#container").on("click", ".deleteCategory","", function (event) {
     "use strict";
     let term_id = $(this).attr("href");
     let $self = $(this);
-
+    let url=HomeURL+"category/delete";
     event.preventDefault();
     $("#dialog-confirm").dialog({
         resizable: false,
@@ -49,7 +49,7 @@ $("#container").on("click", ".deleteCategory","", function (event) {
         buttons: {
             "Yes": function () {
                 $.ajax({
-                    url: "http://localhost/mvc/category/delete",
+                    url: url,
                     type: "POST",
                     dataType: "html",
                     data: {term_id: term_id},
@@ -75,6 +75,7 @@ $("#container").on("click", ".deleteTag","", function (event) {
     "use strict";
     let term_id = $(this).attr("href");
     let $self = $(this);
+    let url=HomeURL+"tag/delete";
     event.preventDefault();
     $("#dialog-confirm").dialog({
         resizable: false,
@@ -84,7 +85,7 @@ $("#container").on("click", ".deleteTag","", function (event) {
         buttons: {
             "Yes": function () {
                 $.ajax({
-                    url: "http://localhost/mvc/tag/delete",
+                    url: url,
                     type: "POST",
                     dataType: "html",
                     data: {term_id: term_id},

@@ -1,6 +1,7 @@
 //Press Menu button
-$('#toggle').click(function () {
-    $("#sidebar").sidebar('toggle');//Side bar toggle
+$('.ui.sidebar').sidebar('setting', 'dimPage', false);
+$('.toggle').on("click","","",function () {
+    $('.ui.sidebar').sidebar('toggle');//Side bar toggle
 });
 //When press Category, Tag... on Sidebar
 let coll = document.getElementsByClassName("term");//Get array have class="term"

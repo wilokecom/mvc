@@ -4,7 +4,6 @@ namespace MVC\Middleware;
 
 use MVC\Support\Auth;
 use MVC\Support\Redirect;
-use MVC\Support\Session;
 
 /**
  * Class AuthMiddleware
