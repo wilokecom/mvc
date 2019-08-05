@@ -2,8 +2,6 @@ $(".pagination ").on("click", "a", "",function (event) {
     event.preventDefault();
     "use strict";
     let url = $(this).attr("href");
-    console.log(url);
-
     $.ajax({
         url: url,
         type: "get",
@@ -24,8 +22,10 @@ $(".pagination ").on("click", "a", "",function (event) {
                     html += '<td class=\"read-more\">' + abPostInfo["post_content"] + '</td>';
                     html += '<td>' + abPostInfo["post_status"] + '</td>';
                     html += '<td>' + abPostInfo["post_type"] + '</td>';
+                    html += '<td>' + abPostInfo["post_type"] + '</td>';
+                    html += '<td>' + abPostInfo["post_type"] + '</td>';
                     html += "<td>" +
-                        "<a href=\"http://localhost:8088/mvc/post/edit?post-id="+ abPostInfo["ID"]+"\">"+
+                        "<a href=\"http://localhost:8088/mvc/post/edit/"+ abPostInfo["ID"]+"\">"+
                         "<img width=\"16\" src=\"http://localhost:8088/mvc/sources/icon/icon_edit.png\">"
                         +"</a>"
                         +"</td>";
@@ -41,9 +41,10 @@ $(".pagination ").on("click", "a", "",function (event) {
                 $('.pagination').html(result['paging']);
                 window.history.pushState({path: url}, '', url);
                 $(document).trigger('rehandleshowmore');
+                // $(document).trigger('deleteItems');
                 }
             }
-    });
+    } ,);
     return false;
 })
 

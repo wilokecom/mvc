@@ -67,7 +67,7 @@ incViewFile("header"); //Header
             </td>
             <td>
                 <a class="deleteItem"
-                   href="javascript:deleteItem(<?php echo $aPostInfo["ID"] ?>)">
+                   href="<?php echo $aPostInfo["ID"]; ?>">
                     <img width="16" src="<?php echo MVC_SOURCES_URL
                                                     . "icon/icon_delete.png"; ?>">
                 </a>
