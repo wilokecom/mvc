@@ -23,7 +23,7 @@ incViewFile("header");
         ?>
         <form class="<?php echo $formClass; ?>" method="POST"
               action="<?php echo Route::get(
-                  "post/handle-edit/" . $id . "/"
+                  "post/handle-edit/". $id . "/"
               ); ?>" enctype="multipart/form-data">
             <!--Display Error-->
             <?php if ($hasError) : ?>

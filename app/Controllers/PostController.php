@@ -2,6 +2,7 @@
 namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
+use MVC\Models\SearchModel;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
@@ -69,6 +70,32 @@ class PostController extends Controller
             echo "Delete Error";
         }
     }
+
+    public function handleSearch()
+    {
+        UserController::redirectToUserLogin();
+        $iID = Session::get(UserController::$loginSessionKey);
+        $sStatus = Validator::validate(array(
+            "search" => "required|maxLength:10000"
+        ),
+            $_POST
+        );
+        if ($sStatus !== true)
+        {
+            Session::add(
+                "post_error",
+                $sStatus);
+                Redirect::to("post/search");
+        };
+        $sSearch = "%".trim($_POST['search'])."%";
+        $sStatusSearch = SearchModel::SelectPost($iID,$sSearch);
+        if (!$sStatusSearch)
+        {
+            $sStatusSearch =  array();
+            Session::add("search_error","Keywords does not exist !");
+        }
+        $this->loadView("post/search",$sStatusSearch);
+    }
     /**
      * Method handleAdd()
      */
@@ -112,7 +139,7 @@ class PostController extends Controller
         if (!$aStatusPost) {
             Session::add(
                 "post_error",
-                "Oops! Something went Post_Add error" 
+                "Oops! Something went Post_Add error"
             );
             Redirect::to("post/add");
         }

@@ -31,15 +31,25 @@ return [
             "route" => "post/add",
             "isLoggedIn" => true
         ),
-        array(
-            'name' => 'Edit-Profile',
-            'route' => 'user/edit-profile',
-            'isLoggedIn' => true
-        ),
+//        array(
+//            'name' => 'Edit-Profile',
+//            'route' => 'user/edit-profile',
+//            'isLoggedIn' => true
+//        ),
         array(
             'name' => 'Profile',
             'route' => 'user/Profile',
             'isLoggedIn' => true
         ),
+        array(
+            'name' => 'Categories',
+            'route' => 'category/dashboard',
+            'isLoggedIn' => true
+        ),
+        array(
+            'name' => 'Tags',
+            'route' => 'tag/dashboard',
+            'isLoggedIn' => true
+        )
     )
 ];

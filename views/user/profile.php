@@ -7,10 +7,8 @@ if (isset($aData))
     $aName = $aData[1];
 }
 ?>
-
     <div id="container">
         <?php incViewFile('top-menu'); ?>
-
         <form class="ui form" method="POST" action="<?php echo \MVC\Support\Route::get('user/edit-profile'); ?>">
             <div class="field">
                 <label>Ảnh đại diện : </label>
