@@ -1,9 +1,8 @@
 <?php
 use \MVC\Support\Route;
 use \MVC\Support\Pagination;
+use MVC\Support\Session;
 
-//Nhảy đến function incViewFile -file index.php
-//Thêm file định dạnh CSS-JS cho header,body,footer
 incViewFile("header"); //Header
 ?>
 <!--Body-->
@@ -13,24 +12,29 @@ incViewFile("header"); //Header
     incViewFile("top-menu");
     if (isset($aData)) {
         $aUserInfo = $aData[0];
-        $aPostInfo = $aData[1];
     }
     ?>
-    <!--Content-->
     <div class="ui success message">
-        <div class="header">Hello <span
-                    style="color:red;"><?php echo $aUserInfo["username"]; ?></span>!
-            <p>Đây là trang Dashboard.</p>
+        <div class="header">Search
         </div>
+        <?php
+        $hasError = Session::has("search_error");
+        if ($hasError) {
+            $formClass = "ui form error";
+            echo "keyword does not exist";
+        } else {
+            $formClass = "ui form";
+        }
+        ?>
     </div>
-    <table class="ui celled table" style="display: <?php echo ($aPostInfo
+    <table class="ui celled table" style="display: <?php echo ($aUserInfo
                                                                == false)
         ? "none" : ""; ?>">
         <thead>
         <tr>
             <th>User ID</th>
             <th>Post ID</th>
-            <th>User Name</th>
+            <!--            <th>User Name</th>-->
             <th>Tittle</th>
             <th>Content</th>
             <th>Status</th>
@@ -44,22 +48,22 @@ incViewFile("header"); //Header
         <tbody id="content">
         <?php
         $id = 0;//Chỉ số mảng bài viết
-        foreach ($aPostInfo as $aPostInfo) {
+        foreach ($aUserInfo as $aUserInfo) {
             echo "<tr>";
-            echo "<td>" . $aPostInfo["post_author"] . "</td>";
-            echo "<td>" . $aPostInfo["ID"] . "</td>";
-            echo "<td>" . $aUserInfo["username"] . "</td>";
-            echo "<td>" . $aPostInfo["post_tittle"] . "</td>";
-            echo "<td class='read-more'>" . $aPostInfo["post_content"]
+            echo "<td>" . $aUserInfo["post_author"] . "</td>";
+            echo "<td>" . $aUserInfo["ID"] . "</td>";
+            //            echo "<td>" . $aUserInfo["username"] . "</td>";
+            echo "<td>" . $aUserInfo["post_tittle"] . "</td>";
+            echo "<td class='read-more'>" . $aUserInfo["post_content"]
                  . "</td>";
-            echo "<td>" . $aPostInfo["post_status"] . "</td>";
-            echo "<td>" . $aPostInfo["post_type"] . "</td>";
+            echo "<td>" . $aUserInfo["post_status"] . "</td>";
+            echo "<td>" . $aUserInfo["post_type"] . "</td>";
             echo "<td></td>";
             echo "<td></td>";
             ?>
             <td>
                 <a href="<?php echo Route::get(
-                    "post/edit/" . $aPostInfo["ID"] . "/"
+                    "post/edit/" . $aUserInfo["ID"] . "/"
                 ); ?>">
                     <img width="16"
                          src="<?php echo MVC_SOURCES_URL
@@ -68,7 +72,7 @@ incViewFile("header"); //Header
             </td>
             <td>
                 <a class="deleteItem"
-                   href="<?php echo $aPostInfo["ID"]; ?>">
+                   href="<?php echo $aUserInfo["ID"]; ?>">
                     <img width="16" src="<?php echo MVC_SOURCES_URL
                                                     . "icon/icon_delete.png"; ?>">
                 </a>

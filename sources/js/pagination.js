@@ -1,4 +1,4 @@
-$(".pagination ").on("click", "a", "",function (event) {
+$(".pagination ").on("click", "a", "", function (event) {
     event.preventDefault();
     "use strict";
     let url = $(this).attr("href");
@@ -11,11 +11,11 @@ $(".pagination ").on("click", "a", "",function (event) {
             let username = "";
             console.log(result);
             // console.log(typeof result.abPostInfo === 'undefined')
-            if (Object.values(result.abPostInfo).length &&  Object.values(result.abUserInfo).length && Object.values(result.paging).length)  {
+            if (Object.values(result.abPostInfo).length && Object.values(result.abUserInfo).length && Object.values(result.paging).length) {
                 username = result.abUserInfo["username"];
                 $.each(result['abPostInfo'], function (key, abPostInfo) {
                     html += '<tr>';
-                    html += '<td>' + username+'</td>';
+                    html += '<td>' + username + '</td>';
                     html += '<td>' + abPostInfo["post_author"] + '</td>';
                     html += '<td>' + abPostInfo["ID"] + '</td>';
                     html += '<td>' + abPostInfo["post_tittle"] + '</td>';
@@ -25,16 +25,16 @@ $(".pagination ").on("click", "a", "",function (event) {
                     html += '<td>' + abPostInfo["post_type"] + '</td>';
                     html += '<td>' + abPostInfo["post_type"] + '</td>';
                     html += "<td>" +
-                        "<a href=\"http://localhost:8088/mvc/post/edit/"+ abPostInfo["ID"]+"\">"+
+                        "<a href=\"http://localhost:8088/mvc/post/edit/" + abPostInfo["ID"] + "\">" +
                         "<img width=\"16\" src=\"http://localhost:8088/mvc/sources/icon/icon_edit.png\">"
-                        +"</a>"
-                        +"</td>";
+                        + "</a>"
+                        + "</td>";
                     html += " <td>" +
-                        "<a class=\"deleteItem\" href=\""+abPostInfo["ID"]+"\">"+
+                        "<a class=\"deleteItem\" href=\"" + abPostInfo["ID"] + "\">" +
                         "<img width=\"16\" src=\"http://localhost:8088/mvc/sources/icon/icon_delete.png\">"
-                    +"</a>"
-                        +"</td>";
-                    html +='</tr>';
+                        + "</a>"
+                        + "</td>";
+                    html += '</tr>';
                 });
                 console.log(html);
                 $('#content').html(html);
@@ -42,9 +42,9 @@ $(".pagination ").on("click", "a", "",function (event) {
                 window.history.pushState({path: url}, '', url);
                 $(document).trigger('rehandleshowmore');
                 // $(document).trigger('deleteItems');
-                }
             }
-    } ,);
+        }
+    },);
     return false;
 })
 
