@@ -36,12 +36,29 @@ class PostModel extends DBFactory
      * @param $guid
      * @return mixed
      */
-    public static function insertPost($userID, $post_status, $post_type, $post_title,$post_content,$guid)
-    {
-        $aParams = array($userID, $post_status, $post_type,
-            $post_title,$post_content,$guid);
-        $query = "INSERT INTO posts(post_author, post_status, post_type, post_tittle, post_content, guid) VALUES (?, ?, ?, ?, ?, ?)";
-        return self::connect()->prepare($query,$aParams)->insert();
+    public static function insertPost(
+        $userID,
+        $post_status,
+        $post_type,
+        $post_title,
+        $post_content,
+        $guid
+    ) {
+        $aParams = array(
+            $userID,
+            $post_status,
+            $post_type,
+            $post_title,
+            $post_content,
+            $guid
+        );
+        $query
+                 = "INSERT INTO posts(post_author, post_status, post_type,
+ post_tittle, post_content, guid) VALUES (?, ?, ?, ?, ?, ?)";
+        return self::connect()->prepare(
+            $query,
+            $aParams
+        )->insert();
     }
     /**
      * @return mixed
@@ -57,7 +74,7 @@ class PostModel extends DBFactory
     ) {
         $aParams = array($meta_key, $meta_value, $post_id);
         $query
-               = "INSERT INTO postmeta (meta_key,meta_value,post_id) VALUES(?, ?, ?)";
+                 = "INSERT INTO postmeta (meta_key,meta_value,post_id) VALUES(?, ?, ?)";
         return self::connect()->prepare(
             $query,
             $aParams
@@ -123,7 +140,7 @@ class PostModel extends DBFactory
             $PostID
         );
         $query
-            = "UPDATE posts SET post_status= ?,post_type= ?,post_tittle = ?, post_content= ? WHERE ID = ?";
+                 = "UPDATE posts SET post_status= ?,post_type= ?,post_tittle = ?, post_content= ? WHERE ID = ?";
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare(
             $query,
@@ -134,27 +151,28 @@ class PostModel extends DBFactory
      * @param $PostID
      * @return mixed
      */
-
-//    public static function deletePostbyPostID($PostID)
-//    {
-//        $aParams = array($PostID);
-//        $query   = "DELETE FROM posts WHERE ID = ?";
-//        //Nhảy đến phương thức delete() file MysqlGrammar.php
-//        return self::connect()->prepare(
-//            $query,
-//            $aParams
-//        )->delete();
-//    }
-
+    //    public static function deletePostbyPostID($PostID)
+    //    {
+    //        $aParams = array($PostID);
+    //        $query   = "DELETE FROM posts WHERE ID = ?";
+    //        //Nhảy đến phương thức delete() file MysqlGrammar.php
+    //        return self::connect()->prepare(
+    //            $query,
+    //            $aParams
+    //        )->delete();
+    //    }
     /**
      * @param $ID
      * @return mixed
      */
-    public  static function deletePost($ID)
+    public static function deletePost($ID)
     {
         $aParams = array($ID);
-        $query = "DELETE FROM posts WHERE ID = ?";
-        return self::connect()->prepare($query,$aParams)->delete();
+        $query   = "DELETE FROM posts WHERE ID = ?";
+        return self::connect()->prepare(
+            $query,
+            $aParams
+        )->delete();
     }
     /**
      * @param $ID
@@ -164,8 +182,12 @@ class PostModel extends DBFactory
     public static function getRecordbyPostAuthor($ID)
     {
         $aParams = array($ID);
-        $query = "SELECT COUNT(ID) as total FROM posts WHERE post_author = ? ";
-        $aRecord = self::connect()->prepare($query,$aParams)->select();
+        $query
+                 = "SELECT COUNT(ID) as total FROM posts WHERE post_author = ? ";
+        $aRecord = self::connect()->prepare(
+            $query,
+            $aParams
+        )->select();
         return $aRecord[0]["total"];
     }
     /**
@@ -176,9 +198,16 @@ class PostModel extends DBFactory
      */
     public static function getPostbyPostAuthors($iID, $iStart, $iLimit)
     {
-        $aParams = array($iID);
-        $query   = "SELECT *  FROM posts WHERE post_author = ? LIMIT $iStart,$iLimit";
-        $aPosts  = self::connect()->prepare($query, $aParams)->select();
+        if ($iID)
+        {
+            $aParams = $aParams = array($iID);
+        }
+        $query
+                 = "SELECT *  FROM posts WHERE post_author = ? LIMIT $iStart,$iLimit";
+        $aPosts  = self::connect()->prepare(
+            $query,
+            $aParams
+        )->select();
         if (!$aPosts) {
             return false;
         }

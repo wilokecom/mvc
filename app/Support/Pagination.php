@@ -1,12 +1,5 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: doduc
- * Date: 05/07/2019
- * Time: 10:37 SA
- */
+<?php declare(strict_types=1);
 namespace MVC\Support;
-
 /**
  * Class Pagination
  * @package MVC\Support
@@ -16,138 +9,103 @@ class Pagination
     /**
      * @var array
      */
-    public static $config
+    public static $aConfig
         = array(
-            "total_page" >= 1,
-            // tổng số mẩu tin
-            'limit_page' >= 10,
-            // số mẩu tin trên một trang
-            // true nếu hiện full số page, flase nếu không muốn hiện false
-            'querystring' => 'page',
-            // GET id nhận page
-            'range' => 5
-             );
+            "current_page" => 1,
+            "total_record" => 1,
+            "total_page" => 1,
+            "limit" => 10,
+            "start" => 0,
+            "link_full" => "",
+            "link_first" => "",
+            "range" => 9,
+            "min" => 0,
+            "max" => 0
+        );
     /**
-     * Pagination constructor.
-     * @param array $config
+     * @param array $aConfig
      */
-    public static function init($config = array())
+    public static function init($aConfig = array())
     {
-        // kiểm tra xem trong config có limit, total_page đủ điều kiện không
-        if (isset($config['limit']) && $config['limit'] < 0
-            || isset($config['total_page']) && $config['total_page'] < 0
-        ) {
-            // nếu không thì dừng chương trình và hiển thị thông báo.
-            die('limit và total_page không được nhỏ hơn 0');
-        }
-        // Kiểm tra xem config có querystring không
-        if (!isset($config['querystring'])) {
-            //nếu không để mặc định là page
-            $config['querystring'] = 'page';
-        }
-        self::$config = $config;
-    }
-    /**
-     * @return float
-     */
-    public static function gettotal_pagePage()
-    {
-        return ceil(self::$config['total_page'] / self::$config['limit']);
-    }
-    /**
-     *
-     */
-    public static function getCurrentPage()
-    {
-        // kiểm tra tồn tại GET querystring và có >=1 không
-        if (isset($_GET[self::$config['querystring']])
-            && (int)$_GET[self::$config['querystring']] >= 1
-        ) {
-            // Nếu có kiểm tra tiếp xem nó có lớn hơn tổn số trang không.
-            if ((int)$_GET[self::$config['querystring']] > self::gettotal_pagePage()
-            ) {
-                // nếu lớn hơn thì trả về tổng số page
-                return (int)self::gettotal_pagePage();
-            } else {
-                // còn không thì trả về số trang
-                return (int)$_GET[self::$config['querystring']];
+        foreach ($aConfig as $key => $val) {
+            if (isset(self::$aConfig[$key])) {
+                self::$aConfig[$key] = $val;
             }
+        }
+        if (self::$aConfig["limit"] < 0) {
+            self::$aConfig["limit"] = 0;
+        }
+        self::$aConfig["total_page"] = ceil(
+            self::$aConfig["total_record"] / self::$aConfig["limit"]
+        );
+//        var_dump(self::$aConfig);
+        if (!self::$aConfig["total_page"]) {
+            self::$aConfig["total_page"] = 1;
+        }
+        if (self::$aConfig["current_page"] < 1) {
+            self::$aConfig["current_page"] = 1;
+        }
+        if (self::$aConfig["current_page"] > self::$aConfig["total_page"]) {
+            self::$aConfig["current_page"] = self::$aConfig["total_page"];
+        }
+        self::$aConfig["start"] = (self::$aConfig["current_page"] - 1) * self::$aConfig["limit"];
+        $middle                 = ceil(self::$aConfig["range"] / 2);
+        if (self::$aConfig["total_page"] < self::$aConfig["range"]) {
+            self::$aConfig["min"] = 1;
+            self::$aConfig["max"] = self::$aConfig["total_page"];
         } else {
-            // nếu không có querystring thì nhận mặc định là 1
-            return 1;
+            self::$aConfig["min"] = self::$aConfig["current_page"] - $middle + 1;
+            self::$aConfig["max"] = self::$aConfig["current_page"] + $middle - 1;
+            if (self::$aConfig["min"] < 1) {
+                self::$aConfig["min"] = 1;
+                self::$aConfig["max"] = self::$aConfig["range"];
+            } elseif (self::$aConfig["max"] > self::$aConfig["total_page"]) {
+                self::$aConfig["max"] = self::$aConfig["total_page"];
+                self::$aConfig["min"] = self::$aConfig["total_page"] - self::$aConfig["range"] + 1;
+            }
         }
     }
     /**
-     * @return string|void
+     * Get link when press button pagination
+     * @return mixed
+     * @param $page
      */
-    public static function getPrePage()
+    public static function link($page)
     {
-        // nếu trang hiện tại bằng 1 thì trả về null
-        if (self::getCurrentPage() === 1) {
-            return;
-        } else {
-            // còn không thì trả về html code
-            return '<li>
-                      <a href="' . $_SERVER['PHP_SELF'] . '?'
-                   . self::$config['querystring'] . '='
-                   . (self::getCurrentPage() - 1) . '" >Pre</a></li>';
+        if ($page <= 1 && self::$aConfig["link_first"]) {
+            return self::$aConfig["link_first"];
         }
+        return str_replace("{page}", $page, self::$aConfig["link_full"]);
     }
     /**
-     * @return string|void
-     */
-    public static function getNextPage()
-    {
-        // nếu trang hiện tại lơn hơn = total_pagepage thì trả về rỗng
-        if (self::getCurrentPage() >= self::gettotal_pagePage()) {
-            return;
-        } else {
-            // còn không thì trả về HTML code
-            return '<li><a href="' . $_SERVER['PHP_SELF'] . '?' .
-                   self::$config['querystring'] . '=' . (self::getCurrentPage()
-                   + 1) . '" >Next</a></li>';
-        }
-    }
-
-    /**
-     * Hiển thị html code của page
-     *
      * @return string
      */
-    public static function getPagination()
+    public static function display()
     {
-        // tạo biến data rỗng
-        $data = '';
-        // kiểm tra xem người dùng có cần full page không.
-        if (isset(self::$config['full']) && self::$config['full'] === false) {
-            // nếu không thì
-            $data .= (self::getCurrentPage() - 3) > 1 ? '<li>...</li>' : '';
-
-            for ((int)$iI = (self::getCurrentPage() - 3) > 0 ?
-                (self::getCurrentPage() - 3) : 1; $iI <= ((self::getCurrentPage() + 3) > self::gettotal_pagePage() ? self::gettotal_pagePage() : (self::getCurrentPage() + 3)); $iI++) {
-                if ($iI === self::getCurrentPage()) {
-                    $data .= '<li class="active" ><a href="#" >' . $iI . '</a></li>';
+        $display = "";
+        if (self::$aConfig["total_record"] > self::$aConfig["limit"]) {
+            $display = "<ul>";
+            // Display Prev and First button
+            if (self::$aConfig["current_page"] > 1) {
+                $display .= "<li><a href=\"" . self::link("1") . "\">First</a></li>";
+                $display .= "<li><a href=\"" . self::link(self::$aConfig["current_page"] - 1) . "\">Prev</a></li>";
+            }
+            // Display page number button
+            for ($page_number = self::$aConfig["min"]; $page_number <= self::$aConfig["max"]; $page_number++) {
+                // Current page
+                if (self::$aConfig["current_page"] == $page_number) {
+                    $display .= "<li><span>" . $page_number . "</span></li>";
                 } else {
-                    $data .= '<li><a href="' . $_SERVER['PHP_SELF'] . '?' .
-                             self::$config['querystring'] . '=' . $iI . '" >' .
-                                 $iI . '</a></li>';
+                    $display .= "<li><a href=\"" . self::link($page_number) . "\">" . $page_number . "</a></li>";
                 }
             }
-
-            $data .= (self::getCurrentPage() + 3) < self::gettotal_pagePage() ? '<li>...</li>' : '';
-        } else {
-            // nếu có thì
-            for ($iI = 1; $iI <= self::gettotal_pagePage(); $iI++) {
-                if ($iI === self::getCurrentPage()) {
-                    $data .= '<li class="active" ><a href="#" >' . $iI . '</a></li>';
-                } else {
-                    $data .= '<li><a href="' . $_SERVER['PHP_SELF'] . '?' .
-                             self::$config['querystring'] . '=' . $iI . '" >' .
-                                 $iI . '</a></li>';
-                }
+            //Display Next and Last button
+            if (self::$aConfig["current_page"] < self::$aConfig["total_page"]) {
+                $display .= "<li><a href=\"" . self::link(self::$aConfig["current_page"] + 1) . "\">Next</a></li>";
+                $display .= "<li><a href=\"" . self::link(self::$aConfig["total_page"]) . "\">Last</a></li>";
             }
+            $display .= "</ul>";
         }
-
-        return '<ul>' . self::getPrePage() . $data . self::getNextPage() . '</ul>';
+        return $display;
     }
 }

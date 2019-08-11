@@ -67,7 +67,7 @@ class MysqlGrammar implements DBInterface
         // tất cả parameter ta truyền sẽ được cho vào cùng một mảng , bên trong hàm, ta có thể gọi đến mảng đó bằng $parameters
         //      var_dump($aParams);die;
         if($types!=""){
-            $this->oSTMT->bind_param($types, ... $aParams);
+            $this->oSTMT->bind_param($types, ...$aParams);
         }
         return $this;
     }
@@ -124,6 +124,14 @@ class MysqlGrammar implements DBInterface
         $this->oSTMT->close();
         return $status;
     }
+
+//    public function delete($string = "")
+//    {
+//        $this->oSTMT->execute();
+//        $number_rows = $this->oSTMT->affected_rows;
+//        $this->oSTMT->close();
+//        return $number_rows;
+//    }
     /**
      * @return $this|mixed
      */

@@ -26,6 +26,10 @@ incViewFile("header"); //Header
     <table class="ui celled table" style="display: <?php echo ($aPostInfo
                                                                == false)
         ? "none" : ""; ?>">
+        <div class="ui pointing menu">
+            <a id="mine" class="active item" href="#">Mine</a>
+            <a id="all" class="item" href="#">All</a>
+        </div>
         <thead>
         <tr>
             <th>User ID</th>
