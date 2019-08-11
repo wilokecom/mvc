@@ -42,5 +42,6 @@ class GeneralScriptsController
         mvcEnqueueScript(MVC_SOURCES_URL . "js/showPassword_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/focusInput_jquery.js");
         mvcEnqueueScript(MVC_SOURCES_URL . "js/deleteItem.js");
+        mvcEnqueueScript(MVC_SOURCES_URL . "js/pagination.js");
     }
 }

@@ -48,12 +48,36 @@ class Controller
     public function loadView($viewFile, ... $aData)
     {
         try {
-//            extract($aData);
+            //            extract($aData);
             //$this->initPlace();
             require_once MVC_VIEWS . $viewFile . ".php";
             //$this->oBlade->make($viewFile, $aData);
         } catch (\Exception $oException) {
             throw $oException;
+        }
+    }
+    /**
+     * @param       $aMiddleware
+     * @param array $aData
+     * @throws \Exception
+     */
+    public function middleware($aMiddleware, $aData = [])
+    {
+        foreach ($aMiddleware as $middleware) {
+            $sMiddlewareClass = getConfig('middleware')->getParam
+            (
+                $middleware,
+                false
+            );
+            if (!empty($sMiddlewareClass) && class_exists($sMiddlewareClass)) {
+                new $sMiddlewareClass($aData);
+            } else {
+                if (MVC_DEBUG) {
+                    throw new\Exception(
+                        'This class' . $middleware . 'does not exist'
+                    );
+                }
+            }
         }
     }
 }

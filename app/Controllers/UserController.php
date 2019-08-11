@@ -3,10 +3,14 @@ namespace MVC\Controllers;
 
 use MVC\Models\PostModel;
 use MVC\Models\UserModel;
+use MVC\Support\Helper;
 use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
 use MVC\Support\Upload;
+use MVC\Support\Route;
+use MVC\Support\Pagination;
+use MVC\Support\Auth;
 
 /**
  * Class UserController
@@ -26,8 +30,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        self::redirectToUserLogin();
-        self::redirectToDashboard();
+      $this->middleware(['auth']);
+      Helper::redirectToDashboard();
     }
     /**
      * method login-display
@@ -36,7 +40,7 @@ class UserController extends Controller
      */
     public function login()
     {
-        self::redirectToDashboard();
+        Helper::redirectToDashboard();
         $this->loadView("user/login");
     }
     /**
@@ -52,20 +56,12 @@ class UserController extends Controller
      * redirect user/login
      */
     public static function redirectToUserLogin()
-    {
+        {
         if (!self::isLoggedIn()) {
             Redirect::to("user/login");
         }
     }
-    /**
-     * redirect dashboard
-     */
-    public static function redirectToDashboard()
-    {
-        if (self::isLoggedIn()) {
-            Redirect::to("user/dashboard");
-        }
-    }
+
     /**
      * if wasn't log in then redirect login page
      *  //get info from user table
@@ -77,14 +73,41 @@ class UserController extends Controller
      */
     public function dashboard()
     {
+        $aResponse = [];
         self::redirectToUserLogin();
-        $iID = Session::get(self::$loginSessionKey);
-        $aUserInfo = UserModel::getUserbyID($iID);
-        $aPostInfo = PostModel::getPostbyPostAuthor($iID);
-        $aPostRecord = PostModel::getRecordbyPostAuthor($iID);
+        $iID           = Session::get(self::$loginSessionKey);
+        $aUserInfo     = UserModel::getUserbyID($iID);
+        $aPostInfo     = PostModel::getPostbyPostAuthor($iID);
+        $aPostRecord   = PostModel::getRecordbyPostAuthor($iID);
+        $iTotalRecords = PostModel::getRecordbyPostAuthor($iID);
+        $aConfig       = array(
+            'current_page' => isset($_GET['page']) ? $_GET['page'] : 1,
+            'total_record' => $aPostRecord,
+            'limit' => 3,
+            'link_full' => Route::get('user/dashboard?page={page}'),
+            'link_first' => Route::get('user/dashboard'),
+            'range' => 5
+        );
+        Pagination::init($aConfig);
+        $iPostStart = Pagination::$aConfig["start"];
+        $iPostLimit = Pagination::$aConfig["limit"];
+        $aPostInfo  = PostModel::getPostbyPostAuthors(
+            $iID,
+            $iPostStart,
+            $iPostLimit
+        );
         if (!$aPostInfo) {
             $aPostInfo = array();
-            $this->loadView('');
+        }
+        $aResponse['abPostInfo'] = $aPostInfo;
+        $aResponse['paging']     = Pagination::display();
+        $aResponse['abUserInfo'] = $aUserInfo;
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
+        ) {
+            die(
+            json_encode($aResponse)
+            );
         }
         $this->loadView(
             "user/dashboard",
@@ -218,10 +241,6 @@ class UserController extends Controller
         $aName     = UserModel::getUserMetaID($iID);
         if (!$aName) {
             $aName = array();
-            $this->loadView(
-                'user/profile',
-                $aUserInfo
-            );
         }
         $this->loadView(
             'user/profile',
@@ -247,17 +266,12 @@ class UserController extends Controller
         );
         if (!$aName) {
             $aName = array();
-            $this->loadView(
-                'user/edit-profile',
-                $aUserInfo
-            );
-        } else {
-            $this->loadView(
-                'user/edit-profile',
-                $aUserInfo,
-                $aName
-            );
         }
+        $this->loadView(
+            'user/edit-profile',
+            $aUserInfo,
+            $aName
+        );
     }
     /**
      *
@@ -314,7 +328,6 @@ class UserController extends Controller
     }
     /**
      * If the name of file-upload not
-     *
      */
     public function upload()
     {
@@ -327,7 +340,7 @@ class UserController extends Controller
             array(
                 'fullname' => 'required|maxLength:50',
                 'name' => 'required|maxLength:50',
-                'type' => 'required|checkType',
+                'type' => 'required|checkImageType',
                 'destination' => 'required|maxLength:100'
             ),
             $aData

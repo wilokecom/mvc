@@ -7,7 +7,7 @@ use MVC\Support\Redirect;
 use MVC\Support\Session;
 use MVC\Support\Validator;
 use MVC\Support\Upload;
-
+use MVC\Support\Auth;
 /**
  * Class PostController
  * @package MVC\Controllers
@@ -28,7 +28,7 @@ class PostController extends Controller
      */
     public function add()
     {
-        UserController::redirectToUserLogin();
+        $this->middleware(['auth']);
         $this->loadView("post/add");
     }
     /**

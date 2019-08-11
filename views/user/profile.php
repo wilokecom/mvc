@@ -15,7 +15,6 @@ if (isset($aData))
                 <img src="<?php if (isset($aName['meta_value'])) {
                     echo MVC_ASSETS_URL . 'Images' . '/' . $aName['meta_value'];
                 } ?>" width="150" height="150">
-
             </div>
 
             <div class="field">
@@ -25,7 +24,6 @@ if (isset($aData))
                     } ?></span>
                 <!--                <input type="text" name="fullname" placeholder="full-name" value="">-->
             </div>
-
             <div class="field">
                 <label style="color: Green;">Username : </label>
                 <span style="font-weight: bold; font-size: 20px; color: red;

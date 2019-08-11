@@ -1,5 +1,4 @@
 <?php
-
 namespace MVC\Support;
 
 /**
@@ -17,23 +16,19 @@ class Session
             session_start();
         }
     }
-
-  /**
-   * @param $key
-   * @param $val
-   */
+    /**
+     * @param $key
+     * @param $val
+     */
     public static function add($key, $val)
     {
         self::init();//Start Session
-
         $_SESSION[$key] = $val;
     }
 
     /**
      * Remove an item from Session
-     *
      * @param String $key
-     *
      * @return void
      */
     //Hủy biến Session
@@ -41,16 +36,15 @@ class Session
     {
         self::init();
         if (isset($_SESSION[$key])) {
-            unset($_SESSION[$key]);//Hủy Session
+            unset($_SESSION[$key]);
         }
     }
 
     /**
      * @param string $key
-     *
      * @return bool
+     * Checking does the Session exist
      */
-    //Kiểm tra xem Session có tồn tại hay không
     public static function has($key)
     {
         self::init();
@@ -65,10 +59,8 @@ class Session
         self::init();
         return self::has($key) ? $_SESSION[$key] : "";
     }
-
     /**
      * Destroy all sessions
-     *
      * @return void
      */
     public static function destroy()
