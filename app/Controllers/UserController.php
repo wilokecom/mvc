@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function register()
     {
-        self::redirectToDashboard();
+        Helper::redirectToDashboard();
         $this->loadView("user/register");
     }
     /**
@@ -73,6 +73,7 @@ class UserController extends Controller
      */
     public function dashboard()
     {
+        PostModel::renameTable();
         $aResponse = [];
         self::redirectToUserLogin();
         $iID           = Session::get(self::$loginSessionKey);

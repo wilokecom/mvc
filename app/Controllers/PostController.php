@@ -108,7 +108,7 @@ class PostController extends Controller
         );
         $bStatus = Validator::validate(
             array(
-//                "post-title" => "required|maxLength:100",
+                "post-title" => "required|maxLength:100",
                 "post-content" => "required|maxLength:10000",
                 "name" => "required|maxLength:200",
                 "type" => "checkImageType",
@@ -166,7 +166,7 @@ class PostController extends Controller
         $id = $aParam[2];
         $status = Validator::validate(
             array(
-                "post-tittle" => "required|maxLength:1000",
+                "post-title" => "required|maxLength:1000",
                 "post-content" => "required|maxLength:10000",
             ),
             $_POST
@@ -181,7 +181,7 @@ class PostController extends Controller
         $aStatusPost = PostModel::updatePostbyPostID(
             $_POST["post-status"],
             $_POST["post-type"],
-            $_POST["post-tittle"],
+            $_POST["post-title"],
             $_POST["post-content"],
             $id
         );
