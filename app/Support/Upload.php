@@ -25,7 +25,7 @@ class Upload
             $destination = $fileUpload['destination'] = MVC_ASSETS_DIR . 'Images' . '/' . $fileUpload['name'];
             move_uploaded_file(
                 $filename,
-                $destination git
+                $destination
             );
         }
         return $fileUpload;

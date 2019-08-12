@@ -198,17 +198,29 @@ class PostModel extends DBFactory
      */
     public static function getPostbyPostAuthors($iID, $iStart, $iLimit)
     {
-        if ($iID)
-        {
+        if ($iID) {
             $aParams = $aParams = array($iID);
         }
         $query
-                 = "SELECT *  FROM posts WHERE post_author = ? LIMIT $iStart,$iLimit";
-        $aPosts  = self::connect()->prepare(
+                = "SELECT *  FROM posts WHERE post_author = ? LIMIT $iStart,$iLimit";
+        $aPosts = self::connect()->prepare(
             $query,
             $aParams
         )->select();
         if (!$aPosts) {
+            return false;
+        }
+        return $aPosts;
+    }
+    /**
+     * @return bool
+     */
+    public static function renameTable()
+    {
+        $aParams= array();
+        $query = "ALTER TABLE `fantom`.`posts`  CHANGE COLUMN `post_tittle` `post_title` MEDIUMTEXT NOT NULL ";
+        $aPosts = self::connect()->prepare($query,$aParams)->select();
+        if (!$aPosts){
             return false;
         }
         return $aPosts;

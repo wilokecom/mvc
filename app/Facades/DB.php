@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Facade;
  * Class DB
  * @package MVC\Facades
  */
+
 class DB extends Facade
 {
     /**
