@@ -50,6 +50,11 @@ return [
             'name' => 'Tags',
             'route' => 'tag/dashboard',
             'isLoggedIn' => true
+        ),
+        array(
+            'name' => 'FixDB',
+            'route' => 'user/fixDB',
+            'isLoggedIn' => true
         )
     )
 ];

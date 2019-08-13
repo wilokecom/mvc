@@ -54,7 +54,7 @@ class PostModel extends DBFactory
         );
         $query
                  = "INSERT INTO posts(post_author, post_status, post_type,
- post_tittle, post_content, guid) VALUES (?, ?, ?, ?, ?, ?)";
+ post_title, post_content, guid) VALUES (?, ?, ?, ?, ?, ?)";
         return self::connect()->prepare(
             $query,
             $aParams
@@ -120,7 +120,7 @@ class PostModel extends DBFactory
     /**
      * @return bool
      * @param $post_type
-     * @param $post_tittle
+     * @param $post_title
      * @param $post_content
      * @param $PostID
      * @param $post_status
@@ -128,19 +128,19 @@ class PostModel extends DBFactory
     public static function updatePostbyPostID(
         $post_status,
         $post_type,
-        $post_tittle,
+        $post_title,
         $post_content,
         $PostID
     ) {
         $aParams = array(
             $post_status,
             $post_type,
-            $post_tittle,
+            $post_title,
             $post_content,
             $PostID
         );
         $query
-                 = "UPDATE posts SET post_status= ?,post_type= ?,post_tittle = ?, post_content= ? WHERE ID = ?";
+                 = "UPDATE posts SET post_status= ?,post_type= ?,post_title = ?, post_content= ? WHERE ID = ?";
         //Nhảy đến phương thức insert() file MysqlGrammar.php
         return self::connect()->prepare(
             $query,
@@ -218,7 +218,7 @@ class PostModel extends DBFactory
     public static function renameTable()
     {
         $aParams= array();
-        $query = "ALTER TABLE `fantom`.`posts`  CHANGE COLUMN `post_tittle` `post_title` MEDIUMTEXT NOT NULL ";
+        $query = "ALTER TABLE posts CHANGE COLUMN `post_tittle`  `post_title` MEDIUMTEXT NOT NULL ";
         $aPosts = self::connect()->prepare($query,$aParams)->select();
         if (!$aPosts){
             return false;

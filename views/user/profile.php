@@ -1,5 +1,5 @@
 <?php
-//use MVC\Support\Session;
+use MVC\Support\Session;
 incViewFile('header');
 if (isset($aData))
 {

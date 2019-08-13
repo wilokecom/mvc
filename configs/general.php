@@ -47,3 +47,7 @@ define("MVC_MODELS", MVC_DIR . "app/Models/");
  * MVC_CONFIG
  */
 define("MVC_CONFIG", MVC_DIR . "configs/");
+/**
+ *MVC_DEBUG
+ */
+define("MVC_DEBUG", true);

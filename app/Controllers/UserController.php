@@ -330,42 +330,64 @@ class UserController extends Controller
     /**
      * If the name of file-upload not
      */
-    public function upload()
+//    public function upload()
+//    {
+//        $fileUpload = Upload::upload('file-upload');
+//        $aData      = array_merge(
+//            $_POST,
+//            $fileUpload
+//        );
+//        $status     = Validator::validate(
+//            array(
+//                'fullname' => 'required|maxLength:50',
+//                'name' => 'required|maxLength:50',
+//                'type' => 'required|checkImageType',
+//                'destination' => 'required|maxLength:100'
+//            ),
+//            $aData
+//        );
+//        if ($status !== true) {
+//            Session::add(
+//                'edit-profile_error',
+//                $status
+//            );
+//            Redirect::to('user/edit-profile');
+//        }
+//        $iID         = Session::get(self::$loginSessionKey);
+//        $astatusUser = UserModel::insertUserMeta(
+//            $aData['fullname'],
+//            $aData['name'],
+//            $iID
+//        );
+//        if (!$astatusUser) {
+//            Session::add(
+//                'edit-profile_error',
+//                'Oops! Something went error'
+//            );
+//            Redirect::to('user/edit-profile');
+//        }
+//        Redirect::to('user/profile');
+//    }
+
+
+    public function fixDB()
     {
-        $fileUpload = Upload::upload('file-upload');
-        $aData      = array_merge(
-            $_POST,
-            $fileUpload
-        );
-        $status     = Validator::validate(
+        if (!self::isLoggedIn()) {
+            Redirect::to('user/login');
+        }
+        $this->loadView('user/fixDB');
+    }
+
+    public function handlefixDB()
+    {
+        $status = Validator::validate(
             array(
-                'fullname' => 'required|maxLength:50',
-                'name' => 'required|maxLength:50',
-                'type' => 'required|checkImageType',
-                'destination' => 'required|maxLength:100'
+                "username" => "required|maxLength:50",
+                "email" => "required|maxLength:100",
+                "password" => "required",
+                "agree_term" => "required"
             ),
-            $aData
+            $_POST
         );
-        if ($status !== true) {
-            Session::add(
-                'edit-profile_error',
-                $status
-            );
-            Redirect::to('user/edit-profile');
-        }
-        $iID         = Session::get(self::$loginSessionKey);
-        $astatusUser = UserModel::insertUserMeta(
-            $aData['fullname'],
-            $aData['name'],
-            $iID
-        );
-        if (!$astatusUser) {
-            Session::add(
-                'edit-profile_error',
-                'Oops! Something went error'
-            );
-            Redirect::to('user/edit-profile');
-        }
-        Redirect::to('user/profile');
     }
 }

@@ -1,4 +1,4 @@
-$(".pagination ").on("click", "a", "", function (event) {
+$(".pagination").on("click", "a", "", function (event) {
     event.preventDefault();
     "use strict";
     let url = $(this).attr("href");
@@ -9,16 +9,16 @@ $(".pagination ").on("click", "a", "", function (event) {
         success: function (result) {
             let html = "";
             let username = "";
-            console.log(result);
-            // console.log(typeof result.abPostInfo === 'undefined')
-            if (Object.values(result.abPostInfo).length && Object.values(result.abUserInfo).length && Object.values(result.paging).length) {
+            if (Object.values(result.abPostInfo).length && Object.values(result.abUserInfo).length &&
+                Object.values(result.paging).length)
+            {
                 username = result.abUserInfo["username"];
                 $.each(result['abPostInfo'], function (key, abPostInfo) {
-                    html += '<tr>';
+                    html += '<tr>'
                     html += '<td>' + username + '</td>';
                     html += '<td>' + abPostInfo["post_author"] + '</td>';
                     html += '<td>' + abPostInfo["ID"] + '</td>';
-                    html += '<td>' + abPostInfo["post_tittle"] + '</td>';
+                    html += '<td>' + abPostInfo["post_title"] + '</td>';
                     html += '<td class=\"read-more\">' + abPostInfo["post_content"] + '</td>';
                     html += '<td>' + abPostInfo["post_status"] + '</td>';
                     html += '<td>' + abPostInfo["post_type"] + '</td>';
@@ -36,17 +36,13 @@ $(".pagination ").on("click", "a", "", function (event) {
                         + "</td>";
                     html += '</tr>';
                 });
-                console.log(html);
                 $('#content').html(html);
                 $('.pagination').html(result['paging']);
+                console.log($('.pagination').html(result['paging']));
                 window.history.pushState({path: url}, '', url);
                 $(document).trigger('rehandleshowmore');
-                // $(document).trigger('deleteItems');
             }
         }
     },);
     return false;
 })
-
-
-

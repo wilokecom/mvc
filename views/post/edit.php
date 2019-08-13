@@ -99,9 +99,9 @@ incViewFile("header");
             <!--Title-->
             <div class="field">
                 <label for="post-tittle">tittle</label>
-                <input id="post-tittle" type="text" name="post-tittle"
+                <input id="post-tittle" type="text" name="post-title"
                        placeholder="Tittle"
-                       value="<?php echo $aPostInfo["post_tittle"]; ?>">
+                       value="<?php echo $aPostInfo["post_title"]; ?>">
             </div>
             <!--Content-->
             <div class="field">
