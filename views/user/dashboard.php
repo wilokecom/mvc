@@ -23,8 +23,7 @@ incViewFile("header"); //Header
             <p>Đây là trang Dashboard.</p>
         </div>
     </div>
-    <table class="ui celled table" style="display: <?php echo ($aPostInfo
-                                                               == false)
+    <table class="ui celled table" style="display: <?php echo ($aPostInfo == false)
         ? "none" : ""; ?>">
         <div class="ui pointing menu">
             <a id="mine" class="active item" href="#">Mine</a>

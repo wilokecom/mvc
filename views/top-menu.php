@@ -1,7 +1,6 @@
 <?php
 use MVC\Support\Route as Route;
 use \MVC\Controllers\UserController;
-
 ?>
 <div class="ui pointing menu">
     <?php
