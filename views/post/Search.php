@@ -53,7 +53,7 @@ incViewFile("header"); //Header
             echo "<td>" . $aUserInfo["post_author"] . "</td>";
             echo "<td>" . $aUserInfo["ID"] . "</td>";
             //            echo "<td>" . $aUserInfo["username"] . "</td>";
-            echo "<td>" . $aUserInfo["post_tittle"] . "</td>";
+            echo "<td>" . $aUserInfo["post_title"] . "</td>";
             echo "<td class='read-more'>" . $aUserInfo["post_content"]
                  . "</td>";
             echo "<td>" . $aUserInfo["post_status"] . "</td>";
