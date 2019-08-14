@@ -369,7 +369,6 @@ class UserController extends Controller
 //        Redirect::to('user/profile');
 //    }
 
-
     public function fixDB()
     {
         if (!self::isLoggedIn()) {
@@ -382,10 +381,8 @@ class UserController extends Controller
     {
         $status = Validator::validate(
             array(
-                "username" => "required|maxLength:50",
-                "email" => "required|maxLength:100",
-                "password" => "required",
-                "agree_term" => "required"
+                "" => "required|maxLength:50",
+                "" => "required|maxLength:100"
             ),
             $_POST
         );

@@ -37,11 +37,13 @@ use \MVC\Controllers\UserController;
     endforeach;
     ?>
     <div class="right menu">
-        <form class="ui form" method="POST"  action="<?php echo \MVC\Support\Route::get
+        <form class="ui form" method="get"  action="<?php echo
+        \MVC\Support\Route::get
         ('post/handleSearch'); ?>">
         <div class="item">
 <!--            <div class="ui transparent icon input">-->
-                <input type="text" name="search" placeholder="Search...">
+                <input type="text" name="search"
+                       placeholder="Search...">
                 <button  type="submit" value="Search"><i class="search link
                 icon"></i></button>
 <!--            </div>-->

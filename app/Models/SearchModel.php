@@ -23,23 +23,9 @@ class SearchModel extends DBFactory
     public static function SelectPost($post_author, $keyword)
     {
         $aParam = array($keyword);
-        //        $aPlaceHolder = [];
-        //        $query = 'SELECT * FROM posts WHERE ';
-        //        $condition = '';
-        //        if (!empty($post_author)) {
-        //            $aParam[] = $post_author;
-        //
-        //            $query .=  'post_author = ?';
-        //            $condition = ' AND ';
-        //        }
-        //        if (!empty($keyword)) {
-        //            $aParam[] = $keyword;
-        //
-        //            $query .= $condition . '$keyword';
-        //            $condition = ' AND ';
-        //        }
-        $query
-            = "SELECT * FROM posts WHERE post_author = $post_author AND post_content LIKE ?";
+//        $query = "SELECT * FROM posts WHERE  post_author=$post_author AND post_content OR
+//post_title LIKE ?";
+        $query="SELECT * FROM `fantom`.posts WHERE MATCH (post_title,post_content) AGAINST ( ? IN NATURAL LANGUAGE MODE)";
         $status = self::connect()->prepare(
             $query,
             $aParam

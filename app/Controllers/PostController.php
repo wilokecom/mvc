@@ -8,6 +8,7 @@ use MVC\Support\Session;
 use MVC\Support\Validator;
 use MVC\Support\Upload;
 use MVC\Support\Auth;
+
 /**
  * Class PostController
  * @package MVC\Controllers
@@ -61,8 +62,8 @@ class PostController extends Controller
      */
     public function delete()
     {
-        $iID = isset($_POST["post_id"]) ? $_POST["post_id"] : null;
-        $iID = (int)$iID;
+        $iID       = isset($_POST["post_id"]) ? $_POST["post_id"] : null;
+        $iID       = (int)$iID;
         $aPostInfo = PostModel::deletePost($iID);
         if ($aPostInfo) {
             echo "Delete Success";
@@ -70,33 +71,40 @@ class PostController extends Controller
             echo "Delete Error";
         }
     }
-
     public function handleSearch()
     {
         UserController::redirectToUserLogin();
-        $iID = Session::get(UserController::$loginSessionKey);
-        $sStatus = Validator::validate(array(
-            "search" => "required|maxLength:10000"
-        ),
-            $_POST
+        $iID     = Session::get(UserController::$loginSessionKey);
+        $sStatus = Validator::validate(
+            array(
+                "search" => "required|maxLength:10000"
+            ),
+            $_GET
         );
-        if ($sStatus !== true)
-        {
+        if ($sStatus !== true) {
             Session::add(
-                "post_error",
-                $sStatus);
-                Redirect::to("post/search");
+                "search_error",
+                $sStatus
+            );
         };
-        $sSearch = "%".trim($_POST['search'])."%";
-        $sStatusSearch = SearchModel::SelectPost($iID,$sSearch);
-        if (!$sStatusSearch)
-        {
-            $sStatusSearch =  array();
-            Session::add("search_error","Keywords does not exist !");
+        $sSearch       = "%" . trim($_GET['search']) . "%";
+        $sStatusSearch = SearchModel::SelectPost(
+            $iID,
+            $sSearch
+        );
+        if (!$sStatusSearch) {
+            $sStatusSearch = array();
+            Session::add(
+                "search_error",
+                "Keywords does not exist !"
+            );
         }
-        $this->loadView("post/search",$sStatusSearch);
+        $this->loadView(
+            "post/search",
+            $sStatusSearch
+        );
     }
-    /**
+    /**post_error
      * Method handleAdd()
      */
     public function handleAdd()
@@ -106,7 +114,7 @@ class PostController extends Controller
             $_POST,
             $aImageUpload
         );
-        $bStatus = Validator::validate(
+        $bStatus      = Validator::validate(
             array(
                 "post-title" => "required|maxLength:100",
                 "post-content" => "required|maxLength:10000",
@@ -163,7 +171,7 @@ class PostController extends Controller
      */
     public function handleEdit($aParam)
     {
-        $id = $aParam[2];
+        $id     = $aParam[2];
         $status = Validator::validate(
             array(
                 "post-title" => "required|maxLength:1000",
