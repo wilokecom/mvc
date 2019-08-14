@@ -19,11 +19,11 @@ incViewFile("header"); //Header
         </div>
         <?php
         $hasError = Session::has("search_error");
-        if ($hasError) {
+        if ($hasError == true) {
+            $formClass = "ui form";
+        } else {
             $formClass = "ui form error";
             echo "keyword does not exist";
-        } else {
-            $formClass = "ui form";
         }
         ?>
     </div>
@@ -52,7 +52,6 @@ incViewFile("header"); //Header
             echo "<tr>";
             echo "<td>" . $aUserInfo["post_author"] . "</td>";
             echo "<td>" . $aUserInfo["ID"] . "</td>";
-            //            echo "<td>" . $aUserInfo["username"] . "</td>";
             echo "<td>" . $aUserInfo["post_title"] . "</td>";
             echo "<td class='read-more'>" . $aUserInfo["post_content"]
                  . "</td>";
